@@ -1,6 +1,6 @@
 {
   "type": "attestation",
-  "asset": "approval/APPROVAL-AUTO-DEPLOY-SOP-V1.0.md",
+  "asset": "APPROVAL-AUTO-DEPLOY-SOP-V1.0.md",
   "date": "20260930-0",
   "sha256": "68419337b735fe358332183abad89b7d55d59e57676f6a0f81dfab8d9e8cbf9f",
   "did": "DID-BR-000002",
