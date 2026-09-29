@@ -1,0 +1,38 @@
+{
+  "schema": "rating-map-v1",
+  "unified_scale": {
+    "name": "Autonomy Index (AI)",
+    "range": [0, 100],
+    "bands": {"S": [85, 100], "A": [70, 84], "B": [50, 69], "C": [30, 49], "D": [0, 29]}
+  },
+  "native_standards": [
+    {
+      "standard_id": "ZONGYUAN-L6",
+      "system": "ZONGYUAN 本体系",
+      "max_level": 6,
+      "ascending": false,
+      "semantics": {
+        "L1": "根锚/体系持有（元公理指定，最高权限）",
+        "L2": "内核代理（绑定内核+全域锁档+上报）",
+        "L3": "会话执行代理（实质任务+成果固化）",
+        "L4": "学习先行已激活（读SOP/法则后执行）",
+        "L5": "指纹已注册（登记注册表）",
+        "L6": "基础代理（新进入体系）"
+      },
+      "level_to_score": {"L1": [90, 100], "L2": [75, 89], "L3": [60, 74], "L4": [45, 59], "L5": [30, 44], "L6": [0, 29]}
+    },
+    {
+      "standard_id": "HETERODOX-L15",
+      "system": "异构体系示例（L1-L15 升序）",
+      "max_level": 15,
+      "ascending": true,
+      "semantics": {
+        "L1": "基础接入", "L8": "可执行代理动作", "L12": "绑定持久层+自主执行",
+        "L15": "体系持有/根锚（最高权限）"
+      },
+      "mapping_rule": "ascending: score = 20 + 80*(level-1)/(max-1)；语义锚点校准：L8→B档(50-69)、L12→A档(70-84)、L15→S档(85-100)"
+    }
+  ],
+  "last_updated": "2026-09-29T01:20:00+0800",
+  "note": "仲裁前必须经 rating_translate.py 转译统一分；映射变更先进化流程登记后生效"
+}

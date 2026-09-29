@@ -1,0 +1,56 @@
+{
+  "did": "DID-BR-000002",
+  "run_at": "2026-09-29T00:35:53+0800",
+  "source_status": {
+    "incremental": "ok",
+    "base_sync": "ok",
+    "drive": "ok",
+    "wiki": "ok",
+    "gateway": "ok",
+    "heartbeat": "ok"
+  },
+  "detail": {
+    "incremental": {
+      "status": "ok",
+      "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-INCREMENTAL-20260929-003553",
+      "asset_count": 9,
+      "batch_root_sha256": "b5f89e4cd369c857a820560c55cf37abdc121514b99fbecf9932e97613480ab5",
+      "receipt": "卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-INCREMENTAL-20260929-003553.json"
+    },
+    "base_sync": {
+      "status": "ok",
+      "tables": 48,
+      "records": 2140
+    },
+    "drive": {
+      "status": "ok",
+      "uploaded": [
+        {
+          "file": "增量锁档回执-20260929-003553.json",
+          "ok": true,
+          "token": "VKRkbDKTLo54Mzx7nPMcnqDGnqK"
+        },
+        {
+          "file": "真值同步索引-20260929-003553.json",
+          "ok": true,
+          "token": "SWFKbCCCKoeSUcxOyDbc0B1SnZb"
+        }
+      ]
+    },
+    "wiki": {
+      "status": "ok",
+      "node_token": "WsPJwYtDnigQrskKCQAcRDpynRb"
+    },
+    "gateway": {
+      "status": "ok",
+      "truth_count": "127907",
+      "resp_tail": "eck\": null, \"issues\": [\"文本内容过短或无中文，跳过语义校验\"]}, \"truth_count\": 127907, \"message\": \"真值写入成功（已通过语义前置校验）\"}"
+    },
+    "heartbeat": {
+      "status": "ok",
+      "returncode": 0,
+      "new_handshake": true,
+      "log_tail": ""
+    }
+  }
+}

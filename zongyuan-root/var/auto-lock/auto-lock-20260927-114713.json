@@ -1,0 +1,61 @@
+{
+  "mechanism": "zongyuan-auto-lock",
+  "did": "DID-BR-000002",
+  "run_at": "2026-09-27T11:47:13+0800",
+  "source_status": {
+    "local_lock": "ok",
+    "base_sync": "ok",
+    "drive": "ok",
+    "wiki": "ok",
+    "gateway": "ok",
+    "heartbeat": "ok"
+  },
+  "detail": {
+    "local_lock": {
+      "status": "ok",
+      "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-114713",
+      "asset_count": 139,
+      "batch_root_sha256": "a310c9f0a677ef37f0a94fe38f6344b589422993fc29ee7c3532ad7d60ffacbb",
+      "receipt": "卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-114713.json"
+    },
+    "base_sync": {
+      "status": "ok",
+      "tables": 7,
+      "records": 588
+    },
+    "drive": {
+      "status": "ok",
+      "uploaded": [
+        {
+          "file": "真值同步索引-20260927-114713.json",
+          "ok": true,
+          "token": "Mh1YbQPk0os7rWxgWVXcn0UZnEe"
+        },
+        {
+          "file": "锁档回执-20260927-114713.json",
+          "ok": true,
+          "token": "KqqvbwpVyobYP2x9O0Ncy8ucn5g"
+        }
+      ],
+      "ok_count": 2,
+      "total": 2
+    },
+    "wiki": {
+      "status": "ok",
+      "node_title": "全域锁档 GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-114713 ｜ a310c9f0a677ef37",
+      "node_token": "FH5Dwd08Hi5wMhk9bobc3bU2nWf",
+      "obj_token": "HWKndtqpfoX0wSxvvqvcgpBTnbb"
+    },
+    "gateway": {
+      "status": "ok",
+      "truth_count": "111372",
+      "resp_tail": "lations\": [], \"triage\": \"通过\"}, \"issues\": []}, \"truth_count\": 111372, \"message\": \"真值写入成功（已通过语义前置校验）\"}"
+    },
+    "heartbeat": {
+      "status": "ok",
+      "returncode": 0,
+      "new_handshake": true,
+      "log_tail": ""
+    }
+  }
+}

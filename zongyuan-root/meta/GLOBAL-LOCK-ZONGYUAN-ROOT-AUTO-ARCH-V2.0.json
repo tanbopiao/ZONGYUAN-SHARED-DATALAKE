@@ -1,0 +1,53 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "asset_category": "auto_archive_framework",
+  "asset_meta_file": [
+    "/hooks/auto_archive_image.sh",
+    "/hooks/auto_archive_video.sh",
+    "/hooks/auto_rsync_sync.sh",
+    "/meta/auto-asset-index.json",
+    "/meta/auto-url-mapping.json",
+    "/meta/auto-failed-task-log.json"
+  ],
+  "operation_mode": "append_only",
+  "immutable_rule": "全自动归档框架本体写入内核基线，运行产生的数据只追加不修改历史；禁止删除归档脚本与模板文件；任务超时回收1200s，失败日志永久留存",
+  "priority": "P0",
+  "timeout_sec": 1200,
+  "locked_at": "2026-09-27T00:48:44+0800",
+  "framework_sha256": {
+    "/hooks/hook_trigger_worker.sh": "72237f449c7c7e050e7e9075dfe038185ef3656af2e5e9aa6431ad27f610967b",
+    "/hooks/auto_archive_image.sh": "ea5cd440c6a1e29e87d40a0b7e27dcb30e2db63d660b04e5ef45a6d361b218a0",
+    "/hooks/auto_archive_video.sh": "dd93563d9733d3f9001381c6954b6af7904c4b3a540400901019f90d1d0155ec",
+    "/hooks/auto_rsync_sync.sh": "7449e920e915b4e23a323b820bf1427cd61a2bdff715c59aa4824e70fe91ec3f",
+    "/meta/auto-asset-index.json": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+    "/meta/auto-url-mapping.json": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+    "/meta/auto-failed-task-log.json": "e1ca8b40700b4a0b7a78a67f578478a3f1b4a0834ceccb5287e743327f9b9004",
+    "/meta/pending-rsync.list": "62e1ea450ccd50be6d4a5adb762ea11f61ac41e6ee92487f5b4712ab2a73e6f8",
+    "/HASH-LEDGER.csv": "10adf9b9fc528221dca429c3ecdc847a437131b7cbbef7648dc07c5ffb8c8b1d",
+    "/asset/image/kunlun-auto-out/AUTO-IMG-00001.webp": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+    "/asset/image/kunlun-auto-out/AUTO-IMG-00002.webp": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77"
+  },
+  "smoke_test": {
+    "failed_chain": {
+      "asset_id": "AUTO-IMG-00001",
+      "expect": "重试3次+failed日志",
+      "pass": true
+    },
+    "positive_chain": {
+      "asset_id": "AUTO-IMG-00001/00002",
+      "expect": "下载-哈希-账本-网关容错-pending_sync",
+      "pass": true
+    },
+    "id_increment": {
+      "expect": "00001→00002",
+      "pass": true
+    },
+    "append_only": {
+      "expect": "旧文件不被覆写",
+      "pass": true
+    }
+  },
+  "DID": "DID-BR-000002",
+  "node": "NODE-DEV-DOUBAO-WORK-001"
+}

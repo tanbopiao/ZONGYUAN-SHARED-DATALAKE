@@ -1,0 +1,6 @@
+语法 ✓
+=== 接 fusion cloud-mirror 子命令 ===
+83:  cloud-mirror) shift; bash "$ZR/scripts/cloud_mirror.sh" "$@" ;;
+fusion 语法 ✓
+=== 后台启动首次全量同步（核心层约8G）===
+后台同步已启动 PID=7125

@@ -1,0 +1,20 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-OP-V1.4",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "operator_id": "OP-WORKER-TRIGGER-001",
+  "operator_version": "v1.4",
+  "deployed_at": "2026-09-27T00:57:21+0800",
+  "capability": [
+    "JSON载荷标准化校验",
+    "sync/async双执行模式",
+    "最大并发前置保护(MAX=4)",
+    "P0~P3优先级",
+    "任务超时自动回收",
+    "飞书Base四表写入",
+    "双通道网关上报",
+    "ntfy联动"
+  ],
+  "status": "LOCKED",
+  "DID": "DID-BR-000002"
+}

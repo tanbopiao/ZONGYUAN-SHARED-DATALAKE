@@ -1,0 +1,661 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-040820",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "lock_timestamp": 1790453300,
+  "locked_at": "2026-09-27T04:08:20+0800",
+  "asset_count": 105,
+  "batch_root_sha256": "59bdbb1cf09a4f67f7096ce5bfddae1a5f7abb091a37e099c6457f091dacf39d",
+  "note": "OpenAI 标准协议网关上线：本地 :9120/v1 聚合6上游（云端doubao/魔塔/deapi/Agnes/润道/千帆）；密钥零明文600；鉴权X-API-Key；/v1/models+chat(SSE)；魔塔qwen-turbo实测通过；与云中枢协议链路互通（云端doubao后端403为云端侧待修）；cron保活；元内核清单12脚本",
+  "openai_gateway": {
+    "listen": "127.0.0.1:9120",
+    "protocol": "openai_v1",
+    "upstreams_online": [
+      "huodouai-cloud",
+      "modelscope"
+    ],
+    "pending": [
+      "deapi",
+      "agnes",
+      "rundao",
+      "qianfan"
+    ],
+    "e2e_test": "qwen-turbo ok",
+    "cloud_interop": "protocol ok / doubao backend 403 pending cloud-side"
+  },
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "status": "LOCKED",
+  "files": [
+    {
+      "path": "/HASH-LEDGER.csv",
+      "sha256": "723c3020853d45ce2d820fe3995f3bf1ebb92412b7e3cf0b61a134e539018ed3",
+      "bytes": 269594,
+      "mode": "0o644"
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00001.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70,
+      "mode": "0o644"
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00002.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70,
+      "mode": "0o644"
+    },
+    {
+      "path": "/docker/worker-compose.yml",
+      "sha256": "f19806e15a87d90417c56e9aff0827626289cf93f413bca2f3d8deebcb934019",
+      "bytes": 1801,
+      "mode": "0o644"
+    },
+    {
+      "path": "/hooks/auto_archive_image.sh",
+      "sha256": "2648f700e5f542284a941c5cc4c2b36c9a333fb6a9c94b18490407af7409dd0a",
+      "bytes": 5089,
+      "mode": "0o755"
+    },
+    {
+      "path": "/hooks/auto_archive_video.sh",
+      "sha256": "f80eac7342507d39e54387425c0b91e4316dc8acfb9afa7b8c2212cb849d813a",
+      "bytes": 4967,
+      "mode": "0o755"
+    },
+    {
+      "path": "/hooks/auto_rsync_sync.sh",
+      "sha256": "861cc8eadffaaa8ca74680105bd3106323451c222484a29659521920da326afa",
+      "bytes": 1912,
+      "mode": "0o755"
+    },
+    {
+      "path": "/hooks/hook_trigger_archive.sh",
+      "sha256": "72237f449c7c7e050e7e9075dfe038185ef3656af2e5e9aa6431ad27f610967b",
+      "bytes": 4963,
+      "mode": "0o755"
+    },
+    {
+      "path": "/hooks/hook_trigger_worker.sh",
+      "sha256": "acb477a9739c76156b95626474903c36099e62b90b2b07436ea0b167132d1fd9",
+      "bytes": 4277,
+      "mode": "0o755"
+    },
+    {
+      "path": "/meta/GLOBAL-LOCK-ZONGYUAN-ROOT-AUTO-ARCH-V2.0.json",
+      "sha256": "d94156cdb1e1c6bf3ed07f42fdc2fb50fee5c074de97f0de92d7f5f8c433601c",
+      "bytes": 2440,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/auto-asset-index.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/auto-failed-task-log.json",
+      "sha256": "7b67d57d14db011723e98e96bb33846e7f2288c8f8eaa52d744de37b6e8c3527",
+      "bytes": 1057,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/auto-url-mapping.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/pending-rsync.list",
+      "sha256": "62e1ea450ccd50be6d4a5adb762ea11f61ac41e6ee92487f5b4712ab2a73e6f8",
+      "bytes": 42,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/rsync-target.env",
+      "sha256": "9811c46e3977e1ea95efab70ce236317af0da09f4b01fde0ae93c45ac0cbe590",
+      "bytes": 266,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/truth-gateway-token.digest.json",
+      "sha256": "3ed2a251906e21f8c1e22d63e24ea090bef38b70de526acbfe09a0834887bc0d",
+      "bytes": 437,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta/worker-api-key.enc.json",
+      "sha256": "e4ff070f3cf27fe5ead2e219ac9a27170bf4fbae5438171dd5793b48bc4567c8",
+      "bytes": 519,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta-rules/META-RULE-012.json",
+      "sha256": "7384d0b38e691d26be8f4bf81fe916366ca6b628363715b80220ac3254feb4a6",
+      "bytes": 952,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta-rules/META-RULE-014.json",
+      "sha256": "f16b7f3793135c5ec3da3047044a6fc6f4e1c5fc6fdc8292f416654499cace61",
+      "bytes": 1179,
+      "mode": "0o644"
+    },
+    {
+      "path": "/meta-rules/worker-hardening.json",
+      "sha256": "ee43eb182888f2425c9fdf8aab7067451f872a9c8365d66fc0e23af26a7c19ab",
+      "bytes": 2153,
+      "mode": "0o444"
+    },
+    {
+      "path": "/operators/trigger_worker_operator.json",
+      "sha256": "ceff2639b57e9bffaed068ea049e0d13ca784ce82099967b8c2bbffcbd08f8ac",
+      "bytes": 1316,
+      "mode": "0o644"
+    },
+    {
+      "path": "/scripts/auto_deploy_op_v1.4.sh",
+      "sha256": "a7c6ea5af046f4713f03a66571cbb567f951b732aa55be3cc1dc6e897ff8be0c",
+      "bytes": 5051,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/cos_reconcile.sh",
+      "sha256": "c207db943aea76b7511945fe6276788e5f0b45c86d494719f540aafa681e5bbc",
+      "bytes": 4110,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/ddns_update.sh",
+      "sha256": "77d9418c24b6fa036a7a05fae9f99a24403af1efdc0f213a192fe600ef262677",
+      "bytes": 3362,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/dyn_ip_manager.sh",
+      "sha256": "28015de454fc18d7553d08d8cb6112985084045a7fa05729a0c3d719900b040f",
+      "bytes": 2998,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/frp_tunnel_keepalive.sh",
+      "sha256": "bf956ea5e5a86b739fd68a8624edd365e6638a6944970da7a8575618a509bc58",
+      "bytes": 861,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/gateway_keepalive.sh",
+      "sha256": "12c42c1ff5a8faaf8b5337b8ddad1ebf1efd23f0697527268d7e32f9450a9b7c",
+      "bytes": 803,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/heartbeat_sync.sh",
+      "sha256": "2b6ebc0368e401cad723150f2f3a95c71083cb8b49655caaa444bf367a1aa128",
+      "bytes": 5184,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/issue_ssl_cert.sh",
+      "sha256": "4df314f4467bd648637622b1a9aec2e2d6c3d9fb9593ef2a26e7cd3a60dc0889",
+      "bytes": 2174,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/nginx_keepalive.sh",
+      "sha256": "01a211063a15c134893c25d78a1e5d1e9fa5855d8f5d3895bbdd99e0080e89dc",
+      "bytes": 633,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/openai_gateway.py",
+      "sha256": "5935ffb885998385f58c0ea3efb2a8b1ff9e8ceafa99c28c676c51b69337f764",
+      "bytes": 4480,
+      "mode": "0o644"
+    },
+    {
+      "path": "/scripts/poll_cns_https.sh",
+      "sha256": "7705ec0edcecf75e7c6cea9de10081e2318e3527a75f3a19116b1c9aff2982dc",
+      "bytes": 4282,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/rsync_flush_pending.sh",
+      "sha256": "c7fc4879d92dcc318fa50f27a14fbcab423fd367d4a376f860a62e494088a834",
+      "bytes": 974,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/system_status_monitor.sh",
+      "sha256": "61ce7bf3d92c9c4e2064f5b84b878399459278272676b890b50c618cdbd38cfe",
+      "bytes": 3994,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/task_timeout_recycle.sh",
+      "sha256": "8d7cf383c884c453706de29ca50a2b878ee1ab631daff5293633a99320fd4ce6",
+      "bytes": 3974,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/truth_sync_and_lock.sh",
+      "sha256": "8080006fbfe1862b15d58f1316717ee40de23ea819b7bf16134331c2cc43cb05",
+      "bytes": 5160,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/worker_api_call.sh",
+      "sha256": "911d6dc5a67e24d73128519891c236f48c373c74cda8fd6c0f3f6121c426f18c",
+      "bytes": 2758,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/worker_auto_deploy_timer.sh",
+      "sha256": "5a60cc3e8a2db63aa78568c98d86beaf0533b8c3fcd51dace587c58c07bd1baf",
+      "bytes": 9701,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/worker_cns_keepalive.sh",
+      "sha256": "0d5a6ce4276ecbdd74c08a121429bd84630d87cfecc50dbfb6ec6bb6772a5e0d",
+      "bytes": 484,
+      "mode": "0o755"
+    },
+    {
+      "path": "/scripts/worker_controlled.sh",
+      "sha256": "4a02afdef0adb9188ae246a0f62d32766091ce096536fc62f6b5b96bfde61170",
+      "bytes": 5927,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/worker_local_process.sh",
+      "sha256": "d8cf0abf2395ba9aa5c966571468f7055ce3083b732a8200587eba3683033402",
+      "bytes": 3556,
+      "mode": "0o555"
+    },
+    {
+      "path": "/scripts/worker_ntfy_alert.sh",
+      "sha256": "a5df6c9c3763cd40484626bc01ecf1cb287018579fd8068a6d6b6f12a4244d5a",
+      "bytes": 2021,
+      "mode": "0o555"
+    },
+    {
+      "path": "/var/audit/worker-api-calls.jsonl",
+      "sha256": "6f04e536d25de90fb1f0733e1b130f5ce8e73ef792b1f1c5c875d082ab2f31cc",
+      "bytes": 245,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/reconcile/reconcile-report-20260927-031756.json",
+      "sha256": "957d7fbf0b97b50a611bb5e33210195899816bc807010ee91ca28b6ed9f9c7a6",
+      "bytes": 650,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/reconcile/reconcile-report-20260927-031848.json",
+      "sha256": "7c37c5ee0bbde74be9e25206547d7113b81c5c54168e05897e901d6c5c1ee58d",
+      "bytes": 496,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/reconcile/reconcile-report-20260927-031901.json",
+      "sha256": "754b6042b6f1c32fb30a88e85073e328de930ce2e15f0a33a056d084bf6823b5",
+      "bytes": 496,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/reconcile/reconcile-report-20260927-031912.json",
+      "sha256": "2deacad83dc4586d54627c791cba7e2a0478775aa5e15747af924a920cafea22",
+      "bytes": 496,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/snapshot/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927.json",
+      "sha256": "b1ebc58836a7b140457679fe4d68b663a14ee84225adb1565a7446dde38cb5e9",
+      "bytes": 4941,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/cos/snapshot/worker-hardening.json",
+      "sha256": "2f3e0e133070fd48ef69e0ada011c6d796427410501eb41aa6d81ff107736726",
+      "bytes": 1643,
+      "mode": "0o444"
+    },
+    {
+      "path": "/var/frp/frpc",
+      "sha256": "0bb98b7a69ce8ee23bc60fec1664f22040a2d44032296e03c8b6573a5d28dd0b",
+      "bytes": 15245464,
+      "mode": "0o755"
+    },
+    {
+      "path": "/var/frp/frps",
+      "sha256": "62c2177b6add2f48d01f73578fe130ecbfafd0ed6571ddeba8ef917434ecb607",
+      "bytes": 19394712,
+      "mode": "0o755"
+    },
+    {
+      "path": "/var/heartbeat/00-心跳索引.json",
+      "sha256": "58132d4b828f248a5109f31e1a582bfe7770366fa1aead94d01ca831784aa5ae",
+      "bytes": 642,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-015540.json",
+      "sha256": "a1d6394192c45c764bac3141839fb6a00b1540b5d2af45944fcb31d04be3c3f2",
+      "bytes": 790,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-020301.json",
+      "sha256": "d63e50f66d73288f1666578ca3667aa665c9c8a7af848e208734ecb2b54f9044",
+      "bytes": 790,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-020303.json",
+      "sha256": "88acca1620d5e1180dbe83ca754fae205ec284b21e28357e15d436ef20bb2e49",
+      "bytes": 790,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/identity/node-identity.json",
+      "sha256": "615d84d119dc52d437f8698345aaba6072173980e057f0e06a281c183862fc0c",
+      "bytes": 834,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/network/ddns-audit.jsonl",
+      "sha256": "84dc8bfe0141750a05a233c793c71fbb37ad15ab0c71f019f7ecc0cad07710fa",
+      "bytes": 2108,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/network/domain-registry.json",
+      "sha256": "3f780cf488c30f3d0ccaabe05c60a4f604f1da0f6dc34e00fa766e3e2ad8b056",
+      "bytes": 1768,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/network/ip-state.json",
+      "sha256": "4f06dceace740062f14033e171b37f4ac51cf2650c7196d8f8580e4068ee1db9",
+      "bytes": 369,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/network/ports-mount.json",
+      "sha256": "d8d9ade0b51265f7e54a7f6cb95c3bd60adc95d55b212241fce606233bff21ac",
+      "bytes": 3564,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/nginx/certs/fullchain.pem",
+      "sha256": "f4a992052a7b3d85e01ecfc5c96e8d337fd166cc96000b1dd3a1042acf39bb47",
+      "bytes": 1131,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/nginx/certs/privkey.pem",
+      "sha256": "46d390cd6fc15b98b7ca8c31bb1eeb408ceb8c9f6b8583ccf14b79eb43aa002d",
+      "bytes": 1704,
+      "mode": "0o600"
+    },
+    {
+      "path": "/var/nginx/nginx.pid",
+      "sha256": "03a7df495c75201673834f9478f8903288b3fa202bcf9f3cddadeea9f92eab37",
+      "bytes": 5,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/nginx/zyr_nginx.conf",
+      "sha256": "4738f0417c08d4ae847c0941a9309f96d250329ae5653f4ae3ee528d0e134b61",
+      "bytes": 2111,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/poll/00-轮询索引.json",
+      "sha256": "77dc5ddc7371fea0ad6175ac5eae22899dd36e3270bbba0d46d061abf0f0ff1b",
+      "bytes": 257,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/poll/轮询-20260927-024341.json",
+      "sha256": "3b861bc58bb41fa8bcf375856e4378db2440b1e7ac21702995e34d4c157002c8",
+      "bytes": 366,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/system/system-status-20260927-031427.json",
+      "sha256": "a701ce689ee1d109bb57768ed1b31e2e12bfc2a450a6697af69f1a9c10940e5b",
+      "bytes": 2321,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/system/system-status.json",
+      "sha256": "a701ce689ee1d109bb57768ed1b31e2e12bfc2a450a6697af69f1a9c10940e5b",
+      "bytes": 2321,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/00-同步索引.json",
+      "sha256": "9c23bff353aacf2956ef7d3ecc4adf87469df5552eb588886be95a42cd051286",
+      "bytes": 904,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/01-数据表.json",
+      "sha256": "9b473c726a0aabbe59dd78f779cac73eeb6394f628adc10015bd533320c0ab84",
+      "bytes": 3466,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/02-账号主表.json",
+      "sha256": "e72ca0d506ae6f678f51957270d79ea8b0c71ef5dcc6e835eb010e6c361f7079",
+      "bytes": 2506,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/03-任务台账.json",
+      "sha256": "7208b044ed9dd5cae24dc88055d6ab2ec3129eac6018fdc8f98c5f887a7cfe20",
+      "bytes": 110252,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/04-资产台账.json",
+      "sha256": "df922e4bae5c5c7e3405d59136f3b144dad34e6ec603f4baea30d082099dc3b6",
+      "bytes": 65193,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/05-决策日志.json",
+      "sha256": "8e21c66751a3e7988ec7c5d215c21833f1d9b27808d475448f204e5be57b680a",
+      "bytes": 61995,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/06-知识库索引.json",
+      "sha256": "32e53809f3caf79e9c1598fd6fc38b0ca7459f4cb04ce752083af3ae28faf68f",
+      "bytes": 30696,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/truth/07-问题阻塞记录.json",
+      "sha256": "46691e60ad9a676789c94804130195fe88fe4d21d36ba60f96a7c32ee14f5de0",
+      "bytes": 5171,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/workers/CNS-DEMO-001.heartbeat",
+      "sha256": "ac63ae9733955f6c9a86a78ebf17abaf4820cd2b23d87467b39a3af4324e4894",
+      "bytes": 11,
+      "mode": "0o644"
+    },
+    {
+      "path": "/var/workers/CNS-DEMO-001.pid",
+      "sha256": "f86b9967c1ebf46e9aedee676f719f4569f4a832b8fd6b88b01874f2e29dac74",
+      "bytes": 6,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-013614.json",
+      "sha256": "ba15684d29e777fd5a3f108b1de2f06adea0a893a92aaf57ef6080d2a8bd7c49",
+      "bytes": 6102,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014240.json",
+      "sha256": "4261e488e0719433f4e8413fb1f0ce09f27e710cdb44f1a41e25d4fadd0ef23a",
+      "bytes": 6427,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014543.json",
+      "sha256": "8073dff1ed56725051295917609da83cf9b63a1b96b1546ebca48fe2978276b0",
+      "bytes": 6689,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014609.json",
+      "sha256": "ca8228d1cfb74a73cf9f7bd1f536785ebbebb2aceb424bb1d566a5408e0eb9ab",
+      "bytes": 6883,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014945.json",
+      "sha256": "676ba5a2db35927f92308a887340d8a6d45d45b07dafeda23c8406f4c6d25c74",
+      "bytes": 7217,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-015159.json",
+      "sha256": "416ac3439e69c34404d9bcbb5fa9827832967b2760c85776b917885dae44d213",
+      "bytes": 7361,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-015649.json",
+      "sha256": "d2f9dc4c2976c1cc752a256c47fc910693b528114deaa3855c4fcec366c2fef1",
+      "bytes": 8110,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-021211.json",
+      "sha256": "695f760fa32073a3b7d322ea8c60d43b026525ad5cb68ba24f7dc8351d478f51",
+      "bytes": 9143,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-021916.json",
+      "sha256": "900b0be822fe03c6827174419c0b159a4dcb7c6363a287ec5851b02c2500efa7",
+      "bytes": 9372,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-023843.json",
+      "sha256": "9cbcdaa9eb1d518799ff119ba17c208b942d9aff3b64e32c2a508bffcadc6de1",
+      "bytes": 9726,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-024703.json",
+      "sha256": "ad5314feb5371fc4c6e88b3a235132104791beb3d28acb236e8a553142e84810",
+      "bytes": 13126,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-025148.json",
+      "sha256": "d966f1bf4ad6da2bd4a415a55d69a93e931a3ce8893de4c0a0d48ce67591fd22",
+      "bytes": 13559,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-030407.json",
+      "sha256": "1233f172c19a6e30b8b63592664771558d948de2a0422861e45f1a4e31004450",
+      "bytes": 14262,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-030746.json",
+      "sha256": "2e6ebb7b9a5a587734c5fa9c750a0a7f2a09521b864f1e01291c237b54ae9b5d",
+      "bytes": 14861,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-031447.json",
+      "sha256": "ebaf4bed5dccb285a085cee8e0435d49bddbcda37e9397495e3e1b9c3e1b5ca6",
+      "bytes": 15506,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-031933.json",
+      "sha256": "b6c4e6e3be517735dba45484d88255de4aef2d56c833f35c8feb3720dafe1ff5",
+      "bytes": 17348,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-033224.json",
+      "sha256": "86e772549e988644593fcbef40ed8d2d775c0497401ac039b047525102776637",
+      "bytes": 18779,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-034118.json",
+      "sha256": "e675d2dbc860c2876a53564aebbfe2daec3f00526ea38172045e35e85a5c5c16",
+      "bytes": 19205,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-034422.json",
+      "sha256": "acd146c0a22b8492bd74c7f08949a0baa941e2bf0626501c61b3d9f87dc80707",
+      "bytes": 19700,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-035146.json",
+      "sha256": "9b3cd320afa693c76a97207386562b0b55ba28309f6f7383b2169c1dc1d159f6",
+      "bytes": 20239,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-035443.json",
+      "sha256": "1d57c4290586745f9a478c5f841d1fcf810c4307305b544015a839710c58b1b6",
+      "bytes": 20895,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927.json",
+      "sha256": "b1ebc58836a7b140457679fe4d68b663a14ee84225adb1565a7446dde38cb5e9",
+      "bytes": 4941,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-OP-V1.4.json",
+      "sha256": "d5fc1ef534f2393b42d7fbd57e76f59aa44b3c5095a71842d41ed10192f9266f",
+      "bytes": 1501,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/NODE-IDENTITY-NODE-DEV-DOUBAO-WORK-001.json",
+      "sha256": "615d84d119dc52d437f8698345aaba6072173980e057f0e06a281c183862fc0c",
+      "bytes": 834,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/auto_deploy_op_v1.4_receipt.json",
+      "sha256": "afd951022cc20b43c8f3807866ac4ddc6c905a2e052e7e7457ec04b85e74b0ae",
+      "bytes": 559,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/operator-worker-trigger-v1.4.json",
+      "sha256": "3fd1e4234566c865c22050631cb608170f0de5335d560d0cafcba99820433470",
+      "bytes": 1824,
+      "mode": "0o644"
+    },
+    {
+      "path": "/卷宗/worker进化模型与锁档边界-20260927.md",
+      "sha256": "5e27e3298eaa267f0daaa63015c0cefeb7f1c67f6c58edc682c7d70d6420ee63",
+      "bytes": 8014,
+      "mode": "0o644"
+    }
+  ]
+}

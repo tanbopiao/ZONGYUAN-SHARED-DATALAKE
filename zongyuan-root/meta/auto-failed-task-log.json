@@ -1,0 +1,48 @@
+[
+  {
+    "asset_id": "AUTO-IMG-00001",
+    "asset_kind": "image",
+    "session_temp_url": "http://127.0.0.1:9/nonexist.png",
+    "asset_title": "冒烟测试-失败",
+    "reason": "download_or_verify_failed",
+    "attempts": 3,
+    "record_timestamp": "2026-09-27T00:47:52+0800",
+    "status": "failed",
+    "DID": "DID-BR-000002"
+  },
+  {
+    "asset_id": "AUTO-IMG-00001",
+    "session_temp_url": "http://127.0.0.1:9121/test.png",
+    "reason": "gateway_report_failed",
+    "record_timestamp": "2026-09-27T00:48:04+0800",
+    "status": "gateway_failed"
+  },
+  {
+    "asset_id": "AUTO-IMG-00002",
+    "session_temp_url": "http://127.0.0.1:9121/test.png",
+    "reason": "gateway_report_failed",
+    "record_timestamp": "2026-09-27T00:48:27+0800",
+    "status": "gateway_failed"
+  },
+  {
+    "asset_id": "AUTO-IMG-00001/AUTO-IMG-00002",
+    "reason": "gateway_backfill_success",
+    "record_timestamp": "2026-09-27T01:06:14+0800",
+    "detail": "网关端点修正为无斜杠后补报成功（truth_count 110038/110039）",
+    "status": "backfilled"
+  },
+  {
+    "asset_id": "AUTO-IMG-00003",
+    "session_temp_url": "http://127.0.0.1:8099/AUTO-IMG-00001.webp",
+    "reason": "gateway_report_failed",
+    "record_timestamp": "2026-09-27T11:47:04+0800",
+    "status": "gateway_failed"
+  },
+  {
+    "asset_id": "AUTO-IMG-00004",
+    "session_temp_url": "http://127.0.0.1:8099/AUTO-IMG-00003.webp",
+    "reason": "gateway_report_failed",
+    "record_timestamp": "2026-09-27T11:51:29+0800",
+    "status": "gateway_failed"
+  }
+]

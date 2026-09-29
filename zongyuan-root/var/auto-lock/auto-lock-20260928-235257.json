@@ -1,0 +1,91 @@
+{
+  "mechanism": "zongyuan-auto-lock",
+  "did": "DID-BR-000002",
+  "run_at": "2026-09-28T23:52:57+0800",
+  "source_status": {
+    "evidence": "ok",
+    "law_schema": "ok",
+    "convergence": "ok",
+    "local_lock": "ok",
+    "base_sync": "ok",
+    "drive": "ok",
+    "wiki": "ok",
+    "gateway": "ok",
+    "heartbeat": "ok"
+  },
+  "detail": {
+    "evidence": {
+      "status": "ok",
+      "summary": "}"
+    },
+    "law_schema": {
+      "status": "ok",
+      "summary": [
+        "[PASS] META-LAW-CRYPT-LOCK-001.json",
+        "[PASS] META-LAYER-SEPARATE-001.json",
+        "[PASS] META-WORKER-KERNEL-001.json",
+        "[PASS] META‑ROOT‑TRUTH‑000.json"
+      ]
+    },
+    "convergence": {
+      "status": "ok",
+      "detail": "VERIFY: 8/8 一致"
+    },
+    "local_lock": {
+      "status": "ok",
+      "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-235257",
+      "asset_count": 72324,
+      "batch_root_sha256": "923905626d57389ccaf333cdd5e1d838238d7f64805f0388bdea099335c37bc8",
+      "receipt": "卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-235257.json"
+    },
+    "base_sync": {
+      "status": "ok",
+      "tables": 48,
+      "records": 2127
+    },
+    "drive": {
+      "status": "ok",
+      "uploaded": [
+        {
+          "file": "真值同步索引-20260928-235257.json",
+          "ok": true,
+          "token": "HisnbQos0ot6CFxB4nYcmTWqncd"
+        },
+        {
+          "file": "锁档回执-20260928-235257.json",
+          "ok": true,
+          "token": "Niz0bldjtoN1aWxTuoIc1yEVndg"
+        },
+        {
+          "file": "证据汇总-20260928-235257.json",
+          "ok": true,
+          "token": "J673bIwJYoyo1jxF44ycA9k8nkh"
+        },
+        {
+          "file": "证据截图-20260928-235257.json",
+          "ok": true,
+          "token": "PQsWbdo6Eog1eMx0VB9cNo6Bnee"
+        }
+      ],
+      "ok_count": 4,
+      "total": 4
+    },
+    "wiki": {
+      "status": "ok",
+      "node_title": "全域锁档 GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-235257 ｜ 923905626d57389c",
+      "node_token": "IQ85w9QCFi4i9fkpwxXcFWc4n9c",
+      "obj_token": "U0ZXdXGJWo0gI8xPaLScvSgInfc"
+    },
+    "gateway": {
+      "status": "ok",
+      "truth_count": "127770",
+      "resp_tail": "lations\": [], \"triage\": \"通过\"}, \"issues\": []}, \"truth_count\": 127770, \"message\": \"真值写入成功（已通过语义前置校验）\"}"
+    },
+    "heartbeat": {
+      "status": "ok",
+      "returncode": 0,
+      "new_handshake": true,
+      "log_tail": ""
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "event": "autonomy_patrol",
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "run_at": "2026-09-29T01:43:06+0800",
+  "summary": {
+    "total": 12,
+    "pass": 11,
+    "partial": 0,
+    "fail": 1
+  },
+  "items": [
+    {
+      "item": "services",
+      "status": "PASS",
+      "detail": "supervisord/daemon/worker/crond/kernel=OK; 端口3/3"
+    },
+    {
+      "item": "cron",
+      "status": "PASS",
+      "detail": "20 条(要求≥10)"
+    },
+    {
+      "item": "meta_law_schema",
+      "status": "PASS",
+      "detail": "校验门通过"
+    },
+    {
+      "item": "key_assets",
+      "status": "PASS",
+      "detail": "全部存在"
+    },
+    {
+      "item": "heartbeat_fresh",
+      "status": "FAIL",
+      "detail": "最新=heartbeat-20260928-233316.json"
+    },
+    {
+      "item": "audit_fresh",
+      "status": "PASS",
+      "detail": "445 条, 最近写入<24h=是"
+    },
+    {
+      "item": "disk",
+      "status": "PASS",
+      "detail": "可用 100.0%"
+    },
+    {
+      "item": "gateway",
+      "status": "PASS",
+      "detail": "在线"
+    },
+    {
+      "item": "merkle_baseline",
+      "status": "PASS",
+      "detail": "root_hash 在位"
+    },
+    {
+      "item": "purge",
+      "status": "PASS",
+      "detail": "日志轮转=0个 [] | tmp清理=0个"
+    },
+    {
+      "item": "vm_restart",
+      "status": "PASS",
+      "detail": "无重启(uptime 5472s)"
+    },
+    {
+      "item": "user_skills",
+      "status": "PASS",
+      "detail": "完整"
+    }
+  ]
+}

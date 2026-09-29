@@ -1,0 +1,48 @@
+{
+  "operator_id": "OP-WORKER-TRIGGER-001",
+  "name": "Worker部署触发算子",
+  "version": "v1.4",
+  "hook_type": "local_file_trigger",
+  "entry_script": "/home/user/ZONGYUAN-ROOT/scripts/worker_auto_deploy_timer.sh",
+  "max_worker_count": 4,
+  "default_timeout_sec": 3600,
+  "input_schema": {
+    "task_id": "string",
+    "worker_name": "string",
+    "image": "string",
+    "gpu": "boolean",
+    "gpu_memory": "number",
+    "cpu_cores": "number",
+    "memory_mb": "number",
+    "env": "object",
+    "payload_note": "string",
+    "run_mode": "enum[async,sync]",
+    "priority": "enum[P0,P1,P2,P3]",
+    "timeout_sec": "number"
+  },
+  "output_schema": {
+    "trigger_ts": "int",
+    "status": "enum[accepted,rejected]",
+    "task_record_id": "string",
+    "run_mode": "enum[async,sync]",
+    "priority": "enum[P0,P1,P2,P3]",
+    "timeout_sec": "number",
+    "current_running_workers": "int",
+    "max_worker_limit": "int",
+    "msg": "string"
+  },
+  "pre_check": [
+    "lark-cli可用",
+    "docker服务运行",
+    "MAX_WORKER_COUNT配额校验",
+    "JSON结构合法性校验",
+    "priority字段合法枚举校验",
+    "timeout_sec数值校验",
+    "当前运行worker数量 < max_worker_count"
+  ],
+  "post_hook": {
+    "gateway_report": true,
+    "feishu_base_write": true,
+    "ntfy_alert": true
+  }
+}

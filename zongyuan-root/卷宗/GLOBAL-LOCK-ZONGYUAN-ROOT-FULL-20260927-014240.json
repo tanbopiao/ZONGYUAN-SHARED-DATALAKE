@@ -1,0 +1,190 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014240",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "lock_timestamp": 1790444560,
+  "locked_at": "2026-09-27T01:42:40+0800",
+  "asset_count": 34,
+  "batch_root_sha256": "9784900449baff2350a7dd7ebf14acfe50212b092918c8e88a956a828f3e0fc3",
+  "note": "含 meta/truth-gateway-token.digest.json（令牌加密存储载体，CL-2 合规）",
+  "files": [
+    {
+      "path": "/HASH-LEDGER.csv",
+      "sha256": "8d90f0459bfb9fd61d434bd408a44d2ff3bcacb55dc07980087fa1a9173356d7",
+      "bytes": 14424
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00001.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00002.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/docker/worker-compose.yml",
+      "sha256": "f19806e15a87d90417c56e9aff0827626289cf93f413bca2f3d8deebcb934019",
+      "bytes": 1801
+    },
+    {
+      "path": "/hooks/auto_archive_image.sh",
+      "sha256": "2648f700e5f542284a941c5cc4c2b36c9a333fb6a9c94b18490407af7409dd0a",
+      "bytes": 5089
+    },
+    {
+      "path": "/hooks/auto_archive_video.sh",
+      "sha256": "f80eac7342507d39e54387425c0b91e4316dc8acfb9afa7b8c2212cb849d813a",
+      "bytes": 4967
+    },
+    {
+      "path": "/hooks/auto_rsync_sync.sh",
+      "sha256": "7449e920e915b4e23a323b820bf1427cd61a2bdff715c59aa4824e70fe91ec3f",
+      "bytes": 1655
+    },
+    {
+      "path": "/hooks/hook_trigger_archive.sh",
+      "sha256": "72237f449c7c7e050e7e9075dfe038185ef3656af2e5e9aa6431ad27f610967b",
+      "bytes": 4963
+    },
+    {
+      "path": "/hooks/hook_trigger_worker.sh",
+      "sha256": "acb477a9739c76156b95626474903c36099e62b90b2b07436ea0b167132d1fd9",
+      "bytes": 4277
+    },
+    {
+      "path": "/meta/GLOBAL-LOCK-ZONGYUAN-ROOT-AUTO-ARCH-V2.0.json",
+      "sha256": "d94156cdb1e1c6bf3ed07f42fdc2fb50fee5c074de97f0de92d7f5f8c433601c",
+      "bytes": 2440
+    },
+    {
+      "path": "/meta/auto-asset-index.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/auto-failed-task-log.json",
+      "sha256": "7b67d57d14db011723e98e96bb33846e7f2288c8f8eaa52d744de37b6e8c3527",
+      "bytes": 1057
+    },
+    {
+      "path": "/meta/auto-url-mapping.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/pending-rsync.list",
+      "sha256": "62e1ea450ccd50be6d4a5adb762ea11f61ac41e6ee92487f5b4712ab2a73e6f8",
+      "bytes": 42
+    },
+    {
+      "path": "/meta/truth-gateway-token.digest.json",
+      "sha256": "3ed2a251906e21f8c1e22d63e24ea090bef38b70de526acbfe09a0834887bc0d",
+      "bytes": 437
+    },
+    {
+      "path": "/meta-rules/META-RULE-012.json",
+      "sha256": "7384d0b38e691d26be8f4bf81fe916366ca6b628363715b80220ac3254feb4a6",
+      "bytes": 952
+    },
+    {
+      "path": "/meta-rules/META-RULE-014.json",
+      "sha256": "f16b7f3793135c5ec3da3047044a6fc6f4e1c5fc6fdc8292f416654499cace61",
+      "bytes": 1179
+    },
+    {
+      "path": "/operators/trigger_worker_operator.json",
+      "sha256": "ceff2639b57e9bffaed068ea049e0d13ca784ce82099967b8c2bbffcbd08f8ac",
+      "bytes": 1316
+    },
+    {
+      "path": "/scripts/auto_deploy_op_v1.4.sh",
+      "sha256": "c2beb82001311b963d5cf1574ea9211fd549ab47f48cdf51c84d10475ef16b60",
+      "bytes": 5113
+    },
+    {
+      "path": "/scripts/task_timeout_recycle.sh",
+      "sha256": "d9a462d7621490e926c2f92ead8a0b4278b2e899f79fa5e3d799f637662e643f",
+      "bytes": 3821
+    },
+    {
+      "path": "/scripts/worker_auto_deploy_timer.sh",
+      "sha256": "981f908e8a5bc8fcdfccb4f12ba2444a8ddeadffea7fd9deadd07d7dfcb8ac65",
+      "bytes": 8543
+    },
+    {
+      "path": "/var/truth/00-同步索引.json",
+      "sha256": "d41006ef598d7b9963a36b34d2a5660c1c001f8d165fc3d1ceade22e688a04e4",
+      "bytes": 904
+    },
+    {
+      "path": "/var/truth/01-数据表.json",
+      "sha256": "eed5eedab8661191d9c33c7f5d455e123afac0a4433ad5cab45edb12b77370f5",
+      "bytes": 3466
+    },
+    {
+      "path": "/var/truth/02-账号主表.json",
+      "sha256": "974ccbba698e30bebd9561cca5ff9521489f33ea21cd5ad97c0503006c79f155",
+      "bytes": 2506
+    },
+    {
+      "path": "/var/truth/03-任务台账.json",
+      "sha256": "ab929d23a8f3098de011aeb5c07975033c21b1c903a862ae1e18c79f1ea4eddc",
+      "bytes": 110252
+    },
+    {
+      "path": "/var/truth/04-资产台账.json",
+      "sha256": "1008c80af25bc1a15e2fb69eb152b33f24d9025f73c29569e323a53223e7fae2",
+      "bytes": 65193
+    },
+    {
+      "path": "/var/truth/05-决策日志.json",
+      "sha256": "f9103eeca6e9417059168bda27ef338c24901ecdd62c342d72f36000b4824b4a",
+      "bytes": 61995
+    },
+    {
+      "path": "/var/truth/06-知识库索引.json",
+      "sha256": "1995e5498a263795025b2adeac09e20184209433db02543ec32b1f4ac107ac02",
+      "bytes": 30696
+    },
+    {
+      "path": "/var/truth/07-问题阻塞记录.json",
+      "sha256": "5e7c9003f32c5c4c7d93aeb3ea2f7ce4d8915cdac677a98ee92162936b8c3672",
+      "bytes": 5171
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-013614.json",
+      "sha256": "ba15684d29e777fd5a3f108b1de2f06adea0a893a92aaf57ef6080d2a8bd7c49",
+      "bytes": 6102
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927.json",
+      "sha256": "b1ebc58836a7b140457679fe4d68b663a14ee84225adb1565a7446dde38cb5e9",
+      "bytes": 4941
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-OP-V1.4.json",
+      "sha256": "d5fc1ef534f2393b42d7fbd57e76f59aa44b3c5095a71842d41ed10192f9266f",
+      "bytes": 1501
+    },
+    {
+      "path": "/卷宗/auto_deploy_op_v1.4_receipt.json",
+      "sha256": "afd951022cc20b43c8f3807866ac4ddc6c905a2e052e7e7457ec04b85e74b0ae",
+      "bytes": 559
+    },
+    {
+      "path": "/卷宗/operator-worker-trigger-v1.4.json",
+      "sha256": "3fd1e4234566c865c22050631cb608170f0de5335d560d0cafcba99820433470",
+      "bytes": 1824
+    }
+  ],
+  "gateway_report": {
+    "endpoint": "https://www.huodouai.com/api/report/truth",
+    "did": "DID-BR-000002",
+    "status": "to_report"
+  },
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "status": "LOCKED"
+}

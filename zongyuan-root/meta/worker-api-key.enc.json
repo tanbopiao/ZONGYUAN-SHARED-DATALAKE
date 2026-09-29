@@ -1,0 +1,13 @@
+{
+  "subject": "worker 云端 API 密钥（ak-*）",
+  "algorithm": "AES-256-GCM",
+  "key_source": "env ZR_API_ENC_KEY（KEK，不落盘）",
+  "iv_b64": "/8uJ6wpBruuiVhQ1",
+  "ciphertext_b64": "KwjQOWlDqRM+kT/OFxENi7zKp8xXYc5QzoO4T/QrRh7nVZs=",
+  "aad": "ZONGYUAN-ROOT-worker-api-key-v1",
+  "sha256_fingerprint": "36e34e21679c9e36471a9327bbfa919e6d94a96cbef3287280dfaba49998c3f3",
+  "plaintext": "NOT_STORED",
+  "law": "META-LAW-CRYPT-LOCK-001",
+  "created_at": "2026-09-27T02:48:46+0800",
+  "owner": "DID-BR-000002"
+}

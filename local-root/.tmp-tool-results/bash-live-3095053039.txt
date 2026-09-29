@@ -1,0 +1,9 @@
+=== 收割器实测（平日轻量模式）===
+[收割:daily] 抓取 19 ｜ 提炼新增 3 ｜ 源 {'arxiv': 10, 'hn': 9}
+网关: 166, "channel": "https://www.huodouai.com/api/report/truth"}
+
+=== 知识库抽样 ===
+/home/user/ZONGYUAN-ROOT/var/knowledge/harvest-20260929-013529-cf8b70.json
+/home/user/ZONGYUAN-ROOT/var/knowledge/harvest-20260929-013529-d57315.json
+最新收割条目: Learning to Stop without Learning to Stop: Self-Supervised Confidence Training Improves Reasoning Efficiency ｜ score 2 ｜ http://arxiv.org/abs/2609.31619v1
+ledger 行数: 3

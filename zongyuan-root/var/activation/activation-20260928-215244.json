@@ -1,0 +1,1 @@
+{"ts":"2026-09-28T21:52:44+0800","action":"boot","status":"ok","detail":"healthy: worker-kernel-001 (pid 2409, 心跳 35s 前) | 中枢态: {"last_pull_ts":"1790558593","mode":"idle","instruction_count":0,"kill_switch":"fail_closed","note":"中枢不可达，worker 保持受控空闲"} / rsync续传","DID":"DID-BR-000002"}

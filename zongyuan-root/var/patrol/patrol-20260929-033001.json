@@ -1,0 +1,79 @@
+{
+  "event": "autonomy_patrol",
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "run_at": "2026-09-29T03:30:02+0800",
+  "summary": {
+    "total": 13,
+    "pass": 12,
+    "partial": 0,
+    "fail": 1
+  },
+  "items": [
+    {
+      "item": "services",
+      "status": "FAIL",
+      "detail": "supervisord/daemon/worker/crond/kernel=DOWN; 端口3/3"
+    },
+    {
+      "item": "services.fix",
+      "status": "PASS",
+      "detail": "已调 guard 拉起"
+    },
+    {
+      "item": "cron",
+      "status": "PASS",
+      "detail": "20 条(要求≥10)"
+    },
+    {
+      "item": "meta_law_schema",
+      "status": "PASS",
+      "detail": "校验门通过"
+    },
+    {
+      "item": "key_assets",
+      "status": "PASS",
+      "detail": "全部存在"
+    },
+    {
+      "item": "heartbeat_fresh",
+      "status": "PASS",
+      "detail": "最新=heartbeat-20260929-032505.json"
+    },
+    {
+      "item": "audit_fresh",
+      "status": "PASS",
+      "detail": "644 条, 最近写入<24h=是"
+    },
+    {
+      "item": "disk",
+      "status": "PASS",
+      "detail": "可用 100.0%"
+    },
+    {
+      "item": "gateway",
+      "status": "PASS",
+      "detail": "在线"
+    },
+    {
+      "item": "merkle_baseline",
+      "status": "PASS",
+      "detail": "root_hash 在位"
+    },
+    {
+      "item": "purge",
+      "status": "PASS",
+      "detail": "日志轮转=0个 [] | tmp清理=1个"
+    },
+    {
+      "item": "vm_restart",
+      "status": "PASS",
+      "detail": "检测到VM重启(uptime 3920s<期望11888s),已触发guard全量拉起"
+    },
+    {
+      "item": "user_skills",
+      "status": "PASS",
+      "detail": "完整"
+    }
+  ]
+}

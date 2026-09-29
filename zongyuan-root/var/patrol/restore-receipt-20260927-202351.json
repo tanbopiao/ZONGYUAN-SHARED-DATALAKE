@@ -1,0 +1,22 @@
+{
+  "did": "DID-BR-000002",
+  "ts": "2026-09-27T20:23:51+0800",
+  "type": "restore-receipt",
+  "status": {
+    "kernel": "running: pid",
+    "worker": "healthy",
+    "cron": 16,
+    "port8081": 1,
+    "port8091": 1,
+    "site_http": "200"
+  },
+  "env_snapshot": "{\"info\": \"## System Environment (v1.14.10):\\n- Ubuntu 22.04.5 LTS 22.04.5 (x86_64)\\n- User: user, use `sudo` to switch to root\\n- Home directory: /home/user\\n- Workspace: /workspace\\n- Timezone: Asia/Singapore\\n- Occupied Ports: 10000,10080,10900,10901,18080,323,443,5900,6080,62987,80,8080,8081,8091,8118,9081,9082,9092,9222\\n\\n## Development Environment:\\nPython:\\n- Python 3.10.12(path: /usr/bin/p",
+  "evidence": {
+    "screen": "/home/user/ZONGYUAN-ROOT/var/evidence/screen-20260927-193255.jpg",
+    "screen_sha256": "be19f4b15783bdcc0aa754922737d7a95f9c0373655f81bca1c8f9bc22da0eb1"
+  },
+  "full_kernel_active": {
+    "mirror_ok": 1,
+    "mirror_gb": "8.14"
+  }
+}

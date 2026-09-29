@@ -1,0 +1,76 @@
+{
+  "mechanism": "zongyuan-auto-lock",
+  "did": "DID-BR-000002",
+  "run_at": "2026-09-28T08:17:03+0800",
+  "source_status": {
+    "evidence": "ok",
+    "local_lock": "ok",
+    "base_sync": "ok",
+    "drive": "ok",
+    "wiki": "ok",
+    "gateway": "ok",
+    "heartbeat": "ok"
+  },
+  "detail": {
+    "evidence": {
+      "status": "ok",
+      "summary": "}"
+    },
+    "local_lock": {
+      "status": "ok",
+      "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-081703",
+      "asset_count": 71937,
+      "batch_root_sha256": "41a766635e910956e4e5eea2090911acfe25611490b3f72460e790bcba5c3ace",
+      "receipt": "卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-081703.json"
+    },
+    "base_sync": {
+      "status": "ok",
+      "tables": 47,
+      "records": 2090
+    },
+    "drive": {
+      "status": "ok",
+      "uploaded": [
+        {
+          "file": "真值同步索引-20260928-081703.json",
+          "ok": true,
+          "token": "HKvhbTj1IomUWwxC032ceTvlnwf"
+        },
+        {
+          "file": "锁档回执-20260928-081703.json",
+          "ok": true,
+          "token": "SLF5bWK9wo91w1xeAvwcxKsCndc"
+        },
+        {
+          "file": "证据汇总-20260928-081703.json",
+          "ok": true,
+          "token": "S6KXbFLNgo3BLLxzz1EcCxhDnFJ"
+        },
+        {
+          "file": "证据截图-20260928-081703.json",
+          "ok": true,
+          "token": "P05qbqkAfoSDNjx06pscIwRvnzh"
+        }
+      ],
+      "ok_count": 4,
+      "total": 4
+    },
+    "wiki": {
+      "status": "ok",
+      "node_title": "全域锁档 GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-081703 ｜ 41a766635e910956",
+      "node_token": "PuCNwGF3aidRNIkuMs9c8os0nib",
+      "obj_token": "V7dFdv7FYolFagxXJCVcICNVnzc"
+    },
+    "gateway": {
+      "status": "ok",
+      "truth_count": "125028",
+      "resp_tail": "lations\": [], \"triage\": \"通过\"}, \"issues\": []}, \"truth_count\": 125028, \"message\": \"真值写入成功（已通过语义前置校验）\"}"
+    },
+    "heartbeat": {
+      "status": "ok",
+      "returncode": 0,
+      "new_handshake": true,
+      "log_tail": ""
+    }
+  }
+}

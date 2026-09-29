@@ -1,0 +1,19 @@
+=== 增量验证：重跑 mirror（应全部跳过）===
+  user-skills: 复制 0 ｜ 跳过 14 ｜ 密钥排除 0
+  reports: 复制 2 ｜ 跳过 37 ｜ 密钥排除 0
+MIRROR: 复制 3 ｜ 跳过 77145 ｜ 密钥排除 4 ｜ 耗时 290s
+稳态策略：首次全量建立基线，后续增量仅同步变化文件（收益最大/风险最小/成本最小）
+
+=== 完整性 ===
+VERIFY: 8/8 一致
+FULL-VERIFY: 3/3 关键镜像一致
+
+=== 收敛点全景 ===
+收敛点: /home/user/ZONGYUAN-ROOT/backup ｜ 资产 77247 个文件
+  cron/: 1 文件
+  etc/: 1 文件
+  full/: 77150 文件
+  kernel-core/: 64 文件
+  reports/: 1 文件
+  user-skills/: 15 文件
+  var/: 15 文件

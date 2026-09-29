@@ -1,0 +1,145 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "lock_timestamp": 1790442604,
+  "locked_at": "2026-09-27T01:10:04+0800",
+  "asset_count": 23,
+  "batch_root_sha256": "61636f414c16ae3164c681723115934defb7b00e8086454d55d87e96dead47b8",
+  "batch_members": [
+    "hooks/(auto_archive x2 + trigger v1.4 + archive备份 + rsync)",
+    "scripts/(deploy_timer + timeout_recycle + auto_deploy_op)",
+    "operators/trigger_worker_operator.json",
+    "meta-rules/(META-RULE-012/014)",
+    "meta/(index + url-mapping + failed-log + GLOBAL-LOCK-ARCH-V2.0 + GLOBAL-LOCK-OP-V1.4 + pending)",
+    "docker/worker-compose.yml",
+    "卷宗/(operator v1.4 + OP-V1.4回执 + auto_deploy回执)",
+    "asset/(AUTO-IMG-00001/00002.webp)",
+    "HASH-LEDGER.csv"
+  ],
+  "files": [
+    {
+      "path": "/HASH-LEDGER.csv",
+      "sha256": "bf94ed626f29b69348bff1e7f4f552e7f5a468364bb8f65e140dc88310e3f317",
+      "bytes": 4287
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00001.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00002.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/docker/worker-compose.yml",
+      "sha256": "f19806e15a87d90417c56e9aff0827626289cf93f413bca2f3d8deebcb934019",
+      "bytes": 1801
+    },
+    {
+      "path": "/hooks/auto_archive_image.sh",
+      "sha256": "2648f700e5f542284a941c5cc4c2b36c9a333fb6a9c94b18490407af7409dd0a",
+      "bytes": 5089
+    },
+    {
+      "path": "/hooks/auto_archive_video.sh",
+      "sha256": "f80eac7342507d39e54387425c0b91e4316dc8acfb9afa7b8c2212cb849d813a",
+      "bytes": 4967
+    },
+    {
+      "path": "/hooks/auto_rsync_sync.sh",
+      "sha256": "7449e920e915b4e23a323b820bf1427cd61a2bdff715c59aa4824e70fe91ec3f",
+      "bytes": 1655
+    },
+    {
+      "path": "/hooks/hook_trigger_archive.sh",
+      "sha256": "72237f449c7c7e050e7e9075dfe038185ef3656af2e5e9aa6431ad27f610967b",
+      "bytes": 4963
+    },
+    {
+      "path": "/hooks/hook_trigger_worker.sh",
+      "sha256": "fd8581d16a558eee03c13a2424527034b06c7565661378c4ab1f7090ed8ad164",
+      "bytes": 4249
+    },
+    {
+      "path": "/meta/GLOBAL-LOCK-ZONGYUAN-ROOT-AUTO-ARCH-V2.0.json",
+      "sha256": "d94156cdb1e1c6bf3ed07f42fdc2fb50fee5c074de97f0de92d7f5f8c433601c",
+      "bytes": 2440
+    },
+    {
+      "path": "/meta/auto-asset-index.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/auto-failed-task-log.json",
+      "sha256": "7b67d57d14db011723e98e96bb33846e7f2288c8f8eaa52d744de37b6e8c3527",
+      "bytes": 1057
+    },
+    {
+      "path": "/meta/auto-url-mapping.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/pending-rsync.list",
+      "sha256": "62e1ea450ccd50be6d4a5adb762ea11f61ac41e6ee92487f5b4712ab2a73e6f8",
+      "bytes": 42
+    },
+    {
+      "path": "/meta-rules/META-RULE-012.json",
+      "sha256": "7384d0b38e691d26be8f4bf81fe916366ca6b628363715b80220ac3254feb4a6",
+      "bytes": 952
+    },
+    {
+      "path": "/meta-rules/META-RULE-014.json",
+      "sha256": "f16b7f3793135c5ec3da3047044a6fc6f4e1c5fc6fdc8292f416654499cace61",
+      "bytes": 1179
+    },
+    {
+      "path": "/operators/trigger_worker_operator.json",
+      "sha256": "ceff2639b57e9bffaed068ea049e0d13ca784ce82099967b8c2bbffcbd08f8ac",
+      "bytes": 1316
+    },
+    {
+      "path": "/scripts/auto_deploy_op_v1.4.sh",
+      "sha256": "c2beb82001311b963d5cf1574ea9211fd549ab47f48cdf51c84d10475ef16b60",
+      "bytes": 5113
+    },
+    {
+      "path": "/scripts/task_timeout_recycle.sh",
+      "sha256": "0a0e7307dbf25da2c10bec4cefd7e2fa379abba0567adede413a3d47ea754d98",
+      "bytes": 3776
+    },
+    {
+      "path": "/scripts/worker_auto_deploy_timer.sh",
+      "sha256": "723ac8060809af14b0ed4e0735ab22dc53013738563d8d48ccf79e479958e04d",
+      "bytes": 8259
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-OP-V1.4.json",
+      "sha256": "d5fc1ef534f2393b42d7fbd57e76f59aa44b3c5095a71842d41ed10192f9266f",
+      "bytes": 1501
+    },
+    {
+      "path": "/卷宗/auto_deploy_op_v1.4_receipt.json",
+      "sha256": "afd951022cc20b43c8f3807866ac4ddc6c905a2e052e7e7457ec04b85e74b0ae",
+      "bytes": 559
+    },
+    {
+      "path": "/卷宗/operator-worker-trigger-v1.4.json",
+      "sha256": "3fd1e4234566c865c22050631cb608170f0de5335d560d0cafcba99820433470",
+      "bytes": 1824
+    }
+  ],
+  "gateway_report": {
+    "endpoint": "https://www.huodouai.com/api/report/truth",
+    "did": "DID-BR-000002",
+    "status": "to_report"
+  },
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "status": "LOCKED"
+}

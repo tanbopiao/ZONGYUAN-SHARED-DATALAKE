@@ -1,0 +1,5 @@
+已加 --weekly 强制深度模式
+
+=== ① 触发外源信息接入（深度模式测试）===
+[收割:weekly] 抓取 29 ｜ 提炼新增 7 ｜ 源 {'arxiv': 10, 'hn': 9, 'github': 10}
+网关: 188, "channel": "https://www.huodouai.com/api/report/truth"}

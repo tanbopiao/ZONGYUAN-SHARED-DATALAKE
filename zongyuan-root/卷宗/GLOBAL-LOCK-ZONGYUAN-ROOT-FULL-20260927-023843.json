@@ -1,0 +1,280 @@
+{
+  "meta_action": "GLOBAL_LOCK_WRITE",
+  "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-023843",
+  "target_root": "/home/user/ZONGYUAN-ROOT",
+  "lock_timestamp": 1790447923,
+  "locked_at": "2026-09-27T02:38:43+0800",
+  "asset_count": 52,
+  "batch_root_sha256": "7f3444996c753bb2c87f587fe54d48284b3b1160351af259020dbf9769dcae5e",
+  "note": "含 worker进化模型与锁档边界文档（架构定位+中枢管控kill-switch+进化模型）；X-DID 单头；零明文密钥",
+  "gateway_report": {
+    "endpoint": "https://www.huodouai.com/api/report/truth",
+    "did": "DID-BR-000002",
+    "status": "to_report"
+  },
+  "DID": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "status": "LOCKED",
+  "files": [
+    {
+      "path": "/HASH-LEDGER.csv",
+      "sha256": "69780674c121e99e8fa8c030c78243d009fe924f0bc79cd5541a281550f921aa",
+      "bytes": 79418
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00001.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/asset/image/kunlun-auto-out/AUTO-IMG-00002.webp",
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    {
+      "path": "/docker/worker-compose.yml",
+      "sha256": "f19806e15a87d90417c56e9aff0827626289cf93f413bca2f3d8deebcb934019",
+      "bytes": 1801
+    },
+    {
+      "path": "/hooks/auto_archive_image.sh",
+      "sha256": "2648f700e5f542284a941c5cc4c2b36c9a333fb6a9c94b18490407af7409dd0a",
+      "bytes": 5089
+    },
+    {
+      "path": "/hooks/auto_archive_video.sh",
+      "sha256": "f80eac7342507d39e54387425c0b91e4316dc8acfb9afa7b8c2212cb849d813a",
+      "bytes": 4967
+    },
+    {
+      "path": "/hooks/auto_rsync_sync.sh",
+      "sha256": "861cc8eadffaaa8ca74680105bd3106323451c222484a29659521920da326afa",
+      "bytes": 1912
+    },
+    {
+      "path": "/hooks/hook_trigger_archive.sh",
+      "sha256": "72237f449c7c7e050e7e9075dfe038185ef3656af2e5e9aa6431ad27f610967b",
+      "bytes": 4963
+    },
+    {
+      "path": "/hooks/hook_trigger_worker.sh",
+      "sha256": "acb477a9739c76156b95626474903c36099e62b90b2b07436ea0b167132d1fd9",
+      "bytes": 4277
+    },
+    {
+      "path": "/meta/GLOBAL-LOCK-ZONGYUAN-ROOT-AUTO-ARCH-V2.0.json",
+      "sha256": "d94156cdb1e1c6bf3ed07f42fdc2fb50fee5c074de97f0de92d7f5f8c433601c",
+      "bytes": 2440
+    },
+    {
+      "path": "/meta/auto-asset-index.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/auto-failed-task-log.json",
+      "sha256": "7b67d57d14db011723e98e96bb33846e7f2288c8f8eaa52d744de37b6e8c3527",
+      "bytes": 1057
+    },
+    {
+      "path": "/meta/auto-url-mapping.json",
+      "sha256": "50b94d7c59f3eac8305a5e60750950a4b2cab16c38343c39ee206769e804b017",
+      "bytes": 1293
+    },
+    {
+      "path": "/meta/pending-rsync.list",
+      "sha256": "62e1ea450ccd50be6d4a5adb762ea11f61ac41e6ee92487f5b4712ab2a73e6f8",
+      "bytes": 42
+    },
+    {
+      "path": "/meta/rsync-target.env",
+      "sha256": "9811c46e3977e1ea95efab70ce236317af0da09f4b01fde0ae93c45ac0cbe590",
+      "bytes": 266
+    },
+    {
+      "path": "/meta/truth-gateway-token.digest.json",
+      "sha256": "3ed2a251906e21f8c1e22d63e24ea090bef38b70de526acbfe09a0834887bc0d",
+      "bytes": 437
+    },
+    {
+      "path": "/meta-rules/META-RULE-012.json",
+      "sha256": "7384d0b38e691d26be8f4bf81fe916366ca6b628363715b80220ac3254feb4a6",
+      "bytes": 952
+    },
+    {
+      "path": "/meta-rules/META-RULE-014.json",
+      "sha256": "f16b7f3793135c5ec3da3047044a6fc6f4e1c5fc6fdc8292f416654499cace61",
+      "bytes": 1179
+    },
+    {
+      "path": "/operators/trigger_worker_operator.json",
+      "sha256": "ceff2639b57e9bffaed068ea049e0d13ca784ce82099967b8c2bbffcbd08f8ac",
+      "bytes": 1316
+    },
+    {
+      "path": "/scripts/auto_deploy_op_v1.4.sh",
+      "sha256": "a7c6ea5af046f4713f03a66571cbb567f951b732aa55be3cc1dc6e897ff8be0c",
+      "bytes": 5051
+    },
+    {
+      "path": "/scripts/heartbeat_sync.sh",
+      "sha256": "2b6ebc0368e401cad723150f2f3a95c71083cb8b49655caaa444bf367a1aa128",
+      "bytes": 5184
+    },
+    {
+      "path": "/scripts/rsync_flush_pending.sh",
+      "sha256": "c7fc4879d92dcc318fa50f27a14fbcab423fd367d4a376f860a62e494088a834",
+      "bytes": 974
+    },
+    {
+      "path": "/scripts/task_timeout_recycle.sh",
+      "sha256": "8d7cf383c884c453706de29ca50a2b878ee1ab631daff5293633a99320fd4ce6",
+      "bytes": 3974
+    },
+    {
+      "path": "/scripts/truth_sync_and_lock.sh",
+      "sha256": "abd1dbb9668bd25611d48af44031b812d7565b07df7605538325d15908608aa7",
+      "bytes": 4872
+    },
+    {
+      "path": "/scripts/worker_auto_deploy_timer.sh",
+      "sha256": "5a60cc3e8a2db63aa78568c98d86beaf0533b8c3fcd51dace587c58c07bd1baf",
+      "bytes": 9701
+    },
+    {
+      "path": "/scripts/worker_local_process.sh",
+      "sha256": "4f4cfd8ed2dbc2b29a6410e0f0c4ef5de3d39657bc0ece7b9b696f3d06aecea7",
+      "bytes": 2965
+    },
+    {
+      "path": "/var/heartbeat/00-心跳索引.json",
+      "sha256": "58132d4b828f248a5109f31e1a582bfe7770366fa1aead94d01ca831784aa5ae",
+      "bytes": 642
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-015540.json",
+      "sha256": "a1d6394192c45c764bac3141839fb6a00b1540b5d2af45944fcb31d04be3c3f2",
+      "bytes": 790
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-020301.json",
+      "sha256": "d63e50f66d73288f1666578ca3667aa665c9c8a7af848e208734ecb2b54f9044",
+      "bytes": 790
+    },
+    {
+      "path": "/var/heartbeat/握手-20260927-020303.json",
+      "sha256": "88acca1620d5e1180dbe83ca754fae205ec284b21e28357e15d436ef20bb2e49",
+      "bytes": 790
+    },
+    {
+      "path": "/var/truth/00-同步索引.json",
+      "sha256": "9c23bff353aacf2956ef7d3ecc4adf87469df5552eb588886be95a42cd051286",
+      "bytes": 904
+    },
+    {
+      "path": "/var/truth/01-数据表.json",
+      "sha256": "9b473c726a0aabbe59dd78f779cac73eeb6394f628adc10015bd533320c0ab84",
+      "bytes": 3466
+    },
+    {
+      "path": "/var/truth/02-账号主表.json",
+      "sha256": "e72ca0d506ae6f678f51957270d79ea8b0c71ef5dcc6e835eb010e6c361f7079",
+      "bytes": 2506
+    },
+    {
+      "path": "/var/truth/03-任务台账.json",
+      "sha256": "7208b044ed9dd5cae24dc88055d6ab2ec3129eac6018fdc8f98c5f887a7cfe20",
+      "bytes": 110252
+    },
+    {
+      "path": "/var/truth/04-资产台账.json",
+      "sha256": "df922e4bae5c5c7e3405d59136f3b144dad34e6ec603f4baea30d082099dc3b6",
+      "bytes": 65193
+    },
+    {
+      "path": "/var/truth/05-决策日志.json",
+      "sha256": "8e21c66751a3e7988ec7c5d215c21833f1d9b27808d475448f204e5be57b680a",
+      "bytes": 61995
+    },
+    {
+      "path": "/var/truth/06-知识库索引.json",
+      "sha256": "32e53809f3caf79e9c1598fd6fc38b0ca7459f4cb04ce752083af3ae28faf68f",
+      "bytes": 30696
+    },
+    {
+      "path": "/var/truth/07-问题阻塞记录.json",
+      "sha256": "46691e60ad9a676789c94804130195fe88fe4d21d36ba60f96a7c32ee14f5de0",
+      "bytes": 5171
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-013614.json",
+      "sha256": "ba15684d29e777fd5a3f108b1de2f06adea0a893a92aaf57ef6080d2a8bd7c49",
+      "bytes": 6102
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014240.json",
+      "sha256": "4261e488e0719433f4e8413fb1f0ce09f27e710cdb44f1a41e25d4fadd0ef23a",
+      "bytes": 6427
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014543.json",
+      "sha256": "8073dff1ed56725051295917609da83cf9b63a1b96b1546ebca48fe2978276b0",
+      "bytes": 6689
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014609.json",
+      "sha256": "ca8228d1cfb74a73cf9f7bd1f536785ebbebb2aceb424bb1d566a5408e0eb9ab",
+      "bytes": 6883
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-014945.json",
+      "sha256": "676ba5a2db35927f92308a887340d8a6d45d45b07dafeda23c8406f4c6d25c74",
+      "bytes": 7217
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-015159.json",
+      "sha256": "416ac3439e69c34404d9bcbb5fa9827832967b2760c85776b917885dae44d213",
+      "bytes": 7361
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-015649.json",
+      "sha256": "d2f9dc4c2976c1cc752a256c47fc910693b528114deaa3855c4fcec366c2fef1",
+      "bytes": 8110
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-021211.json",
+      "sha256": "695f760fa32073a3b7d322ea8c60d43b026525ad5cb68ba24f7dc8351d478f51",
+      "bytes": 9143
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927-021916.json",
+      "sha256": "900b0be822fe03c6827174419c0b159a4dcb7c6363a287ec5851b02c2500efa7",
+      "bytes": 9372
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260927.json",
+      "sha256": "b1ebc58836a7b140457679fe4d68b663a14ee84225adb1565a7446dde38cb5e9",
+      "bytes": 4941
+    },
+    {
+      "path": "/卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-OP-V1.4.json",
+      "sha256": "d5fc1ef534f2393b42d7fbd57e76f59aa44b3c5095a71842d41ed10192f9266f",
+      "bytes": 1501
+    },
+    {
+      "path": "/卷宗/auto_deploy_op_v1.4_receipt.json",
+      "sha256": "afd951022cc20b43c8f3807866ac4ddc6c905a2e052e7e7457ec04b85e74b0ae",
+      "bytes": 559
+    },
+    {
+      "path": "/卷宗/operator-worker-trigger-v1.4.json",
+      "sha256": "3fd1e4234566c865c22050631cb608170f0de5335d560d0cafcba99820433470",
+      "bytes": 1824
+    },
+    {
+      "path": "/卷宗/worker进化模型与锁档边界-20260927.md",
+      "sha256": "ee3e3af226b00accc4761c0f38e8b90a940eed76ee4263292fdcbbb8fd47a028",
+      "bytes": 6090
+    }
+  ]
+}

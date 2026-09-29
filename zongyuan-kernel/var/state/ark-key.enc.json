@@ -1,0 +1,13 @@
+{
+  "subject": "ark API key",
+  "algorithm": "AES-256-GCM",
+  "key_source": "env ZR_API_ENC_KEY（KEK，不落盘）",
+  "iv_b64": "IQDGzYppeBZRg1Rh",
+  "ciphertext_b64": "lJHuEKUOCZjD67LyRcDxqz41puqTbQbZ+wcbXeyDSdMyj10MpgiSd54nwiQcVSZCZFq5rX2YqopvruNh4yI=",
+  "aad": "zongyuan-kernel-key-v1",
+  "sha256_fingerprint": "e4dadb841507cf3be68b81124d84d2ef897af0e5c227bad965fff49fa390a3f8",
+  "plaintext": "NOT_STORED",
+  "law": "META-LAW-CRYPT-LOCK-001",
+  "created_at": "2026-09-27T12:09:16+0800",
+  "owner": "zongyuan-kernel"
+}

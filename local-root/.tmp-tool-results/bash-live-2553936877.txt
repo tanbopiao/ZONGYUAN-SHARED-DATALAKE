@@ -1,0 +1,14 @@
+rsync exit=124
+=== 本地镜像校验 ===
+404.html
+about
+api
+api-docs
+architecture.html
+archive
+_archive_baks
+assets
+blog
+cases
+chat.html
+chat-widget.js

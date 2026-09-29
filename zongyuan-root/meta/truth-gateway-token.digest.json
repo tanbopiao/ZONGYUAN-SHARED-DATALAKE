@@ -1,0 +1,12 @@
+{
+  "subject": "X-Capture-Token（真值网关令牌）",
+  "algorithm": "PBKDF2-HMAC-SHA256",
+  "iterations": 600000,
+  "salt_hex": "7e68ebad4df71e05f9ffc4b575d94bc8",
+  "digest_hex": "3d4306c94810fe3e8c720429f0e93be62c2d148246c4a933e2324ec4fb8b850b",
+  "plaintext": "NOT_STORED",
+  "injection": "env TRUTH_GATEWAY_TOKEN",
+  "created_at": "2026-09-27T01:40:58+0800",
+  "law": "META-LAW-CRYPT-LOCK-001 CL-2",
+  "owner": "DID-BR-000002"
+}

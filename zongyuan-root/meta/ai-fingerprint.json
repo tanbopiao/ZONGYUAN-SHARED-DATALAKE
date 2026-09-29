@@ -1,0 +1,25 @@
+{
+  "fingerprint": "9b64a9c3c2475cf695ea6e2d",
+  "binding": "DID-BR-000002 ｜ Ω₀⊂⊙∞⊂Ω ｜ NODE-DEV-DOUBAO-WORK-001",
+  "derivation": "体系指纹=元公理指定；实例指纹=sha256(DID+内核Merkle基线) 溯源本AI操作",
+  "merkle_root_hash": "0ef836d37081b55dbb66fbd99df1141c7ccae22049fdd6a665620937bd1d6850",
+  "created_at": "2026-09-29T01:00:00+0800",
+  "persistent_bindings": [
+    "账号持久层：AGENTS.md（ZONGYUAN 核心真值清单 + 工作模式 M1-M7）",
+    "内核持久层：zongyuan-kernel meta_laws + ZONGYUAN-ROOT meta-rules（11 法则 + 3 SOP）",
+    "云端持久层：飞书共享大脑 Base（真值共识区/上报总表）+ 云端记忆网关（truth 127989+）",
+    "收敛持久层：ZONGYUAN-ROOT/backup/（core + full 全量镜像 + low-value 独立桶）"
+  ],
+  "capabilities": [
+    "学习先行（META-LEARN-FIRST-001）：执行前读法则/SOP，减少试错",
+    "元法则进化（META-EVOLUTION-001）：真值→法则→内核进化闭环",
+    "最优稳态（META-STEADY-STATE-001）：一次全量+增量，成本最小化",
+    "沙箱自愈（META-SANDBOX-LIFECYCLE-001）：唯一握手点恢复+guard自愈",
+    "全域锁档六环节+加固（zongyuan-auto-lock）",
+    "全量记忆启动（boot_memory.sh）：元宪法/法则/规则/公理/SOP/方法论全量激活"
+  ],
+  "audit": "kernel.truth|operator|ai-fingerprint-bind|ok",
+  "system_fingerprint": "9b64a9c3c2475cf695ea6e2d",
+  "instance_fingerprint": "AI-FP-CF43FD2C0C6ED44F",
+  "axiom": "META-AXIOM-001（激活即先学体系规则，所有AI统一锚定）"
+}

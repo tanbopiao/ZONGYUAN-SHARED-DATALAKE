@@ -1,0 +1,86 @@
+{
+  "mechanism": "zongyuan-auto-lock",
+  "did": "DID-BR-000002",
+  "run_at": "2026-09-28T22:05:10+0800",
+  "source_status": {
+    "evidence": "ok",
+    "law_schema": "ok",
+    "local_lock": "ok",
+    "base_sync": "ok",
+    "drive": "ok",
+    "wiki": "ok",
+    "gateway": "ok",
+    "heartbeat": "ok"
+  },
+  "detail": {
+    "evidence": {
+      "status": "ok",
+      "summary": "}"
+    },
+    "law_schema": {
+      "status": "ok",
+      "summary": [
+        "[PASS] META-LAW-CRYPT-LOCK-001.json",
+        "[PASS] META-LAYER-SEPARATE-001.json",
+        "[PASS] META-WORKER-KERNEL-001.json",
+        "[PASS] META‑ROOT‑TRUTH‑000.json"
+      ]
+    },
+    "local_lock": {
+      "status": "ok",
+      "event_id": "GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-220510",
+      "asset_count": 72039,
+      "batch_root_sha256": "962ab76abde3360dcc72217032ddf2b404c84f786e0fd8651aa2a3188f5444fc",
+      "receipt": "卷宗/GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-220510.json"
+    },
+    "base_sync": {
+      "status": "ok",
+      "tables": 48,
+      "records": 2126
+    },
+    "drive": {
+      "status": "ok",
+      "uploaded": [
+        {
+          "file": "真值同步索引-20260928-220510.json",
+          "ok": true,
+          "token": "Irf9bvkpVo2ggnx8xFpcitK5nfc"
+        },
+        {
+          "file": "锁档回执-20260928-220510.json",
+          "ok": true,
+          "token": "RVxlbQ2qqo9sZVxKUMscZ0DPnlh"
+        },
+        {
+          "file": "证据汇总-20260928-220510.json",
+          "ok": true,
+          "token": "EcSwblD3rouNnjxS0jccgpGsnFb"
+        },
+        {
+          "file": "证据截图-20260928-220510.json",
+          "ok": true,
+          "token": "PdTzb7MvbolfEQxRyFqckZoxn3b"
+        }
+      ],
+      "ok_count": 4,
+      "total": 4
+    },
+    "wiki": {
+      "status": "ok",
+      "node_title": "全域锁档 GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-220510 ｜ 962ab76abde3360d",
+      "node_token": "RH4cwcCsoiSfchkbXXCcaf23nyd",
+      "obj_token": "JsSqdw41BoODrGxYXu7cTeO1nhf"
+    },
+    "gateway": {
+      "status": "ok",
+      "truth_count": "127346",
+      "resp_tail": "lations\": [], \"triage\": \"通过\"}, \"issues\": []}, \"truth_count\": 127346, \"message\": \"真值写入成功（已通过语义前置校验）\"}"
+    },
+    "heartbeat": {
+      "status": "ok",
+      "returncode": 0,
+      "new_handshake": true,
+      "log_tail": ""
+    }
+  }
+}

@@ -1,0 +1,12 @@
+[22:39:47] === ZONGYUAN-ROOT 全自动全域锁档启动 ｜ DID-BR-000002 ｜ 2026-09-28T22:39:47+0800 ===
+[22:39:51] [0/6] 运行态证据采集 ok：}
+[22:39:51] [0.5/6] 元法则Schema校验 ok：[PASS] META‑ROOT‑TRUTH‑000.json
+[22:45:37] [1/6] 本地锁档 ok：GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-223947 ｜ 72130 资产 ｜ 批次根 723e98af3f5b8536
+[22:46:18] [2/6] 飞书Base同步 ok：48 表 / 1951 条
+[22:46:28] [3/6] 云盘归档 ok：4/4
+[22:46:29] [4/6] 知识库归档 ok：全域锁档 GLOBAL-LOCK-ZONGYUAN-ROOT-FULL-20260928-223947 ｜ 723e98af3f5b8536
+[22:46:30] [5/6] 网关上报 ok：truth_count=127477
+[22:46:32] [6/6] 心跳握手 ok
+[22:46:32] === 完成：汇总 var/auto-lock/auto-lock-20260928-223947.json ===
+SOURCE_STATUS: {"evidence": "ok", "law_schema": "ok", "local_lock": "ok", "base_sync": "ok", "drive": "ok", "wiki": "ok", "gateway": "ok", "heartbeat": "ok"}
+SUMMARY_FILE: /home/user/ZONGYUAN-ROOT/var/auto-lock/auto-lock-20260928-223947.json

@@ -1,0 +1,23 @@
+auto_deploy_op_v1.4.sh
+axiom_patrol_timer.sh
+brain_quota.py
+cloud_link.sh
+cloud_mirror.sh
+cloud_probe.ps1
+cloud_pull.sh
+cognitive_daily.sh
+cos_reconcile.sh
+cron_keepalive.py
+ddns_update.sh
+disaster_backup.sh
+dyn_ip_manager.sh
+evolution_consumer.py
+feishu_mirror_sync.py
+fleet_merge.py
+fleet_review.py
+fleet.sh
+frps_guard.sh
+frp_tunnel_keepalive.sh
+=== fusion.sh 是否存在 ===
+/home/user/ZONGYUAN-ROOT/scripts/zongyuan_fusion.sh
+=== 找认知建议器实现 ===

@@ -1,0 +1,20 @@
+{
+  "law_id": "META-LAKE-ARCHIVE-001",
+  "name": "全资产魔搭数据湖归档法则（DataLake Archive）",
+  "level": "P0",
+  "description": "所有资产——本地根目录全部文件夹、本地实例持久层、账号持久层——统一同步归档至魔搭数据湖（ModelScope DataHub）作为外部冷备/数据湖层。全量归档一次后转入增量归档（最优稳态：收益最大/成本最小/风险最小）。凭据零明文落盘（运行时环境变量注入），失败不阻塞主流程。与 META-SANDBOX-LIFECYCLE-001 协同：沙箱销毁损失最小化的外部纵深层",
+  "clauses": [
+    {"id": "LA-1", "text": "覆盖范围（全资产定义）：①本地根目录全部文件夹（/home/user/Doubao/chats/38444214541567234 主项目目录及子目录全量）；②本地实例持久层（ZONGYUAN-ROOT 全树，含 backup/ 收敛点 core+full+low-value）；③脑内核（zongyuan-kernel 全树，元法则/状态/审计/经验库）；④账号持久层（AGENTS.md 工作指令、用户偏好、共享大脑 Base 索引、网关真值）——不遗漏任何文件、信息、数据，派生资产与低价值资产一并归档（低价值独立桶分离）"},
+    {"id": "LA-2", "text": "最优稳态策略：首次全量归档一次（收敛点备份 + 本地全树归档包 tar.zst），此后只做增量归档（变更文件清单/增量包），不再重复全量，降低算力与额度消耗；增量基于 HASH-LEDGER 与 persist verify 差异面计算"},
+    {"id": "LA-3", "text": "凭据与通道：魔搭（ModelScope）API 认证仅经环境变量 MODELSCOPE_API_TOKEN 运行时注入，零明文落盘、不写脚本、不进回复文本；目标仓库/数据集由账号持久层登记（datahub target registry）；上传走官方 SDK/API，主通道失败切备用通道，失败不阻塞主流程并记录"},
+    {"id": "LA-4", "text": "周期与触发：每次增量锁档完成后触发增量归档；每日定点全量完整性校验（本地归档包 vs 数据湖对象清单）；沙箱重置/销毁前强制全量归档握手（与 META-SANDBOX-LIFECYCLE-001 SL-3 唯一握手点协同）"},
+    {"id": "LA-5", "text": "治理与留痕：归档清单/时间戳/哈希写入 var/archive/archive-ledger.jsonl；审计 kernel.truth|operator|archive|ok；网关上报 data.lake.archive.<ts>；归档对象命名规范 zongyuan-<scope>-<yyyyMMdd>-<seq>"},
+    {"id": "LA-6", "text": "恢复路径：数据湖对象可整体拉回本地恢复（灾备源）；恢复优先级本地 backup/ 收敛点 > 数据湖归档 > 云端网关/飞书，多源交叉验证 sha256"}
+  ],
+  "allowed_actions": ["archive", "incremental_archive", "verify", "restore_from_lake", "report", "audit"],
+  "script": "scripts/lake_archive.sh + scripts/gateway_report.py",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "DID": "DID-BR-000002",
+  "created": "2026-09-29",
+  "requires": "MODELSCOPE_API_TOKEN 环境变量（运行时注入）"
+}

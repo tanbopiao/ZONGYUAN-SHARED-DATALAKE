@@ -1,0 +1,73 @@
+[
+  {
+    "asset_id": "AUTO-IMG-00001",
+    "asset_kind": "image",
+    "asset_title": "冒烟测试-正向",
+    "prompt": "测试提示词",
+    "ratio": "9:16",
+    "tag": [
+      "昆仑洞天",
+      "暗夜玫瑰"
+    ],
+    "session_temp_url": "http://127.0.0.1:9121/test.png",
+    "local_instance_url": "http://127.0.0.1:9120/assets/kunlun-auto-out/AUTO-IMG-00001.webp",
+    "cloud_gallery_url": "https://gallery.huodouai.com/kunlun-auto-out/AUTO-IMG-00001.webp",
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+    "create_timestamp": "2026-09-27T00:48:04+0800",
+    "status": "pending_sync",
+    "DID": "DID-BR-000002"
+  },
+  {
+    "asset_id": "AUTO-IMG-00002",
+    "asset_kind": "image",
+    "asset_title": "冒烟测试-自增",
+    "prompt": "test2",
+    "ratio": "1:1",
+    "tag": [
+      "自增"
+    ],
+    "session_temp_url": "http://127.0.0.1:9121/test.png",
+    "local_instance_url": "http://127.0.0.1:9120/assets/kunlun-auto-out/AUTO-IMG-00002.webp",
+    "cloud_gallery_url": "https://gallery.huodouai.com/kunlun-auto-out/AUTO-IMG-00002.webp",
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+    "create_timestamp": "2026-09-27T00:48:27+0800",
+    "status": "pending_sync",
+    "DID": "DID-BR-000002"
+  },
+  {
+    "asset_id": "AUTO-IMG-00003",
+    "asset_kind": "image",
+    "asset_title": "内核集成验证图",
+    "prompt": "全自动归档链路端到端验证",
+    "ratio": "1:1",
+    "tag": [
+      "内核集成",
+      "验证"
+    ],
+    "session_temp_url": "http://127.0.0.1:8099/AUTO-IMG-00001.webp",
+    "local_instance_url": "http://127.0.0.1:9120/assets/kunlun-auto-out/AUTO-IMG-00003.webp",
+    "cloud_gallery_url": "https://gallery.huodouai.com/kunlun-auto-out/AUTO-IMG-00003.webp",
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+    "create_timestamp": "2026-09-27T11:47:03+0800",
+    "status": "pending_sync",
+    "DID": "DID-BR-000002"
+  },
+  {
+    "asset_id": "AUTO-IMG-00004",
+    "asset_kind": "image",
+    "asset_title": "无人值守投递验证",
+    "prompt": "enqueue自动触发归档",
+    "ratio": "1:1",
+    "tag": [
+      "无人值守",
+      "验证"
+    ],
+    "session_temp_url": "http://127.0.0.1:8099/AUTO-IMG-00003.webp",
+    "local_instance_url": "http://127.0.0.1:9120/assets/kunlun-auto-out/AUTO-IMG-00004.webp",
+    "cloud_gallery_url": "https://gallery.huodouai.com/kunlun-auto-out/AUTO-IMG-00004.webp",
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+    "create_timestamp": "2026-09-27T11:51:28+0800",
+    "status": "pending_sync",
+    "DID": "DID-BR-000002"
+  }
+]

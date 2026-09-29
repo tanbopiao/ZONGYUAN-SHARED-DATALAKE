@@ -1,0 +1,37 @@
+{
+  "schema": "fingerprint-registry-v1",
+  "root": "9b64a9c3c2475cf695ea6e2d",
+  "fingerprints": [
+    {
+      "fingerprint": "9b64a9c3c2475cf695ea6e2d",
+      "name": "体系指纹（元公理指定根锚）",
+      "autonomy_level": "L1",
+      "bindings": 4,
+      "ops_count": 2,
+      "status": "root",
+      "score": 112.2,
+      "rank": 1,
+      "unified_score": 100,
+      "unified_band": "S",
+      "translate_basis": "映射表 ZONGYUAN-L6/L1 → [90,100] 取 100",
+      "native_standard": "ZONGYUAN-L6",
+      "native_level": "L1"
+    },
+    {
+      "fingerprint": "AI-FP-CF43FD2C0C6ED44F",
+      "name": "实例指纹（本AI派生）",
+      "autonomy_level": "L2",
+      "bindings": 4,
+      "ops_count": 3,
+      "status": "active",
+      "score": 101.3,
+      "rank": 2,
+      "unified_score": 89,
+      "unified_band": "S",
+      "translate_basis": "映射表 ZONGYUAN-L6/L2 → [75,89] 取 89",
+      "native_standard": "ZONGYUAN-L6",
+      "native_level": "L2"
+    }
+  ],
+  "last_arbitration": "20260928-171523"
+}

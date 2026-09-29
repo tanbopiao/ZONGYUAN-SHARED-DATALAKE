@@ -1,0 +1,120 @@
+{
+  "title": "本地base台账（共享大脑格式镜像）",
+  "generated_at": "2026-09-27T01:26:37+0800",
+  "source_base": "DgnMbLqZiaIUDKshqCrcD4DvnBg",
+  "tables": [
+    {
+      "table": "数据表",
+      "table_id": "tblrgdUrE9SQEv6L",
+      "fields": [
+        "附件",
+        "文本",
+        "单选",
+        "日期"
+      ],
+      "exported_records": 6,
+      "file": "01-数据表.csv",
+      "status": "ok"
+    },
+    {
+      "table": "账号主表",
+      "table_id": "tblYnYxlpcGeX4mG",
+      "fields": [
+        "所属租户",
+        "角色定位",
+        "关联任务",
+        "负责范围",
+        "当前状态",
+        "最后同步时间",
+        "账号名称"
+      ],
+      "exported_records": 8,
+      "file": "02-账号主表.csv",
+      "status": "ok"
+    },
+    {
+      "table": "任务台账",
+      "table_id": "tblnVRjuf7P31cEP",
+      "fields": [
+        "状态",
+        "进度",
+        "优先级",
+        "备注",
+        "方案评分",
+        "关联资产",
+        "执行结果",
+        "截止时间",
+        "任务名称",
+        "关联节点",
+        "负责账号"
+      ],
+      "exported_records": 170,
+      "file": "03-任务台账.csv",
+      "status": "ok"
+    },
+    {
+      "table": "资产台账",
+      "table_id": "tbltgttCuWgAnN2e",
+      "fields": [
+        "状态",
+        "所属节点",
+        "所属任务",
+        "更新时间",
+        "类型",
+        "资产名称",
+        "元类分类",
+        "存储位置",
+        "所属账号",
+        "关联决策"
+      ],
+      "exported_records": 181,
+      "file": "04-资产台账.csv",
+      "status": "ok"
+    },
+    {
+      "table": "决策日志",
+      "table_id": "tblFQTgWkJQR6Xwp",
+      "fields": [
+        "时间",
+        "决策内容",
+        "提出账号",
+        "参与账号",
+        "决策结果",
+        "关联资产"
+      ],
+      "exported_records": 128,
+      "file": "05-决策日志.csv",
+      "status": "ok"
+    },
+    {
+      "table": "知识库索引",
+      "table_id": "tblmMEeXhlrOvXI2",
+      "fields": [
+        "版本",
+        "更新时间",
+        "知识条目",
+        "类型",
+        "来源账号",
+        "链接"
+      ],
+      "exported_records": 83,
+      "file": "06-知识库索引.csv",
+      "status": "ok"
+    },
+    {
+      "table": "问题阻塞记录",
+      "table_id": "tbljp3z11UtiuWCF",
+      "fields": [
+        "状态",
+        "负责解决",
+        "解决方案",
+        "时间",
+        "问题描述",
+        "提出账号"
+      ],
+      "exported_records": 12,
+      "file": "07-问题阻塞记录.csv",
+      "status": "ok"
+    }
+  ]
+}
