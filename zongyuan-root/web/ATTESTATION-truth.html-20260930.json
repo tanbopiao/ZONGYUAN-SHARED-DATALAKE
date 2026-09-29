@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "showcase/truth.html",
+  "date": "20260930-0",
+  "sha256": "e4957f37af3b112c2b806b1be6978810f64edc8f71858079877451e9e143192a",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
