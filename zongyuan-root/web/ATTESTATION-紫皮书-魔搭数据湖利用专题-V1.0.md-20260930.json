@@ -1,9 +1,9 @@
 {
   "type": "attestation",
-  "asset": "紫皮书-魔搭数据湖利用专题-V1.0.md",
+  "asset": "publish/紫皮书-魔搭数据湖利用专题-V1.0.md",
   "date": "20260930-0",
   "sha256": "befb4ad939d54b1de194b32799300fb02980d0d3296cd3c5944a99434142576c",
   "did": "DID-BR-000002",
   "anchored": "Ω₀⊂⊙∞⊂Ω",
-  "source": "auto-publish-engine"
+  "source": "auto-publish-engine-v2"
 }
