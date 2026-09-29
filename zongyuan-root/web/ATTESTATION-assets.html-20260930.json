@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "showcase/assets.html",
+  "date": "20260930-0",
+  "sha256": "7e2b3671c856d55151fb3946554fe79fcaa3dcb4bd9e7006ab17e768c3d4c3bd",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
