@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "ENDPOINT_NAMESPACE.md",
+  "date": "20260930-0",
+  "sha256": "29a527cf5ffd0a334dffa6ac1753846eba8c7cd5173a5c8773565dd1647643a8",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
