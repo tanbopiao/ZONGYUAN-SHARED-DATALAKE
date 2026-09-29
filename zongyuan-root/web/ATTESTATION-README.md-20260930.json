@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "README.md",
+  "date": "20260930-0",
+  "sha256": "be3af370b4a81bf3e95a9eaa65c78371bea89a950bdca2f98bd4018c7bfa1ddc",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
