@@ -1,0 +1,9 @@
+{
+  "name": "火斗云智AI",
+  "short_name": "火斗云智",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#c9a961",
+  "icons": [{"src": "/favicon.ico", "sizes": "any", "type": "image/x-icon"}]
+}

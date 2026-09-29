@@ -1,0 +1,20 @@
+# 火斗云智AIOS - robots.txt
+# 最后更新: 2026-09-23
+
+User-agent: *
+Allow: /
+Disallow: /internal/
+Disallow: /kernel/
+Disallow: /backup/
+Disallow: /_backup/
+Disallow: /_archive_quality/
+
+# 爬虫规则
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# 站点地图
+Sitemap: https://www.huodouai.com/sitemap.xml
