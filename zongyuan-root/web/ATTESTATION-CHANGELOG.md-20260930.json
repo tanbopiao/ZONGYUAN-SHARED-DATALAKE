@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "CHANGELOG.md",
+  "date": "20260930-0",
+  "sha256": "c1493ec49f91c55d3c34cf16c0152aa3b9155b3e2c7d27306f0798d726a3f1f4",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
