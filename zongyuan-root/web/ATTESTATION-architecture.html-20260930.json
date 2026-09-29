@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "showcase/architecture.html",
+  "date": "20260930-0",
+  "sha256": "dc323fc94ee2a1d9de0b9bb088bb85269f6f2d207f5bff2f1a72b7d989836da5",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
