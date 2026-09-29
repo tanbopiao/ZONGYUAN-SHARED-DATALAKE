@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "operator-chain/OPERATOR-CHAIN-SOP-V1.0.md",
+  "date": "20260930-0",
+  "sha256": "dd0b19b659f83a33ce97ecdc2b7624eb9cafb4c9e1e292d352de4c97af7e4231",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
