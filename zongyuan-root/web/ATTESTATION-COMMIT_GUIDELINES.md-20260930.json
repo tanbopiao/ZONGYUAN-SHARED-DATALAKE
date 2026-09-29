@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "COMMIT_GUIDELINES.md",
+  "date": "20260930-0",
+  "sha256": "0a9402e6d7df675a58a3560948096360edd9589c586f7844db411c3baf6066f6",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
