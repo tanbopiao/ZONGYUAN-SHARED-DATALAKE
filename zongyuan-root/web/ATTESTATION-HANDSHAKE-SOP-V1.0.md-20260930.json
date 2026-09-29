@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "HANDSHAKE-SOP-V1.0.md",
+  "date": "20260930-0",
+  "sha256": "956e0dca7a750a59e5f3826d6f1042e10e55431cbc6d3d5f508368a780c03666",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
