@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "MULTI_AGENT_SOP.md",
+  "date": "20260930-0",
+  "sha256": "751a15c7ed2ddc4d1ff52db02c4c0535943e60177f94b1c19e1de7da98f2703c",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
