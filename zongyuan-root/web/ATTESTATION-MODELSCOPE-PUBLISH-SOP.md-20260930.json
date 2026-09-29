@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "modelscope/MODELSCOPE-PUBLISH-SOP.md",
+  "date": "20260930-0",
+  "sha256": "7d41acab439d010494a3131dd8a0c8f2b88859e3227785b5a3809ab0131e45c6",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
