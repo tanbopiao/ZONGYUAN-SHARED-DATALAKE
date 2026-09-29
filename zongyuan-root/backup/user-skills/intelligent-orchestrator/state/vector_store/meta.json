@@ -1,0 +1,9 @@
+{
+  "dim": 256,
+  "method": "deterministic n-gram(2,3)-md5→256d, L2 norm, cosine",
+  "docs": 16,
+  "built_at": "2026-09-28T22:17:34+0800",
+  "DID": "DID-BR-000002",
+  "layer": "L2-vector-semantic-index",
+  "status": "active"
+}

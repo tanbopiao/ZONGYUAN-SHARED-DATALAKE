@@ -1,0 +1,64 @@
+{
+  "snapshot_type": "STATE_MACHINE_FULL_MEMORY",
+  "snapshot_id": "SNAP-FULL-1790557965",
+  "created_utc": "2026-09-28T01:12:45Z",
+  "epoch": 1790557965,
+  "did": "DID-BR-000002",
+  "ontology": "Ω₀⊂⊙∞⊂Ω",
+  "axiom_mode": "元极恒一 Lv10",
+  "layers": {
+    "L7_心智层": {
+      "state": "online",
+      "evidence": "Ω-Brain MVP + brain工具链"
+    },
+    "L6_联邦进化层": {
+      "state": "online",
+      "evidence": "4 brain工具"
+    },
+    "L5_镜像分发层": {
+      "state": "online",
+      "evidence": "4274镜像文件"
+    },
+    "L4_契约调度层": {
+      "state": "online",
+      "evidence": "调度器+注册表"
+    },
+    "L3_策略护栏层": {
+      "state": "online",
+      "evidence": "OPA rego+enforcer"
+    },
+    "L2_资源防护层": {
+      "state": "online",
+      "evidence": "supervisord+熔断总线"
+    },
+    "L1_感知执行底座": {
+      "state": "online",
+      "evidence": "Merkle账本+审计"
+    }
+  },
+  "brain_kernel": {
+    "path": "/home/user/Doubao/chats/38412149511142658/zongyuan-kernel",
+    "meta_laws": 10,
+    "audit_entries": 264,
+    "key_slots": {
+      "ark-key.enc.json": "d6705ed5c040",
+      "zhipu-key.enc.json": "c474411bfc03"
+    },
+    "port_8081": "listening"
+  },
+  "hand_kernel": {
+    "path": "/home/user/ZONGYUAN-ROOT",
+    "tools": 8,
+    "receipts": 55,
+    "supervisord": "online"
+  },
+  "guard": {
+    "cron_entries": 15,
+    "cron_restore": true
+  },
+  "cloud_gateway": {
+    "endpoint": "https://www.huodouai.com/api/report/truth",
+    "auth": "X-DID"
+  },
+  "global_state": "NORMAL"
+}

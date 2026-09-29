@@ -1,0 +1,14 @@
+{
+  "subject": "智谱 GLM-4-Flash（云端溯源注入）",
+  "algorithm": "AES-256-GCM",
+  "key_source": "env ZR_API_ENC_KEY",
+  "iv_b64": "afclBbiVIKWeNPAw",
+  "ciphertext_b64": "4xdZ0rs+jfNl7svUlwEhqhJpxNBwQSvHCgQZKeomnFtVA1Gb5Fry1EWC3G7lJHPkRnlni64mn1p39rYu8/l0TVI=",
+  "aad": "zongyuan-kernel::llm-zhipu",
+  "sha256_fingerprint": "d83a6fa4e58af33f1337f5a50eb22fbc7b4858379cf87f890f1f1eaed9ce00c1",
+  "plaintext": "NOT_STORED",
+  "law": "META-LAW-CRYPT-LOCK-001",
+  "created_at": "2026-09-28 07:44:30",
+  "owner": "zongyuan-kernel",
+  "origin": "cloud-kernel/api_keys_unified.json"
+}

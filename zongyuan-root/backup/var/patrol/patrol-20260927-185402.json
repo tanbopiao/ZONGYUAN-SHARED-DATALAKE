@@ -1,0 +1,14 @@
+{
+  "did": "DID-BR-000002",
+  "ts": "2026-09-27T18:54:02+0800",
+  "status": {
+    "kernel": 0,
+    "worker": 1,
+    "cron": 0,
+    "port8081": 1,
+    "port8091": 1,
+    "site_http": "200",
+    "abnormal": 1
+  },
+  "env_snapshot": "{\"info\": \"## System Environment (v1.14.10):\\n- Ubuntu 22.04.5 LTS 22.04.5 (x86_64)\\n- User: user, use `sudo` to switch to root\\n- Home directory: /home/user\\n- Workspace: /workspace\\n- Timezone: Asia/Singapore\\n- Occupied Ports: 10000,10080,10900,10901,18080,323,443,5900,6080,62987,80,8080,8081,8091,8118,9222\\n\\n## Development Environment:\\nPython:\\n- Python 3.10.12(path: /usr/bin/python3.10)\\n- Python 3.11.13(path: /opt/python3.11/bin/python3.11)\\n- Python 3.12.11(path: /opt/python3.12/bin/python3.12)\\n\\nNode.js:\\n- v22.23.2(path: /opt/fnm/node-versions/v22.23.2/installation/bin/node)\\n\\n## A"
+}
