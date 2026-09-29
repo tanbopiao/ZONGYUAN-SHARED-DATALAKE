@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "showcase/whitepaper.html",
+  "date": "20260930-0",
+  "sha256": "ce0d4bedcabddffd973daa9954b5e440e7008896a509f9f03333c7895bb57575",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
