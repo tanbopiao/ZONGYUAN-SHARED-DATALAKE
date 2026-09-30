@@ -1,17 +1,3 @@
-{
-  "eval_id": "STEADY-EVAL-20260927",
-  "method": "P=0.3U-0.4R-0.3C",
-  "scope": "多节点逻辑态推演资产·双端部署判定",
-  "items": [
-    {"asset": "熔断抖动参数MR-FUSE", "U": 0.78, "R": 0.12, "C": 0.10, "P": 0.186, "verdict": "高优部署"},
-    {"asset": "SYSTEM-STATE统一状态总线", "U": 0.88, "R": 0.10, "C": 0.15, "P": 0.179, "verdict": "高优部署"},
-    {"asset": "权限基线固化", "U": 0.82, "R": 0.08, "C": 0.12, "P": 0.178, "verdict": "高优部署"},
-    {"asset": "滚动分片账本", "U": 0.85, "R": 0.12, "C": 0.18, "P": 0.153, "verdict": "高优部署"},
-    {"asset": "镜像哈希+重试退避", "U": 0.86, "R": 0.15, "C": 0.20, "P": 0.138, "verdict": "高优部署"},
-    {"asset": "心智算力配额", "U": 0.70, "R": 0.15, "C": 0.15, "P": 0.120, "verdict": "计划部署"},
-    {"asset": "契约回滚执行器", "U": 0.84, "R": 0.25, "C": 0.35, "P": 0.052, "verdict": "计划部署"},
-    {"asset": "fleet_review文件评审", "U": 0.80, "R": 0.20, "C": 0.35, "P": 0.055, "verdict": "计划部署"},
-    {"asset": "evolution_consumer秒级同步", "U": 0.82, "R": 0.22, "C": 0.40, "P": 0.044, "verdict": "计划部署"},
-    {"asset": "system_sensor 5s采样", "U": 0.60, "R": 0.20, "C": 0.30, "P": 0.030, "verdict": "暂缓"}
-  ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:1cf97a949976b2a73a1d705662794262802b040f6bc11f8b118a32b6b2d564c0
+size 1289
