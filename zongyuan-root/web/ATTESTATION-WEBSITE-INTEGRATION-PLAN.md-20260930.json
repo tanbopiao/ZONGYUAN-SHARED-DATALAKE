@@ -1,0 +1,9 @@
+{
+  "type": "attestation",
+  "asset": "showcase/WEBSITE-INTEGRATION-PLAN.md",
+  "date": "20260930-0",
+  "sha256": "341e13e86e5c481d8b4824d6e8117a8b99f9286a7a1062ae001f19e67c570379",
+  "did": "DID-BR-000002",
+  "anchored": "Ω₀⊂⊙∞⊂Ω",
+  "source": "auto-publish-engine-v2"
+}
