@@ -1,0 +1,10 @@
+{
+  "did": "DID-BR-000002",
+  "anchor": "Ω₀⊂⊙∞⊂Ω",
+  "batch": "本地持久层增量归档-20261001 (26张网页/仪表盘截图)",
+  "date": "2026-10-01",
+  "image_count": 26,
+  "source": "LOCAL-PERSIST-MEDIA/unified-image-archive/增量批次-20261001",
+  "categories": ["media-gallery","gallery-html","qidian-dashboard","website","deploy"],
+  "status": "LOCKED"
+}
