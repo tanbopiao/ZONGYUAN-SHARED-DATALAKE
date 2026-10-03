@@ -1,18 +1,3 @@
-{
-  "task": "官网部署请求-20261003",
-  "requester": "NODE-DEV-DOUBAO-WORK-001",
-  "DID": "DID-BR-000002",
-  "target": "huodouai.com docroot /www/wwwroot/huodouai.com/",
-  "scope": "仅新增白名单文件，不修改/删除现有官网文件",
-  "files": [
-    {"name": "asset-dashboard.html", "dest": "/www/wwwroot/huodouai.com/", "note": "数字化资产索引页(含doubao-html链接)"},
-    {"name": "favicon.svg", "dest": "/www/wwwroot/huodouai.com/", "note": "P0缺口修复: 当前404"},
-    {"name": "aios-logo.png", "dest": "/www/wwwroot/huodouai.com/assets/", "note": "P0缺口修复: logo引用缺失"}
-  ],
-  "online_pages": [
-    "https://fcn2w3ejyg57.doubaoapps.com/app/app_17f9cnrvhs4 (cloud-gaps)",
-    "https://fcn2w3ejyg57.doubaoapps.com/app/app_17f988xz9ym (whitepaper)"
-  ],
-  "approval": "M11规则: 云端写改删需人工审批; 本请求为增量新增, 请求云端中枢审批执行",
-  "requested_at": "2026-10-03T11:15:00+0800"
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ceb0b063543bdb295d8ea7b7eea671112ae1114ff6670f335d3674f793fdba42
+size 966
