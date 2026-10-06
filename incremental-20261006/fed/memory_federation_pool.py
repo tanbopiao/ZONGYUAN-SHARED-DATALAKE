@@ -39,6 +39,28 @@ def file_count(p):
         return None
 
 
+# 飞书共享大脑在线探测：若存在 logs/_feishu_tables.json（lark-cli base +table-list --base-token ... --as user 的产物），
+# 则聚合 53 表 records_count 为真实计数；否则 fallback probe 状态
+feishu_count = 0
+feishu_detail = 'probe-local-mirror-empty;online=53tables'
+feishu_tables = os.path.join(ROOT, 'logs', '_feishu_tables.json')
+if os.path.exists(feishu_tables):
+    try:
+        raw = open(feishu_tables, 'rb').read()
+        d = None
+        for enc in ('utf-8-sig', 'utf-16', 'gbk', 'latin1'):
+            try:
+                d = json.loads(raw.decode(enc))
+                break
+            except Exception:
+                continue
+        if d is not None:
+            tbls = d.get('data', {}).get('tables', [])
+            feishu_count = sum(t.get('records_count', 0) for t in tbls)
+            feishu_detail = 'online:%d表/共%d条' % (len(tbls), feishu_count)
+    except Exception as e:
+        feishu_detail = 'probe-parse-fail:%s' % repr(e)[:30]
+
 sources = [
     {'source_id': 'local-memory-index', 'name': '本地资产记忆索引', 'type': 'index',
      'locator': 'memory_index.json', 'count': jcount('memory_index.json', 'asset_entries') or 0, 'status': 'ok'},
@@ -55,7 +77,7 @@ sources = [
     {'source_id': 'local-semantic', 'name': '语义样本(协议+终态锁档)', 'type': 'semantic',
      'locator': 'kernel/protocols + kernel/assets/full', 'count': (file_count('kernel/protocols') or 0) + (file_count('kernel/assets/full') or 0), 'status': 'ok'},
     {'source_id': 'feishu-brain', 'name': '飞书共享大脑(53表)', 'type': 'brain',
-     'locator': 'Base DgnMbLqZiaIUDKshqCrcD4DvnBg', 'count': 0, 'status': 'probe-local-mirror-empty;online=53tables'},
+     'locator': 'Base DgnMbLqZiaIUDKshqCrcD4DvnBg', 'count': feishu_count, 'status': feishu_detail},
     {'source_id': 'modelscope-datalake', 'name': '魔搭数据湖镜像', 'type': 'datalake',
      'locator': 'modelscope_bridge/datalake_mirror', 'count': 0, 'status': 'ok', 'last_commit': '(git log)'},
     {'source_id': 'cloud-gateway', 'name': '云端记忆网关', 'type': 'gateway',
