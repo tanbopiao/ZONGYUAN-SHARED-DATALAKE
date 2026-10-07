@@ -33,6 +33,10 @@ HEARTBEAT_INTERVAL = int(os.environ.get("HEARTBEAT_INTERVAL",
                                         CFG.get("heartbeat_interval", 30)))
 SUBSCRIPTION_TIMEOUT = int(os.environ.get("SUB_TIMEOUT",
                                           CFG.get("sub_timeout", 50)))  # ntfy流超时(秒)
+# 并存融合: 主题可从 node_config 覆盖. 每个节点可配独立 topic,
+# 与既有 worker(boot.py 的 zongyuan-kunlun-2026)并存, 互不抢命令.
+MAIN_TOPIC   = CFG.get("topic")         or MAIN_TOPIC
+RESULT_TOPIC = CFG.get("result_topic")  or RESULT_TOPIC
 
 def baseline_self_check():
     """节点级worker基线只读自检: 若本地worker被人工/节点修改, 自动从魔搭基线恢复.
