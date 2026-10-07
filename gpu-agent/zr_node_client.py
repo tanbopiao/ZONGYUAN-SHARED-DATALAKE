@@ -18,7 +18,7 @@ import json, sys, os, time, socket, urllib.request, urllib.error
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from zr_node_protocol import (
     PROTO, DID, MAIN_TOPIC, RESULT_TOPIC, NTFY_BASE,
-    encode_cmd, decode_msg, is_trusted, node_id,
+    encode_cmd, decode_msg, is_trusted, node_id, new_task_id,
 )
 
 SRC = os.environ.get("ZR_SRC", "NN-LOCAL-DEV-001")
