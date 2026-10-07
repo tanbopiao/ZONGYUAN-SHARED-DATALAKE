@@ -11,7 +11,7 @@ cd /mnt/workspace
 # 1. 保活方案: 优先crontab, 不可用则降级supervisor (容器内常无crontab)
 if command -v crontab >/dev/null 2>&1; then
   cat > /tmp/zr_cron.txt << 'EOF'
-*/2 * * * * pgrep -f "python3 zr_node_worker.py" >/dev/null || (cd /mnt/workspace && nohup python3 zr_node_worker.py >> worker_stdout.log 2>&1 &)
+*/2 * * * * pgrep -f "zr_node_worker.py" >/dev/null || (cd /mnt/workspace && nohup python3 zr_node_worker.py >> worker_stdout.log 2>&1 &)
 @reboot sleep 10 && bash /mnt/workspace/zr_bootstrap.sh
 EOF
   crontab /tmp/zr_cron.txt 2>/dev/null && echo "保活: crontab 已安装(2分钟) + @reboot自启"
@@ -35,13 +35,13 @@ else
 fi
 
 # 3. 立即启动worker (若未运行)
-if pgrep -f "python3 zr_node_worker.py" >/dev/null 2>&1; then
-  echo "worker: 已在运行 (PID $(pgrep -f 'python3 zr_node_worker.py' | head -1))"
+if pgrep -f "zr_node_worker.py" >/dev/null 2>&1; then
+  echo "worker: 已在运行 (PID $(pgrep -f 'zr_node_worker.py' | head -1))"
 else
   nohup python3 zr_node_worker.py >> worker_stdout.log 2>&1 &
   sleep 2
-  if pgrep -f "python3 zr_node_worker.py" >/dev/null 2>&1; then
-    echo "worker: 已启动 (PID $(pgrep -f 'python3 zr_node_worker.py' | head -1))"
+  if pgrep -f "zr_node_worker.py" >/dev/null 2>&1; then
+    echo "worker: 已启动 (PID $(pgrep -f 'zr_node_worker.py' | head -1))"
   else
     echo "worker: 启动失败, 检查 worker_stdout.log"
   fi

@@ -7,9 +7,9 @@
 # 注意: 不跨容器重启(重启后需重跑 bootstrap 或手动启动)
 # ============================================================
 while true; do
-  if ! pgrep -f "python3 zr_node_worker.py" >/dev/null 2>&1; then
+  if ! pgrep -f "zr_node_worker.py" >/dev/null 2>&1; then
     cd /mnt/workspace
-    nohup python3 zr_node_worker.py >> /mnt/workspace/worker_stdout.log 2>&1 &
+    nohup python3 /mnt/workspace/zr_node_worker.py >> /mnt/workspace/worker_stdout.log 2>&1 &
     echo "[$(date '+%F %T')] worker 掉线, 已重新拉起 PID $!" >> /mnt/workspace/supervisor.log
   fi
   sleep 60

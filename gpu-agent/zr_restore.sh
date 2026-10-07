@@ -63,7 +63,7 @@ fi
 
 # ---------- [5/5] 启动 ----------
 echo "[5/5] 启动 supervisor 保活 + worker..."
-pkill -f "python3 zr_node_worker.py" 2>/dev/null || true
+pkill -f "zr_node_worker.py" 2>/dev/null || true
 pkill -f "zr_supervisor.sh" 2>/dev/null || true
 sleep 1
 nohup bash /mnt/workspace/zr_supervisor.sh >> /mnt/workspace/supervisor.log 2>&1 &
