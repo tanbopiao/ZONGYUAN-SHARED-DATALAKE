@@ -110,6 +110,7 @@ def run_cmd(cmd, src, task_id):
 def subscription_loop():
     """长连订阅命令主题 (兼容 boot.py 的 /json 流)"""
     url = f"{NTFY_BASE}/{MAIN_TOPIC}/json?poll=1"
+    processed_ids = set()   # 已处理消息ID (防重启重放/重复执行)
     while True:
         try:
             req = urllib.request.Request(url)
@@ -124,6 +125,15 @@ def subscription_loop():
                         continue
                     if evt.get("event") != "message":
                         continue
+                    # 消息去重: ntfy 每条消息有唯一 id, 已处理则跳过
+                    mid = evt.get("id")
+                    if mid:
+                        if mid in processed_ids:
+                            print(f"[去重] 跳过已处理消息 {mid}", flush=True)
+                            continue
+                        processed_ids.add(mid)
+                        if len(processed_ids) > 5000:
+                            processed_ids.clear()  # 防内存膨胀, 允许偶尔重放
                     raw = evt.get("message", "")
                     # 旧格式: JSON body 双层包装 (cpu_agent 发布) → 取内层 message
                     if isinstance(raw, str):

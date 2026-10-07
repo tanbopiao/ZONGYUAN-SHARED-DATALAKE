@@ -65,16 +65,17 @@ def listen_results(since="5m", wait=45, task_id=None):
         time.sleep(3)
     return got
 
-def send_and_wait(cmd, wait=60, timeout=300, node=None):
+def send_and_wait(cmd, wait=90, timeout=300, node=None):
     """发标准命令 → 等回传 (node=目标节点名; None=广播)"""
     payload = encode_cmd(cmd, src=SRC, timeout=timeout, node=node)
     msg = decode_msg(payload)
     tag = node or "广播"
+    since_ts = int(time.time()) - 60  # 从60秒前开始(覆盖命令到达窗口)
     print(f"[发] 命令主题 ← cmd={cmd[:60]} task={msg['task_id']} target={tag}")
     st = ntfy_publish_text(MAIN_TOPIC, payload)
     print(f"    HTTP {st}")
     print(f"[收] 结果主题 {wait}s...")
-    res = listen_results("5m", wait, msg["task_id"])
+    res = listen_results(str(since_ts), wait, msg["task_id"])
     if res:
         for d in res[-3:]:
             print(f"──[{d.get('ts')}] task={d.get('task_id')} node={d.get('node','?')} code={d.get('code')}")
