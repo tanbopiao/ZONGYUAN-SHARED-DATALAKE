@@ -84,8 +84,9 @@ ALLOW_PREFIXES = [
     "echo", "hostname", "uname", "pwd", "date", "uptime", "df ", "free ",
     "python3 -V", "python3 -c", "ps aux", "ss -t", "netstat -t", "curl -s",
     "ls ", "cat ", "head ", "tail ", "grep ", "git status", "git pull",
-    "nohup python3", "cd /mnt/workspace", "find ", "wc -l", "du -sh",
-    "which ", "env ", "whoami", "id ", "jobs",
+    "git -C", "git clone", "git fetch", "cp ", "mkdir -p", "cd /mnt/workspace",
+    "nohup python3", "find ", "wc -l", "du -sh", "which ", "env ", "whoami",
+    "id ", "jobs",
 ]
 
 def check_safe(cmd):

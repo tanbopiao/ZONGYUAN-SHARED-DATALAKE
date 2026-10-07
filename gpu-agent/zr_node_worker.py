@@ -69,6 +69,15 @@ def handle_cmd(raw, legacy_mode=False):
         print(f"[拒绝] 身份校验失败: {str(msg)[:80]}", flush=True)
         return None
     if msg.get("type") != "cmd":
+        # 协议命令类型扩展: restart 优雅自重启 (不依赖shell自杀)
+        if msg.get("type") == "restart":
+            import os
+            print("[RESTART] 2秒后自重启", flush=True)
+            send_result({"type": "restarting", "node": NODE, "proto": PROTO,
+                         "zr_did": DID, "ts": int(time.time())})
+            subprocess.Popen(f"sleep 2; nohup python3 {os.path.abspath(__file__)} > worker_stdout.log 2>&1 &",
+                             shell=True)
+            os._exit(0)
         return None
     # 目标节点路由: 指定node且不等于本节点 → 跳过(广播消息无node=执行)
     target = msg.get("node")

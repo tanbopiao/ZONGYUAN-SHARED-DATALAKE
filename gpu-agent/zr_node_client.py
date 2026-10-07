@@ -115,6 +115,18 @@ def main():
             print("无消息")
     elif "--handshake" in a:
         handshake()
+    elif "--restart" in a:
+        node = None
+        if "--node" in a:
+            node = a[a.index("--node")+1]
+        payload = json.dumps({
+            "proto": PROTO, "zr_did": DID, "src": SRC,
+            "task_id": new_task_id("r"), "type": "restart",
+        }, ensure_ascii=False)
+        tag = node or "广播"
+        print(f"[发] restart 命令 → {tag}")
+        st = ntfy_publish_text(MAIN_TOPIC, payload)
+        print(f"    HTTP {st} (worker 2秒后自重启)")
     elif "--report" in a:
         i = a.index("--report")
         key = a[i+1]; value = a[i+2] if len(a) > i+2 else ""
