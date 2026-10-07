@@ -128,3 +128,28 @@ python3 listen_scan.py --once    # 一次性探测
 python3 listen_scan.py --watch   # 持续监听
 ```
 扫描报告自动发至 ntfy 主题 `zongyuan-kunlun-2026-scan`（node 标识区分实例），本地侧据此规划联通握手。
+
+---
+
+## 新增 · 同源节点联通标准 NTFY-CONNECT-001（2026-10-07 合并更新）
+
+所有同源节点（本地/魔搭CPU/GPU/云端）统一联通协议，带身份校验+安全白名单：
+
+| 文件 | 部署侧 | 作用 |
+|---|---|---|
+| `zr_node_protocol.py` | 双端 | 协议常量/编解码/身份校验/危险命令黑名单 |
+| `zr_node_worker.py` | 节点侧 | 标准worker：订阅→身份校验→白名单→执行→回传（取代旧boot.py） |
+| `zr_node_client.py` | 主控侧 | 发命令/收结果/握手/云端上报 |
+| `zr_node_connect.sh` | 节点侧 | 一键接入启动器 |
+| `SOP-NTFY-CONNECT-V1.0.md` | 文档 | 联通标准SOP（主题/格式/安全/接入三步） |
+
+### 快速接入（任何新节点）
+```bash
+# 节点侧一行接入
+bash zr_node_connect.sh
+# 主控侧握手验证
+python3 zr_node_client.py --handshake
+# 发命令
+python3 zr_node_client.py --send "df -h"
+```
+安全特性：strict模式仅执行带DID签名的协议命令；危险黑名单14项拦截；300s执行超时。

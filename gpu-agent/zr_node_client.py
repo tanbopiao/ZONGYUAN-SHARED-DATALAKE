@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+ZONGYUAN-ROOT · 同源节点标准客户端 (zr_node_client.py)  V1.0
+============================================================
+确权: Ω₀⊂⊙∞⊂Ω | DID-BR-000002 | 协议: NTFY-CONNECT-001
+用途: 本地/任意节点 快速联通远程 worker (魔搭CPU/GPU等), 发命令+收结果
+快速接入(新节点 worker 侧):
+  bash zr_node_connect.sh <node_name>      # 实例侧一键接入(见SOP)
+客户端用法:
+  python3 zr_node_client.py --send "<命令>"          # 发命令并等回传
+  python3 zr_node_client.py --listen <秒>            # 监听结果主题
+  python3 zr_node_client.py --handshake              # 标准双向握手测试
+  python3 zr_node_client.py --report <key> <value>   # 云端上报
+"""
+import json, sys, os, time, socket, urllib.request, urllib.error
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from zr_node_protocol import (
+    PROTO, DID, MAIN_TOPIC, RESULT_TOPIC, NTFY_BASE,
+    encode_cmd, decode_msg, is_trusted, node_id,
+)
+
+SRC = os.environ.get("ZR_SRC", "NN-LOCAL-DEV-001")
+
+def ntfy_publish_text(topic, text):
+    req = urllib.request.Request(f"{NTFY_BASE}/{topic}", data=text.encode(),
+                                 headers={"Content-Type": "text/plain"})
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return r.status
+
+def ntfy_get_json(topic, since, timeout):
+    """拉取主题消息 (poll 模式)"""
+    msgs = []
+    url = f"{NTFY_BASE}/{topic}/json?poll=1&since={since}"
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            data = r.read().decode("utf-8", errors="replace")
+        for line in data.strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                msgs.append(json.loads(line))
+            except Exception:
+                pass
+    except Exception:
+        pass
+    return msgs
+
+def listen_results(since="5m", wait=45, task_id=None):
+    """监听结果主题; 若指定 task_id 则过滤"""
+    deadline = time.time() + wait
+    got = []
+    while time.time() < deadline:
+        msgs = ntfy_get_json(RESULT_TOPIC, since, 15)
+        for m in msgs:
+            raw = m.get("message", "")
+            d = decode_msg(raw)
+            if d and (not task_id or d.get("task_id") == task_id):
+                got.append(d)
+        if got:
+            return got
+        time.sleep(3)
+    return got
+
+def send_and_wait(cmd, wait=60, timeout=300):
+    """发标准命令 → 等回传"""
+    payload = encode_cmd(cmd, src=SRC, timeout=timeout)
+    msg = decode_msg(payload)
+    print(f"[发] 命令主题 ← cmd={cmd[:60]} task={msg['task_id']}")
+    st = ntfy_publish_text(MAIN_TOPIC, payload)
+    print(f"    HTTP {st}")
+    print(f"[收] 结果主题 {wait}s...")
+    res = listen_results("5m", wait, msg["task_id"])
+    if res:
+        for d in res[-3:]:
+            print(f"──[{d.get('ts')}] task={d.get('task_id')} code={d.get('code')}")
+            print(f"   out: {d.get('out','')[:500]}")
+        return True
+    print("⚠️ 未收到回传")
+    return False
+
+def handshake():
+    """标准握手: 发 echo 回传主机名"""
+    print("════ NTFY-CONNECT-001 双向握手 ════")
+    return send_and_wait("echo ZR-HANDSHAKE; hostname; whoami", wait=60)
+
+def report(key, value):
+    from zr_node_protocol import report_truth
+    r = report_truth(key, value, source_node=SRC)
+    print("云端:", r)
+
+def main():
+    a = sys.argv[1:]
+    if not a:
+        print(__doc__)
+    elif "--send" in a:
+        cmd = a[a.index("--send")+1]
+        wait = int(a[a.index("--send")+2]) if a.index("--send")+2 < len(a) and a[a.index("--send")+2].isdigit() else 60
+        send_and_wait(cmd, wait)
+    elif "--listen" in a:
+        sec = int(a[a.index("--listen")+1]) if len(a) > a.index("--listen")+1 else 60
+        res = listen_results("1h", sec)
+        for d in res[-10:]:
+            print(f"[{d.get('ts')}] {d.get('type')} task={d.get('task_id','-')} code={d.get('code','-')}: {str(d.get('out',''))[:200]}")
+        if not res:
+            print("无消息")
+    elif "--handshake" in a:
+        handshake()
+    elif "--report" in a:
+        i = a.index("--report")
+        key = a[i+1]; value = a[i+2] if len(a) > i+2 else ""
+        report(key, value)
+    else:
+        print(__doc__)
+
+if __name__ == "__main__":
+    main()
