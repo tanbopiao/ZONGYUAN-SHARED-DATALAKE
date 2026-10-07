@@ -1,35 +1,3 @@
-{
-  "operator_id": "OP-WORKER-TRIGGER-001",
-  "name": "Worker部署触发算子",
-  "version": "v1.0",
-  "hook_type": "local_file_trigger",
-  "entry_script": "/home/user/ZONGYUAN-ROOT/scripts/worker_auto_deploy_timer.sh",
-  "input_schema": {
-    "task_id": "string",
-    "worker_name": "string",
-    "image": "string",
-    "gpu": "boolean",
-    "gpu_memory": "number",
-    "cpu_cores": "number",
-    "memory_mb": "number",
-    "env": "object",
-    "payload_note": "string"
-  },
-  "output_schema": {
-    "trigger_ts": "int",
-    "status": "enum[accepted,rejected]",
-    "task_record_id": "string",
-    "msg": "string"
-  },
-  "pre_check": [
-    "lark-cli可用",
-    "docker服务运行",
-    "MAX_WORKER_COUNT配额校验",
-    "JSON结构合法性校验"
-  ],
-  "post_hook": {
-    "gateway_report": true,
-    "feishu_base_write": true,
-    "ntfy_alert": true
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:62168d56dcd76a48a342578d945f726f2d83facd5d76517d03ac373dc829eead
+size 865
