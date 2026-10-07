@@ -89,17 +89,20 @@ def main():
     print("[agent] ZONGYUAN GPU 实例 Agent 启动, 轮询 ntfy 下行指令 ...", flush=True)
     print("[agent] 待命: EXEC|PING 握手 ｜ EXEC|RUN_TRAIN 训练 ｜ EXEC|<shell命令> 任意命令", flush=True)
     push_res("[AGENT-UP] gpu agent online " + time.strftime("%Y-%m-%d %H:%M:%S"))
-    last = 0
+    seen = set()
     while True:
         try:
-            req = urllib.request.Request(f"{CMD_TOPIC}/json?since={last}&timeout=55")
+            since = int(time.time()) - 180
+            req = urllib.request.Request(f"{CMD_TOPIC}/json?since={since}&timeout=55")
             with urllib.request.urlopen(req, timeout=65) as r:
                 msgs = json.loads(r.read())
             for m in msgs:
-                mid = int(m.get("id", 0))
-                if mid <= last:
+                mid = m.get("id", "")
+                if not mid or mid in seen:
                     continue
-                last = mid
+                seen.add(mid)
+                if len(seen) > 500:
+                    seen = set()
                 msg = m.get("message", "")
                 if not msg.startswith("EXEC|"):
                     continue
