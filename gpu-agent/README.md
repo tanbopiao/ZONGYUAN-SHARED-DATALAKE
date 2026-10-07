@@ -63,3 +63,26 @@ bash one_click_train.sh qwen25-3b    # 3B 全参
 bash one_click_train.sh --epochs 2   # 透传训练参数
 ```
 产物：`output_oneclick/`（model_final 或 adapter+merged）+ `output_oneclick.tar.gz`。
+
+---
+
+## 新增 · Worker部署触发算子+钩子 V1.0（2026-10-07 合并更新）
+
+`operator-worker-trigger/` 目录，JSON算子联动本地实例触发Worker部署：
+
+| 文件 | 说明 |
+|---|---|
+| `trigger_worker_operator.json` | 算子定义 OP-WORKER-TRIGGER-001（入参/出参/前置校验/后置钩子） |
+| `hook_trigger_worker.sh` | 钩子：接收JSON→校验→写飞书台账(状态待处理)→ntfy提醒 |
+| `worker_auto_deploy_timer.sh` | 轮询：认领待处理任务→移交部署引擎 |
+| `operator-worker-trigger-v1.0.json` | 算子卷宗（事件ID HOOK-JSON-OPERATOR-WORKER-TRIGGER-001） |
+
+### 用法（在本地节点）
+```bash
+# 触发一个Worker部署任务
+bash hook_trigger_worker.sh '{"task_id":"task-x","worker_name":"ai-render-worker","image":"docker.io/ubuntu:22.04","gpu":true,"cpu_cores":4,"memory_mb":8192}'
+# 轮询认领（单轮 / 循环模式）
+bash worker_auto_deploy_timer.sh
+bash worker_auto_deploy_timer.sh --loop 600
+```
+实测：钩子写入台账OK(record=reczz28KY08sRRi3)、轮询认领正常、ntfy提醒已触发。

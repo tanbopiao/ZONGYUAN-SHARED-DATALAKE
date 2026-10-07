@@ -1,0 +1,19 @@
+{
+  "archive_id": "ARCH-OP-WORKER-TRIGGER-001",
+  "name": "Worker部署JSON算子+钩子 V1.0",
+  "version": "v1.0",
+  "operator_file": "/home/user/ZONGYUAN-ROOT/operators/trigger_worker_operator.json",
+  "hook_file": "/home/user/ZONGYUAN-ROOT/hooks/hook_trigger_worker.sh",
+  "polling_file": "/home/user/ZONGYUAN-ROOT/scripts/worker_auto_deploy_timer.sh",
+  "event_id": "HOOK-JSON-OPERATOR-WORKER-TRIGGER-001",
+  "meta_rule_ref": ["META-RULE-012", "META-RULE-014"],
+  "capability": [
+    "JSON载荷校验，标准化入参",
+    "钩子接收JSON，写入飞书任务台账，标记待部署",
+    "轮询脚本认领待部署任务，移交部署引擎",
+    "与扩缩容、大盘脚本完整联动",
+    "失败返回结构化JSON结果，可上报记忆网关"
+  ],
+  "risk_note": "算子仅入队任务，实际部署依赖worker_auto_deploy_timer.sh定时轮询；如需同步阻塞部署，可修改钩子直接调用扩容脚本",
+  "create_ts": 1785227300
+}
