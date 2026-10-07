@@ -44,3 +44,22 @@ print(tok.decode(out[0][ids.input_ids.shape[1]:], skip_special_tokens=True))
 
 ## 回传
 把 `adapter-4d/` 打包（zip）回传给我（或上传魔搭私有数据集），我负责：合并回本地部署 + 四维架构推理验证 + 审计留痕 + 归档。
+
+
+---
+
+## 新增 · 一键训练套件 V1.0（2026-10-07 合并更新）
+
+| 文件 | 说明 |
+|---|---|
+| `one_click_train.py` | 一键训练主脚本：显存自适应(≥128G全参/否则QLoRA)、设备自动检测(CUDA/ROCm)、数据兜底(24条内置语料)、自动补装依赖、产出adapter+merged+报告JSON+tar.gz |
+| `one_click_train.sh` | 一键启动器：环境自检 + 模型快捷参数 |
+
+### 用法
+```bash
+bash one_click_train.sh              # 默认 Qwen2.5-3B，显存自适应
+bash one_click_train.sh qwen25-7b    # 192G 显存推荐：7B 全参
+bash one_click_train.sh qwen25-3b    # 3B 全参
+bash one_click_train.sh --epochs 2   # 透传训练参数
+```
+产物：`output_oneclick/`（model_final 或 adapter+merged）+ `output_oneclick.tar.gz`。
