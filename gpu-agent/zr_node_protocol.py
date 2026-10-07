@@ -103,11 +103,30 @@ def check_safe(cmd):
             return True, "ok"
     return False, f"not-allowed-prefix:{prefix[:30]}"
 
-# ============ 节点身份 ============
-def node_id(role="MODEL"):
-    """节点ID: ZR-NODE-<ROLE>-<hostname前10>"""
+# ============ 节点身份 (节点级配置优先) ============
+NODE_CONFIG_PATH = "/mnt/workspace/.zr/node_config.json"
+
+def load_node_config(path=None):
+    """读取本节点独立配置(每节点一份, 只读固化). 不存在返回空dict.
+    节点级worker关键: node_id/role/gpu/capabilities/参数 全部从此读, 不写死进代码,
+    多节点各自隔离, 互不改参数."""
+    path = path or os.environ.get("ZR_NODE_CONFIG", NODE_CONFIG_PATH)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def node_id(role="MODEL", config=None):
+    """节点ID: 优先级 节点配置 > 环境变量 > hostname派生.
+    返回 (node_id, cfg)"""
+    config = config if config is not None else load_node_config()
+    nid = config.get("node_id") or os.environ.get("ZR_NODE")
+    if nid:
+        return nid, config
     host = os.environ.get("ZR_HOST", socket_hostname())
-    return f"ZR-NODE-{role}-{host[:10]}"
+    role = config.get("role", role)
+    return f"ZR-NODE-{role}-{host[:10]}", config
 
 def socket_hostname():
     try:

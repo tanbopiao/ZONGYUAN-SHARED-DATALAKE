@@ -21,13 +21,41 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from zr_node_protocol import (
     PROTO, DID, MAIN_TOPIC, RESULT_TOPIC, NTFY_BASE,
     encode_cmd, decode_msg, is_trusted, check_safe, node_id,
+    load_node_config,
 )
 
 # ============ 配置 ============
-NODE = os.environ.get("ZR_NODE", node_id("MODEL"))
-MODE = os.environ.get("NTFY_MODE", "strict")  # strict | legacy
-HEARTBEAT_INTERVAL = int(os.environ.get("HEARTBEAT_INTERVAL", "30"))
-SUBSCRIPTION_TIMEOUT = int(os.environ.get("SUB_TIMEOUT", "50"))  # ntfy流超时(秒)
+# 节点级worker: 身份/参数一律从本节点独立配置读, 不写死进代码
+CFG = load_node_config()
+NODE, _ = node_id(CFG.get("role", "MODEL"), CFG)
+MODE = os.environ.get("NTFY_MODE", CFG.get("mode", "strict"))  # strict | legacy
+HEARTBEAT_INTERVAL = int(os.environ.get("HEARTBEAT_INTERVAL",
+                                        CFG.get("heartbeat_interval", 30)))
+SUBSCRIPTION_TIMEOUT = int(os.environ.get("SUB_TIMEOUT",
+                                          CFG.get("sub_timeout", 50)))  # ntfy流超时(秒)
+
+def baseline_self_check():
+    """节点级worker基线只读自检: 若本地worker被人工/节点修改, 自动从魔搭基线恢复.
+    防止'各节点改worker参数'导致行为漂移/中断. 运行中文件覆盖不影响当前进程, 下次启动生效."""
+    src = CFG.get("worker_source")
+    if not src:
+        return
+    try:
+        import hashlib, shutil
+        f_self = os.path.abspath(__file__)
+        f_src = os.path.join(src, "zr_node_worker.py")
+        if not os.path.exists(f_src):
+            print("[基线] worker_source无基线副本, 跳过自检", flush=True)
+            return
+        def sha(p):
+            return hashlib.sha256(open(p, "rb").read()).hexdigest()
+        if sha(f_self) != sha(f_src):
+            shutil.copy(f_src, f_self)
+            print(f"[基线告警] worker被本地修改, 已从基线恢复: {src}", flush=True)
+        else:
+            print("[基线] worker与魔搭基线一致", flush=True)
+    except Exception as e:
+        print(f"[基线检查失败] {e}", flush=True)
 
 def ntfy_publish_text(topic, text):
     """发文本到 ntfy (纯文本body, 中文安全)"""
@@ -173,7 +201,8 @@ def heartbeat_loop():
         time.sleep(HEARTBEAT_INTERVAL)
 
 def main():
-    print(f"ZR Worker 启动 | {NODE} | proto={PROTO} | mode={MODE}", flush=True)
+    baseline_self_check()
+    print(f"ZR Worker 启动 | {NODE} | proto={PROTO} | mode={MODE} | cfg=node_config", flush=True)
     send_online()
     threading.Thread(target=heartbeat_loop, daemon=True).start()
     subscription_loop()
