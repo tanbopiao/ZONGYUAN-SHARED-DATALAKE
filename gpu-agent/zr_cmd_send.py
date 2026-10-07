@@ -56,17 +56,21 @@ def push_cmd(task_id, cmd):
     return {"ok": rc == 0, "task_id": task_id, "err": (err or out)[:200]}
 
 def check_result(task_id, wait=60):
+    """从云端读回结果: GET /api/truth 最新列表, 按 value.task_id 匹配 RESULT
+       (结果由实例 POST 云端, key 自动生成, 用 value 标记匹配)"""
     deadline = time.time() + wait
     while time.time() < deadline:
-        if not ensure_repo():
-            time.sleep(3); continue
-        sh(f"cd {TMP} && git remote set-url origin '{remote_url()}' && git pull --ff-only origin master", 60)
-        fn = os.path.join(TMP, CTRL_REL, f"RESULT-{task_id}.json")
-        if os.path.exists(fn):
-            try:
-                return json.load(open(fn))
-            except Exception as e:
-                return {"error": str(e)}
+        try:
+            with urllib.request.urlopen(urllib.request.Request("https://www.huodouai.com/api/truth"), timeout=15) as r:
+                data = json.loads(r.read().decode("utf-8", errors="replace"))
+        except Exception:
+            time.sleep(4); continue
+        if data.get("ok"):
+            for rec in data.get("results", []):
+                v = rec.get("value")
+                if isinstance(v, dict) and v.get("task_id") == task_id and "code" in v:
+                    v["_key"] = rec.get("key"); v["_ts"] = rec.get("ts")
+                    return v
         time.sleep(4)
     return None
 
