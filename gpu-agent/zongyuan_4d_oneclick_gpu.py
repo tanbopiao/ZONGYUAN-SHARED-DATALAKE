@@ -79,5 +79,24 @@ args = TrainingArguments(output_dir="./train_out", per_device_train_batch_size=8
     num_train_epochs=3, learning_rate=2e-4, warmup_steps=2, logging_steps=2, save_strategy="no", report_to=[], bf16=True)
 Trainer(model=model, args=args, train_dataset=ds, data_collator=coll, processing_class=tok).train()
 model.save_pretrained("./adapter-4d"); tok.save_pretrained("./adapter-4d")
-print("[4/4] 完成！adapter 已保存到 ./adapter-4d", flush=True)
-print("回传命令: tar -czf adapter-4d.tar.gz adapter-4d  (然后把 adapter-4d.tar.gz 上传回传给我)")
+print("[4/5] adapter 已保存到 ./adapter-4d", flush=True)
+
+# [5/5] 自动回传: adapter 推送魔搭数据湖 gpu-agent/adapter-4d/（读环境变量令牌，无需人工）
+import os as _os, shutil as _sh, subprocess as _sp
+TOKEN = _os.environ.get("MODELSCOPE_SDK_TOKEN", "").strip()
+DL_URL = "https://www.modelscope.cn/datasets/zongyuanroot/ZONGYUAN-SHARED-DATALAKE.git"
+here = _os.path.dirname(_os.path.abspath(__file__))
+root = _os.path.abspath(_os.path.join(here, ".."))
+if TOKEN and _os.path.isdir(_os.path.join(root, ".git")):
+    try:
+        _sh.copytree("./adapter-4d", _os.path.join(root, "gpu-agent", "adapter-4d"), dirs_exist_ok=True)
+        _sp.run(["git", "add", "gpu-agent/adapter-4d"], cwd=root, check=True, capture_output=True)
+        _sp.run(["git", "commit", "-m", "adapter-4d 四维LoRA训练结果 20261007"], cwd=root, check=True, capture_output=True)
+        _sp.run(["git", "push", DL_URL.replace("https://", f"https://{TOKEN}@"), "master"],
+                cwd=root, check=True, capture_output=True, timeout=300)
+        print("[5/5] 回传完成: adapter 已推送到魔搭数据湖 gpu-agent/adapter-4d/", flush=True)
+    except Exception as e:
+        print("[5/5] 回传失败:", repr(e)[:300], " 请手动打包 adapter-4d 回传", flush=True)
+else:
+    print("[5/5] 未设置 MODELSCOPE_SDK_TOKEN 或非仓库目录，跳过自动回传；请手动打包 adapter-4d 回传", flush=True)
+print("TRAIN-ALL-DONE", flush=True)
