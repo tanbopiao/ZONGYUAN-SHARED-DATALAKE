@@ -150,14 +150,20 @@ def run_cmd(cmd, src, task_id):
 
 def subscription_loop():
     """长连订阅命令主题 (兼容 boot.py 的 /json 流)
-    since=<最后消息时间> 只收新消息, 防 ntfy 重放缓存历史 (根因修复 V1.3)"""
+    since=<最后消息时间> 只收新消息, 防 ntfy 重放缓存历史 (根因修复 V1.3)
+    限流稳态 V1.6: 429/断连指数退避(5→10→20→40→60s封顶), 连接成功重置,
+    避免固定5s重连风暴把429锁死 (根因: ntfy按连接/请求频率限流)"""
     processed_ids = set()   # 已处理消息ID (进程内兜底去重)
     last_since = int(time.time())  # 从启动时刻起, 不重放历史消息
+    backoff = 5  # 指数退避起始秒数
     while True:
         url = f"{NTFY_BASE}/{MAIN_TOPIC}/json?poll=1&since={last_since}"
         try:
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req, timeout=SUBSCRIPTION_TIMEOUT) as r:
+                if backoff != 5:
+                    print(f"[订阅] 连接恢复, 退避重置", flush=True)
+                backoff = 5  # 连接成功 → 重置退避
                 for line in r:
                     line = line.decode("utf-8", errors="replace").strip()
                     if not line:
@@ -191,9 +197,17 @@ def subscription_loop():
                         except Exception:
                             pass
                     handle_cmd(raw, legacy_mode=(MODE == "legacy"))
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                print(f"[限流] 429 Too Many Requests | 退避 {backoff}s (指数退避, 防重连风暴)", flush=True)
+            else:
+                print(f"[订阅] HTTP {e.code} | 退避 {backoff}s", flush=True)
+            time.sleep(backoff)
+            backoff = min(backoff * 2, 60)  # 5→10→20→40→60 封顶
         except Exception as e:
-            print(f"[订阅] 断开: {e} | 5s后重连", flush=True)
-            time.sleep(5)
+            print(f"[订阅] 断开: {e} | {backoff}s后重连", flush=True)
+            time.sleep(backoff)
+            backoff = min(backoff * 2, 60)  # 5→10→20→40→60 封顶
 
 def heartbeat_loop():
     while True:

@@ -49,12 +49,13 @@ def ntfy_get_json(topic, since, timeout):
         pass
     return msgs
 
-def listen_results(since="5m", wait=45, task_id=None):
-    """监听结果主题; 若指定 task_id 则过滤"""
+def listen_results(since="5m", wait=45, task_id=None, result_topic=None):
+    """监听结果主题; 若指定 task_id 则过滤. result_topic: 自定义结果主题(并存节点独立结果主题)"""
+    rt = result_topic or RESULT_TOPIC
     deadline = time.time() + wait
     got = []
     while time.time() < deadline:
-        msgs = ntfy_get_json(RESULT_TOPIC, since, 15)
+        msgs = ntfy_get_json(rt, since, 40)  # 长轮询降频, 减限流压力
         for m in msgs:
             raw = m.get("message", "")
             d = decode_msg(raw)
@@ -68,6 +69,8 @@ def listen_results(since="5m", wait=45, task_id=None):
 def send_and_wait(cmd, wait=90, timeout=300, node=None, topic=None):
     """发标准命令 → 等回传 (node=目标节点名; None=广播; topic=覆盖命令主题, 用于并存节点独立主题)"""
     topic = topic or MAIN_TOPIC
+    # 并存节点独立主题约定: 结果主题 = 命令主题 + "-result" (若未显式以-result结尾)
+    result_topic = topic if topic.endswith("-result") else topic + "-result"
     payload = encode_cmd(cmd, src=SRC, timeout=timeout, node=node)
     msg = decode_msg(payload)
     tag = node or "广播"
@@ -76,7 +79,7 @@ def send_and_wait(cmd, wait=90, timeout=300, node=None, topic=None):
     st = ntfy_publish_text(topic, payload)
     print(f"    HTTP {st} topic={topic}")
     print(f"[收] 结果主题 {wait}s...")
-    res = listen_results(str(since_ts), wait, msg["task_id"])
+    res = listen_results(str(since_ts), wait, msg["task_id"], result_topic=result_topic)
     if res:
         for d in res[-3:]:
             print(f"──[{d.get('ts')}] task={d.get('task_id')} node={d.get('node','?')} code={d.get('code')}")
