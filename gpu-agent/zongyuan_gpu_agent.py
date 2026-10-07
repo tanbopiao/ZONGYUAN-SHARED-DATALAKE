@@ -96,7 +96,18 @@ def main():
             req = urllib.request.Request(f"{CMD_TOPIC}/json?since={since}&poll=0",
                                          headers={'User-Agent': 'zr-gpu-agent'})
             with urllib.request.urlopen(req, timeout=25) as r:
-                msgs = json.loads(r.read())
+                raw = r.read().decode('utf-8', 'ignore')
+            msgs = []
+            for line in raw.splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    j = json.loads(line)
+                except Exception:
+                    continue
+                if j.get('event') == 'message':
+                    msgs.append(j)
             for m in msgs:
                 mid = m.get("id", "")
                 if not mid or mid in seen:
