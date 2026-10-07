@@ -105,3 +105,26 @@ bash worker_auto_deploy_timer.sh --loop 600
 bash start_gpu_worker.sh   # 启动+心跳+自愈（保持前台循环）
 ```
 worker 上线后，本地侧通过 ntfy 主题 `zongyuan-kunlun-2026-cmd/-result` 即可双向握手（下行指令/结果回传）。
+
+---
+
+## 新增 · 实例全域检查套件 V1.0（2026-10-07 合并更新）
+
+放弃浏览器操作，脚本侧全域检查 + ntfy 回传：
+
+| 文件 | 说明 |
+|---|---|
+| `scan_environment.py` | 全域扫描：系统/GPU(CUDA+ROCm)/端口/进程/worker文件/依赖/网络 → JSON报告+存档+ntfy上报 |
+| `run_scan.sh` | 一键执行器：拉取脚本→执行扫描→自动上报 ntfy（实例侧一行命令） |
+| `listen_scan.py` | 本地侧监听器：接收实例扫描报告（ntfy主题 zongyuan-kunlun-2026-scan） |
+
+### 用法
+```bash
+# 实例侧(CPU/GPU都适用): 一行命令完成扫描+上报
+bash run_scan.sh
+
+# 本地侧(接收报告):
+python3 listen_scan.py --once    # 一次性探测
+python3 listen_scan.py --watch   # 持续监听
+```
+扫描报告自动发至 ntfy 主题 `zongyuan-kunlun-2026-scan`（node 标识区分实例），本地侧据此规划联通握手。
