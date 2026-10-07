@@ -99,7 +99,7 @@ def check_safe(cmd):
             return False, f"blacklist:{bad}"
     prefix = c.split(";")[0].split("&&")[0].strip()
     for ok in ALLOW_PREFIXES:
-        if prefix.startswith(ok):
+        if prefix.startswith(ok.lower()):
             return True, "ok"
     return False, f"not-allowed-prefix:{prefix[:30]}"
 
