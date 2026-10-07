@@ -86,3 +86,22 @@ bash worker_auto_deploy_timer.sh
 bash worker_auto_deploy_timer.sh --loop 600
 ```
 实测：钩子写入台账OK(record=reczz28KY08sRRi3)、轮询认领正常、ntfy提醒已触发。
+
+---
+
+## 新增 · GPU Worker 自启动+自愈包装 V1.0（2026-10-07 合并更新）
+
+`start_gpu_worker.sh`：实例启动即一键拉起 worker 全链路
+
+| 特性 | 说明 |
+|---|---|
+| 自动拉取 | worker 缺失时自动从本数据湖 gpu-agent 稀疏拉取 |
+| 后台守护 | nohup 启动 zongyuan_gpu_agent.py，PID 落盘 |
+| GPU心跳 | 启动即上报 ntfy HEARTBEAT（node=ZR-NODE-GPU-AMD-*） |
+| 崩溃自愈 | 30s 轮询检查，掉线自动重启+重发心跳 |
+
+### 用法（GPU 实例终端）
+```bash
+bash start_gpu_worker.sh   # 启动+心跳+自愈（保持前台循环）
+```
+worker 上线后，本地侧通过 ntfy 主题 `zongyuan-kunlun-2026-cmd/-result` 即可双向握手（下行指令/结果回传）。
