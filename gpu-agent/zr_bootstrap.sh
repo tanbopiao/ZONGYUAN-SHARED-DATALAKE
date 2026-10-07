@@ -8,12 +8,22 @@
 set -e
 cd /mnt/workspace
 
-# 1. 安装保活crontab (每2分钟检查, worker掉线自动拉起; 容器重建后需重跑本脚本)
-cat > /tmp/zr_cron.txt << 'EOF'
+# 1. 保活方案: 优先crontab, 不可用则降级supervisor (容器内常无crontab)
+if command -v crontab >/dev/null 2>&1; then
+  cat > /tmp/zr_cron.txt << 'EOF'
 */2 * * * * pgrep -f "python3 zr_node_worker.py" >/dev/null || (cd /mnt/workspace && nohup python3 zr_node_worker.py >> worker_stdout.log 2>&1 &)
 @reboot sleep 10 && bash /mnt/workspace/zr_bootstrap.sh
 EOF
-crontab /tmp/zr_cron.txt 2>/dev/null && echo "crontab: 已安装保活(2分钟) + @reboot自启"
+  crontab /tmp/zr_cron.txt 2>/dev/null && echo "保活: crontab 已安装(2分钟) + @reboot自启"
+else
+  # crontab 不可用 -> 启动 supervisor 保活守护 (while循环, 每60s)
+  if ! pgrep -f "zr_supervisor.sh" >/dev/null 2>&1; then
+    nohup bash /mnt/workspace/zr_supervisor.sh >> /mnt/workspace/supervisor.log 2>&1 &
+    echo "保活: supervisor 守护已启动 (PID $!)"
+  else
+    echo "保活: supervisor 已在运行"
+  fi
+fi
 
 # 2. 检查凭证目录 (持久层)
 mkdir -p /mnt/workspace/.zr
