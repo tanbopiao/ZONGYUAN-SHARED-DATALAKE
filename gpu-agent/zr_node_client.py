@@ -65,18 +65,19 @@ def listen_results(since="5m", wait=45, task_id=None):
         time.sleep(3)
     return got
 
-def send_and_wait(cmd, wait=60, timeout=300):
-    """发标准命令 → 等回传"""
-    payload = encode_cmd(cmd, src=SRC, timeout=timeout)
+def send_and_wait(cmd, wait=60, timeout=300, node=None):
+    """发标准命令 → 等回传 (node=目标节点名; None=广播)"""
+    payload = encode_cmd(cmd, src=SRC, timeout=timeout, node=node)
     msg = decode_msg(payload)
-    print(f"[发] 命令主题 ← cmd={cmd[:60]} task={msg['task_id']}")
+    tag = node or "广播"
+    print(f"[发] 命令主题 ← cmd={cmd[:60]} task={msg['task_id']} target={tag}")
     st = ntfy_publish_text(MAIN_TOPIC, payload)
     print(f"    HTTP {st}")
     print(f"[收] 结果主题 {wait}s...")
     res = listen_results("5m", wait, msg["task_id"])
     if res:
         for d in res[-3:]:
-            print(f"──[{d.get('ts')}] task={d.get('task_id')} code={d.get('code')}")
+            print(f"──[{d.get('ts')}] task={d.get('task_id')} node={d.get('node','?')} code={d.get('code')}")
             print(f"   out: {d.get('out','')[:500]}")
         return True
     print("⚠️ 未收到回传")
@@ -97,9 +98,13 @@ def main():
     if not a:
         print(__doc__)
     elif "--send" in a:
-        cmd = a[a.index("--send")+1]
-        wait = int(a[a.index("--send")+2]) if a.index("--send")+2 < len(a) and a[a.index("--send")+2].isdigit() else 60
-        send_and_wait(cmd, wait)
+        i = a.index("--send")
+        cmd = a[i+1]
+        wait = int(a[i+2]) if i+2 < len(a) and a[i+2].isdigit() else 60
+        node = None
+        if "--node" in a:
+            node = a[a.index("--node")+1]
+        send_and_wait(cmd, wait, node=node)
     elif "--listen" in a:
         sec = int(a[a.index("--listen")+1]) if len(a) > a.index("--listen")+1 else 60
         res = listen_results("1h", sec)

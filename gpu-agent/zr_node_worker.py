@@ -70,6 +70,11 @@ def handle_cmd(raw, legacy_mode=False):
         return None
     if msg.get("type") != "cmd":
         return None
+    # 目标节点路由: 指定node且不等于本节点 → 跳过(广播消息无node=执行)
+    target = msg.get("node")
+    if target and target != NODE:
+        print(f"[跳过] 目标={target} 本节点={NODE}", flush=True)
+        return None
     cmd = msg.get("cmd", "")
     src = msg.get("src", "?")
     task_id = msg.get("task_id", "")

@@ -40,13 +40,17 @@ def new_task_id(prefix="t"):
     """生成任务ID: t-<epoch>-<rand6>"""
     return f"{prefix}-{int(time.time())}-{uuid.uuid4().hex[:6]}"
 
-def encode_cmd(cmd, src="NN-LOCAL-DEV-001", timeout=300, task_id=None):
-    """命令 → 协议JSON文本 (worker 收到后校验身份再执行)"""
-    return json.dumps({
+def encode_cmd(cmd, src="NN-LOCAL-DEV-001", timeout=300, task_id=None, node=None):
+    """命令 → 协议JSON文本 (worker 收到后校验身份再执行)
+    node: 目标节点名(如 ZR-NODE-MODEL-GPU-01); None=广播(所有在线worker执行)"""
+    msg = {
         "proto": PROTO, "zr_did": DID, "src": src,
         "task_id": task_id or new_task_id(),
         "cmd": cmd, "timeout": timeout, "type": "cmd",
-    }, ensure_ascii=False)
+    }
+    if node:
+        msg["node"] = node
+    return json.dumps(msg, ensure_ascii=False)
 
 def decode_msg(raw):
     """ntfy message → dict; 非法返回 None"""
