@@ -108,10 +108,12 @@ def run_cmd(cmd, src, task_id):
     return None
 
 def subscription_loop():
-    """长连订阅命令主题 (兼容 boot.py 的 /json 流)"""
-    url = f"{NTFY_BASE}/{MAIN_TOPIC}/json?poll=1"
-    processed_ids = set()   # 已处理消息ID (防重启重放/重复执行)
+    """长连订阅命令主题 (兼容 boot.py 的 /json 流)
+    since=<最后消息时间> 只收新消息, 防 ntfy 重放缓存历史 (根因修复 V1.3)"""
+    processed_ids = set()   # 已处理消息ID (进程内兜底去重)
+    last_since = int(time.time())  # 从启动时刻起, 不重放历史消息
     while True:
+        url = f"{NTFY_BASE}/{MAIN_TOPIC}/json?poll=1&since={last_since}"
         try:
             req = urllib.request.Request(url)
             with urllib.request.urlopen(req, timeout=SUBSCRIPTION_TIMEOUT) as r:
@@ -125,6 +127,10 @@ def subscription_loop():
                         continue
                     if evt.get("event") != "message":
                         continue
+                    # 更新 since: 只推进到最后消息时间, 绝不倒退
+                    et = evt.get("time")
+                    if isinstance(et, (int, float)) and et > last_since:
+                        last_since = int(et)
                     # 消息去重: ntfy 每条消息有唯一 id, 已处理则跳过
                     mid = evt.get("id")
                     if mid:
