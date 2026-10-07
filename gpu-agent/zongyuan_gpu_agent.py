@@ -133,8 +133,10 @@ def main():
                     except Exception as e:
                         out = "[EXEC-ERR] " + repr(e)
                 push_res(out)
+            print(f"[poll] ok {time.strftime('%H:%M:%S')} msgs={len(msgs)}", flush=True)
             time.sleep(5)
         except Exception as e:
+            print(f"[agent-err] {repr(e)[:200]}", flush=True)
             time.sleep(5)
 
 if __name__ == "__main__":
