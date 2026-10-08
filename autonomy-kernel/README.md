@@ -17,7 +17,8 @@ zongyuan-autonomy-kernel/
 ├── kernel/                          # 自治内核核心代码
 │   ├── zr_node_protocol.py          # NTFY-CONNECT-001 协议 (身份/命令/真值上报)
 │   ├── zr_node_worker.py            # 同源节点 worker (订阅命令/执行/回传/心跳)
-│   └── zr_cloud_ctl.py              # 云端主控 (自动决策 + 自我进化 + 控制面)
+│   ├── zr_cloud_ctl.py              # 云端主控 (自动决策 + 自我进化 + AxiomGate)
+│   └── zr_axiom_gate.py             # AxiomGate 裁决器 (四维校验+风险三优先+配额稳态)
 ├── deploy/
 │   └── bootstrap_autonomy_kernel.sh # 一键部署脚本 (worker|controller|full)
 └── docs/
@@ -32,8 +33,24 @@ zongyuan-autonomy-kernel/
 | **自动感知** | 节点表自动维护（心跳 / 上线 / 完成） |
 | **自动决策** | 任务池 + 能力匹配，自动派发待办任务 |
 | **自我进化 (RSI)** | 节点信誉表，依据历史结果调整派发策略 |
+| **AxiomGate 裁决** | 派发前四维真值校验 + 风险三优先评分 + 配额稳态三重裁决 |
 | **自动上报** | 真值中枢 X-Capture-Token + X-DID 双向握手 |
 | **多节点兼容** | CPU/GPU 异构节点统一接入 |
+
+## AxiomGate 裁决器（V1.0）
+
+派发前强制三重裁决，高危任务自动拦截：
+
+- **L1 四维真值校验**：空间(命令)/时间(时间戳)/属性(能力标签)/因果(任务ID) 完整性
+- **L2 风险三优先**：风险最小 > 成本最小 > 收益最大；高危命令(rm -rf/mkfs/drop等)硬拦截，低信誉(<40)节点拦截
+- **L3 配额稳态**：正常→预警(<30%)→只读空转(<10%)，只读空转禁派发消耗型任务
+
+实测证据（2026-10-08）：
+```
+[AxiomGate拦截] t-gate-highrisk→NODE | 四维=True 风险=high 配额=normal | 派发跳过
+[决策] 派发 t-gate-ok → NODE(信誉100) | echo AXIOM-GATE-OK
+```
+高危任务被拦、正常任务放行，安全裁决在生产链路生效。
 
 ## 四、一键部署
 
