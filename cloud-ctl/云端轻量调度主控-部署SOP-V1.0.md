@@ -124,6 +124,27 @@ curl -s -X POST -H 'X-CTL-Token: ZR-CTL-2026-OMEGA' -H 'Content-Type: applicatio
 
 **"自动决策"能力达成。**
 
+### RSI 自我进化（2026-10-08 新增）— 从"准自治"到"真自治"
+
+给主控新增 **RSI 自我进化模块**：基于历史决策结果自我评估、自我调整派发策略。
+
+核心机制：
+- **节点信誉表**：`data/msagent-evolution.json`，每个节点有信誉分 score（初始100）
+- **进化学习**：`on_result` 收到 done/error → 更新信誉（成功+2，失败-8，错误-5）
+- **策略自适应**：`dispatch_one` 按信誉降序选节点，低信誉(<40)剔除
+- **进化评估**：`evolution_thread` 每2分钟评估，高信誉(≥120)/低信誉(<50淘汰候选)上报真值中枢
+
+实测证据（2026-10-08，worker ZR-NODE-TEST-EVOLVE-001）：
+```
+[决策] 派发 t-evolve- → ZR-NODE-TEST-EVOLVE-001(信誉100) | echo EVOLVE-TASK-
+[完成] ZR-NODE-TEST-EVOLVE-001 | t-evolve- code=0
+```
+信誉表变化：score 100 → 102 → 104（2次成功，win=2, lose=0）
+- worker 上线 → 决策按信誉派发 → 完成回传 → 信誉自动+2
+- **主控会自我学习节点可靠性，自动优先高信誉节点**
+
+**至此"自动决策 + 自我进化"闭环达成，云端中枢进入真自治状态。**
+
 ### ntfy 限流经验（重要坑）
 
 云端出口 IP 高频轮询 ntfy 会触发 **429 限流**（长窗口），导致主控收不到消息。

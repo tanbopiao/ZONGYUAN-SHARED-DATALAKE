@@ -124,6 +124,86 @@ def report_truth(key, value_json):
 # ============ 节点表 & 心跳 ============
 NODES = {}   # node -> {"last_ts", "last_heartbeat", "gpu", "out"}
 
+# ============ RSI 自我进化 (信誉评估 + 策略自适应) ============
+EVOLVE_FILE = "/www/wwwroot/huodouai.com/zhongshu/data/msagent-evolution.json"
+# 节点信誉: {node: {"score": 100, "win": n, "lose": n, "tasks": [..], "updated": ts}}
+NODE_REPUTATION = {}
+_evolve_lock = threading.Lock()
+
+def _load_reputation():
+    global NODE_REPUTATION
+    d = jload(EVOLVE_FILE) or {}
+    NODE_REPUTATION = d.get("reputation", {})
+    print(f"[进化] 加载信誉表: {len(NODE_REPUTATION)}节点", flush=True)
+
+def _persist_reputation():
+    try:
+        os.makedirs(os.path.dirname(EVOLVE_FILE), exist_ok=True)
+        with open(EVOLVE_FILE, "w") as f:
+            json.dump({"updated_ts": now(), "reputation": NODE_REPUTATION},
+                      f, ensure_ascii=False, indent=2)
+    except Exception: pass
+
+def reputation(node_name, default=100.0):
+    """读取节点信誉分 (未评估=100中性分)"""
+    with _evolve_lock:
+        return NODE_REPUTATION.get(node_name, {}).get("score", default)
+
+def _update_reputation(node_name, delta, task_id="", outcome="success", note=""):
+    """更新节点信誉: 成功+2, 失败-8, 超时-5; 记录最近任务"""
+    with _evolve_lock:
+        r = NODE_REPUTATION.get(node_name, {"score": 100.0, "win": 0, "lose": 0,
+                                             "tasks": [], "updated": now()})
+        r["score"] = max(0.0, min(200.0, r.get("score", 100.0) + delta))
+        if outcome == "success":
+            r["win"] = r.get("win", 0) + 1
+        else:
+            r["lose"] = r.get("lose", 0) + 1
+        r["tasks"] = (r.get("tasks", [])[-20:] + [{"task_id": task_id, "outcome": outcome,
+                                                   "ts": now(), "note": note}])
+        r["updated"] = now()
+        NODE_REPUTATION[node_name] = r
+    _persist_reputation()
+
+def _on_result_evolve(msg):
+    """进化学习: 根据 worker 回传的 done 结果更新对应节点信誉"""
+    node = msg.get("node", "")
+    if not node:
+        return
+    ttype = msg.get("type", "")
+    code = msg.get("code", 0)
+    if ttype == "done":
+        if code == 0:
+            _update_reputation(node, +2, msg.get("task_id", ""), "success")
+        else:
+            _update_reputation(node, -8, msg.get("task_id", ""), "fail",
+                               f"exit={code}")
+    elif ttype == "error":
+        _update_reputation(node, -5, msg.get("task_id", ""), "error",
+                           str(msg.get("error", ""))[:80])
+
+def evolution_thread():
+    """自我进化循环: 周期评估节点信誉, 上报策略, 淘汰低信誉节点"""
+    while True:
+        time.sleep(120)  # 每2分钟评估一次
+        try:
+            with _evolve_lock:
+                rep = dict(NODE_REPUTATION)
+            if not rep:
+                continue
+            # 汇总: 高信誉(>=120) / 中(>=80) / 低(<50, 淘汰候选)
+            high = [n for n, r in rep.items() if r.get("score", 100) >= 120]
+            low  = [n for n, r in rep.items() if r.get("score", 100) < 50]
+            report_truth(f"REPORT.CLOUD-CTL.EVOLVE.{now()}",
+                         json.dumps({"action": "evaluate", "nodes": len(rep),
+                                     "high_reputation": high,
+                                     "low_reputation_candidates": low,
+                                     "detail": rep}))
+            if low:
+                print(f"[进化] 低信誉节点(待淘汰/降权): {low}", flush=True)
+        except Exception as e:
+            print(f"[进化异常] {e}", flush=True)
+
 def note_event(msg):
     node = msg.get("node", "?")
     NODES[node] = {
@@ -180,6 +260,7 @@ def on_result(raw):
     if msg is None: return
     if not is_trusted(msg): return
     note_event(msg)
+    _on_result_evolve(msg)  # 进化学习: 更新节点信誉
     if msg.get("type") == "online":
         print(f"[上线] {msg.get('node')} | gpu={msg.get('gpu','?')}", flush=True)
     elif msg.get("type") == "heartbeat":
@@ -329,16 +410,20 @@ def node_capability(node_name):
     return caps
 
 def dispatch_one():
-    """决策: 找 1 个待办任务 + 1 个能力匹配的在线节点, 派发; 无则跳过"""
+    """决策: 找 1 个待办任务 + 1 个能力匹配的在线节点, 派发; 无则跳过
+    策略自适应: 候选节点按信誉分降序, 优先派发给高信誉节点 (RSI)"""
     tasks = load_task_pool()
     if not tasks:
         return False
     online = snapshot()["online"]
     if not online:
         return False
+    # 按信誉排序候选节点 (高分优先, 低分<40 剔除)
+    ranked_online = sorted(online, key=lambda n: reputation(n), reverse=True)
+    ranked_online = [n for n in ranked_online if reputation(n) >= 40]
     for t in tasks:
         need = set(t.get("capability", ["echo"]))
-        for node in online:
+        for node in ranked_online:
             have = set(node_capability(node))
             if need.issubset(have):
                 cmd = t.get("cmd")
@@ -348,7 +433,7 @@ def dispatch_one():
                               timeout=t.get("timeout", 300))
                 if ok:
                     mark_task(t["task_id"], "dispatched")
-                    print(f"[决策] 派发 {t['task_id']} → {node} | {cmd[:60]}", flush=True)
+                    print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f}) | {cmd[:60]}", flush=True)
                     return True
     return False
 
@@ -369,11 +454,13 @@ def main():
           flush=True)
     print(f"网关健康: {report_truth('REPORT.CLOUD-CTL.BOOT.'+str(now()), json.dumps({'boot': True}))}",
           flush=True)
+    _load_reputation()  # 加载信誉表 (RSI)
     threading.Thread(target=sub_thread, args=(RESULT_TOPIC, on_result, "result"), daemon=True).start()
     threading.Thread(target=sub_thread, args=(MAIN_TOPIC, lambda raw: None, "cmd-scan"), daemon=True).start()
     threading.Thread(target=ctl_handler, daemon=True).start()
     threading.Thread(target=watchdog_thread, daemon=True).start()
     threading.Thread(target=decision_thread, daemon=True).start()  # 自动决策循环
+    threading.Thread(target=evolution_thread, daemon=True).start()  # RSI 自我进化
     signal.pause()
 
 if __name__ == "__main__":
