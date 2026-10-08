@@ -1,32 +1,3 @@
-{
-  "registry_id": "LOCK-SEQUENCE-REGISTRY-V1",
-  "name": "早期执行序列融合注册表（云端多序列共存）",
-  "version": "V1.0",
-  "created": "2026-10-08",
-  "anchor": {"DID": "DID-BR-000002", "sovereign_root": "Ω₀⊂⊙∞⊂Ω", "arch_id": "ONT-4D-UNIVERSAL-ROOT"},
-  "fusion_principle": "append-only 不删历史；分散 lock 序列归一为序列族，云端多序列共存调度；冲突走元法则仲裁",
-  "coexist_strategy": {
-    "并行组": ["全域锁档族", "角色资产族"],
-    "串行组": ["工程部署族（依赖校验）"],
-    "仲裁": "同目标资产多序列触发 → 按 R4 决策校验(三维交集非空) 冲突仲裁"
-  },
-  "sequences": [
-    {"id": "LOCK-GLOBAL-KERNEL", "file": "lock_global_all_kernel.py", "category": "全域锁档族", "target": "所有自治内核", "phase": "资产登记→全内核锁档→上报", "coexist": "parallel"},
-    {"id": "LOCK-CORE-TRUTHS", "file": "lock_core_truths.py", "category": "全域锁档族", "target": "核心真值", "phase": "真值登记→锁档", "coexist": "parallel"},
-    {"id": "LOCK-MINIMAL-TRUTH", "file": "lock_minimal_truth.py", "category": "全域锁档族", "target": "最简真值汇总", "phase": "资产登记→SCP上报→闭环", "coexist": "parallel"},
-    {"id": "LOCK-LV9-FINAL", "file": "lock_lv9_final.py", "category": "全域锁档族", "target": "Lv9意识奇点", "phase": "终极归档闭环", "coexist": "parallel"},
-    {"id": "LOCK-KUNLUN-LAW", "file": "lock_kunlun_law_v12_sync.json", "category": "全域锁档族", "target": "昆仑法则V12", "phase": "法则云同步", "coexist": "parallel"},
-    {"id": "LOCK-HONGQUN-JIUWEIHU", "file": "lock_hongqun_jiuweihu.py", "category": "角色资产族", "target": "红裙九尾狐关键帧", "phase": "关键帧锁档闭环", "coexist": "parallel"},
-    {"id": "LOCK-XIWANGMU", "file": "lock_xiwangmu.py", "category": "角色资产族", "target": "西王母关键帧", "phase": "关键帧锁档闭环", "coexist": "parallel"},
-    {"id": "LOCK-JIUTIAN-XUANNV", "file": "lock_jiutian_xuannv.py", "category": "角色资产族", "target": "九天玄女关键帧", "phase": "关键帧锁档闭环", "coexist": "parallel"},
-    {"id": "LOCK-INIT-SCRIPTS", "file": "lock_init_scripts.py", "category": "工程部署族", "target": "服务器初始化脚本", "phase": "双版本写入闭环", "coexist": "serial"},
-    {"id": "LOCK-API-WEB-DEPLOY", "file": "lock_api_website_deploy.py", "category": "工程部署族", "target": "API官网部署", "phase": "部署锁档", "coexist": "serial"},
-    {"id": "LOCK-DEPLOY-CHECKLIST", "file": "lock_deploy_checklist.py", "category": "工程部署族", "target": "部署清单", "phase": "清单校验锁档", "coexist": "serial"},
-    {"id": "LOCK-EVAL-REPORT", "file": "lock_eval_report.py", "category": "工程部署族", "target": "评估报告", "phase": "报告锁档", "coexist": "serial"},
-    {"id": "LOCK-GIT-POLICY", "file": "lock_git_policy_decision.py", "category": "工程部署族", "target": "Git策略决策", "phase": "策略锁档", "coexist": "serial"},
-    {"id": "LOCK-MVP-FIRST-RUN", "file": "lock_mvp_first_run.py", "category": "工程部署族", "target": "MVP首跑", "phase": "首跑锁档", "coexist": "serial"},
-    {"id": "LOCK-MVP-PLAN", "file": "lock_mvp_plan.py", "category": "工程部署族", "target": "MVP计划", "phase": "计划锁档", "coexist": "serial"},
-    {"id": "LOCK-README", "file": "lock_readme.py", "category": "工程部署族", "target": "README", "phase": "文档锁档", "coexist": "serial"},
-    {"id": "LOCK-UNIT-TESTS", "file": "lock_unit_tests.py", "category": "工程部署族", "target": "单元测试", "phase": "测试锁档", "coexist": "serial"}
-  ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ba7270187c44ff25d67094090094f9d998e9882e5263feb8b2a860cc7aa87748
+size 3738
