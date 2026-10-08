@@ -66,6 +66,22 @@ except Exception as e:
         except Exception:
             return {}
 
+# ============ AxiomGate 裁决器 (安全/资源算子层) ============
+try:
+    from zr_axiom_gate import AxiomGate, authorize as axiom_authorize, four_dim_check
+    _gate = AxiomGate()
+    print(f"[AxiomGate] 裁决器就绪 {_gate.gate_id} | 风险三优先: 风险最小>成本最小>收益最大", flush=True)
+except Exception as _e:
+    print(f"[AxiomGate加载失败] {_e} — 内置简化裁决", flush=True)
+    class _Gate:
+        def authorize(self, task, node=None, node_rep=None):
+            return True, {"allow": True, "fallback": True}
+    _gate = _Gate()
+    def axiom_authorize(task, node=None, node_rep=None):
+        return True, {"allow": True, "fallback": True}
+    def four_dim_check(task):
+        return True, []
+
 # ============ 配置 ============
 HUB_CTL = "ZR-CLOUD-CTL-001"
 CONTROL_PORT = 9010
@@ -411,7 +427,8 @@ def node_capability(node_name):
 
 def dispatch_one():
     """决策: 找 1 个待办任务 + 1 个能力匹配的在线节点, 派发; 无则跳过
-    策略自适应: 候选节点按信誉分降序, 优先派发给高信誉节点 (RSI)"""
+    策略自适应: 候选节点按信誉分降序, 优先派发给高信誉节点 (RSI)
+    AxiomGate: 派发前三重裁决(四维校验+风险三优先+配额稳态)"""
     tasks = load_task_pool()
     if not tasks:
         return False
@@ -426,6 +443,16 @@ def dispatch_one():
         for node in ranked_online:
             have = set(node_capability(node))
             if need.issubset(have):
+                # ---- AxiomGate 三重裁决 ----
+                allow, verdict = axiom_authorize(t, node=node, node_rep=reputation(node))
+                if not allow:
+                    fd = verdict.get("four_dim", {})
+                    rk = verdict.get("risk", {})
+                    qt = verdict.get("quota", {})
+                    print(f"[AxiomGate拦截] {t['task_id']}→{node} | "
+                          f"四维={fd.get('pass','?')} 风险={rk.get('level','?')} "
+                          f"配额={qt.get('mode','?')} | 派发跳过", flush=True)
+                    continue
                 cmd = t.get("cmd")
                 if not cmd:
                     continue
