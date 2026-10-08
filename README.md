@@ -17,6 +17,7 @@
 | meta-rules/ | 元法则（017视觉帧快照/018资源账单） |
 | zongyuan-root/ | 内核全量镜像 |
 | control/ | git命令槽 |
+| **autonomy-kernel/** | **自治内核基底V1.0（自动决策+自我进化，一键部署）** |
 
 ## 对外公开内容
 白皮书和宣传内容在公开库: zongyuanroot/zongyuan-root-open-knowledge
