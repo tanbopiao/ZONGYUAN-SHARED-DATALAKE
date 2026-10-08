@@ -104,6 +104,35 @@ curl -s -X POST -H 'X-CTL-Token: ZR-CTL-2026-OMEGA' -H 'Content-Type: applicatio
 
 **至此"自动运行 + 自愈"闭环达成。**
 
+### 自动决策能力（2026-10-08 新增）— "自己找事做"
+
+给主控新增**自动决策循环**：周期性扫描任务池 + 在线节点表，按节点能力自动匹配派发待办任务，无需人工下发命令。
+
+核心机制：
+- **任务池**：`data/msagent-taskpool.jsonl`，投递待办任务（status=pending）
+- **决策循环**：每20s扫描，找能力匹配的在线节点自动派发
+- **能力匹配**：`node_capability()` 按节点名启发式（gpu/dsw/model→含 train/infer；默认 echo/ls/python3）
+- **控制面接口**：`POST /enqueue` 投递任务进池
+
+实测证据（2026-10-08，worker ZR-NODE-TEST-DECIDE-002）：
+```
+[决策] 派发 t-auto-001 → ZR-NODE-TEST-DECIDE-002 | echo AUTO-DECISION-OK
+[决策] 派发 t-auto-002 → ZR-NODE-TEST-DECIDE-002 | echo AUTO-DECISION-OK-2
+```
+- 仅投任务进池，未手动下发 → 主控自动识别节点、自动匹配、自动派发
+- worker 自动执行并回传 done，任务池自动标记 dispatched
+
+**"自动决策"能力达成。**
+
+### ntfy 限流经验（重要坑）
+
+云端出口 IP 高频轮询 ntfy 会触发 **429 限流**（长窗口），导致主控收不到消息。
+规避：
+- 订阅用**低频率长轮询**（poll=1），连接间加 5s 最小间隔
+- 429 时 **30s 长退避**，指数退避封顶 60s
+- 不要高频 curl 同一主题测连通（会加剧限流）
+- 限流是暂时的，恢复后自动继续（本机+云端恢复后均 200）
+
 ## 七、回滚
 
 主控已由 systemd 托管，回滚用：

@@ -40,7 +40,7 @@ for _p in [_HERE, PROTO_DIR]:
 try:
     from zr_node_protocol import (
         PROTO, DID, MAIN_TOPIC, RESULT_TOPIC, SCAN_TOPIC, NTFY_BASE,
-        encode_cmd, decode_msg, is_trusted, check_safe,
+        encode_cmd, decode_msg, is_trusted, check_safe, load_node_config,
     )
 except Exception as e:
     print(f"[协议加载失败] {e} — 内置兜底常量", flush=True)
@@ -59,6 +59,12 @@ except Exception as e:
         except Exception: return None
     def is_trusted(m): return isinstance(m, dict) and m.get("proto") == PROTO and m.get("zr_did") == DID
     def check_safe(cmd): return (True, "ok")
+    def load_node_config(path=None):
+        try:
+            with open(path or "/mnt/workspace/.zr/node_config.json") as f:
+                return json.load(f)
+        except Exception:
+            return {}
 
 # ============ 配置 ============
 HUB_CTL = "ZR-CLOUD-CTL-001"
@@ -136,16 +142,18 @@ def _persist_nodes():
 
 # ============ ntfy 订阅线程 ============
 def sub_thread(topic, handler, tag):
-    """长轮询订阅 ntfy topic; 收到消息 → handler(json or text)"""
+    """长轮询订阅 ntfy topic; 低频率, 避免触发 ntfy 429 限流"""
+    last = int(time.time())
+    backoff = 15
     while True:
         try:
-            url = f"{NTFY_BASE}/{topic}/json?poll=1&since={CACHE_TS}"
+            url = f"{NTFY_BASE}/{topic}/json?poll=1&since={last}"
             req = urllib.request.Request(url)
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=45) as r:
                 while True:
                     raw = r.readline()
                     if not raw:
-                        break
+                        break  # 长轮询超时无新消息 → 正常断开, 稍后退避
                     line = raw.decode("utf-8", "ignore").strip()
                     if not line: continue
                     try:
@@ -154,14 +162,18 @@ def sub_thread(topic, handler, tag):
                         continue
                     if d.get("event") == "message":
                         handler(d.get("message", ""))
+                        last = max(last, int(d.get("time", last)))
+            backoff = 15  # 正常断开, 用基础退避
         except urllib.error.HTTPError as e:
             if e.code == 429:
-                time.sleep(10)  # 限流退避
+                time.sleep(30)  # 限流: 长退避
             else:
-                time.sleep(5)
+                time.sleep(backoff)
         except Exception as e:
-            print(f"[{tag}] 断开: {str(e)[:80]} | 5s后重连", flush=True)
-            time.sleep(5)
+            print(f"[{tag}] 断开: {str(e)[:60]} | {backoff}s后重连", flush=True)
+            time.sleep(backoff)
+            backoff = min(backoff * 2, 60)
+        time.sleep(5)  # 每次连接间最小间隔, 防止高频重连触发限流
 
 def on_result(raw):
     msg = decode_msg(raw)
@@ -232,6 +244,21 @@ def ctl_handler():
             elif self.path.startswith("/report"):
                 r = report_truth(data.get("key", ""), json.dumps(data.get("value", {})))
                 self._json(200, {"report": r})
+            elif self.path.startswith("/enqueue"):
+                # 投递待办任务进任务池, 决策循环自动派发
+                import uuid
+                tid = data.get("task_id") or f"t-{int(time.time())}-{uuid.uuid4().hex[:6]}"
+                rec = {"task_id": tid, "cmd": data.get("cmd", ""),
+                       "capability": data.get("capability", ["echo"]),
+                       "timeout": data.get("timeout", 300),
+                       "status": "pending", "created_ts": now()}
+                try:
+                    os.makedirs(os.path.dirname(TASK_POOL_FILE), exist_ok=True)
+                    with open(TASK_POOL_FILE, "a") as f:
+                        f.write(json.dumps(rec, ensure_ascii=False)+"\n")
+                    self._json(200, {"ok": True, "task_id": tid, "msg": "已入任务池,决策循环将自动派发"})
+                except Exception as e:
+                    self._json(500, {"ok": False, "error": str(e)})
             else:
                 self._json(404, {"ok": False, "error": "not found"})
         def log_message(self, *a): pass
@@ -254,6 +281,89 @@ def watchdog_thread():
                                      "online_count": snap["online_count"]}))
             print(f"[巡检] 在线节点: {online}", flush=True)
 
+# ============ 自动决策循环 (自找事做) ============
+TASK_POOL_FILE = "/www/wwwroot/huodouai.com/zhongshu/data/msagent-taskpool.jsonl"
+
+def load_task_pool():
+    """读取待办任务池 (任务在 JSONL, 仅取 status=pending)"""
+    tasks = []
+    try:
+        with open(TASK_POOL_FILE) as f:
+            for line in f:
+                line = line.strip()
+                if not line: continue
+                try: tasks.append(json.loads(line))
+                except Exception: continue
+    except Exception:
+        pass
+    return [t for t in tasks if t.get("status") == "pending"]
+
+def mark_task(tid, status):
+    """把任务池里指定任务标记状态 (完成/已派发)"""
+    try:
+        lines = open(TASK_POOL_FILE).read().splitlines()
+        with open(TASK_POOL_FILE, "w") as f:
+            for line in lines:
+                try: obj = json.loads(line)
+                except Exception: f.write(line+"\n"); continue
+                if obj.get("task_id") == tid:
+                    obj["status"] = status
+                    obj["dispatched_ts"] = now()
+                f.write(json.dumps(obj, ensure_ascii=False)+"\n")
+        return True
+    except Exception:
+        return False
+
+def node_capability(node_name):
+    """从节点配置推断能力标签 (无配置则通用)"""
+    cfg = load_node_config()
+    if node_name in cfg.get("node_capabilities", {}):
+        return cfg["node_capabilities"][node_name]
+    # 依据节点名启发式: GPU 节点能跑训练, 通用节点能跑 echo/ls/python
+    low = node_name.lower()
+    caps = ["echo", "ls", "cat", "python3"]
+    if "gpu" in low or "train" in low:
+        caps += ["train", "infer", "render"]
+    if "dsw" in low or "model" in low:
+        caps += ["train", "infer"]
+    return caps
+
+def dispatch_one():
+    """决策: 找 1 个待办任务 + 1 个能力匹配的在线节点, 派发; 无则跳过"""
+    tasks = load_task_pool()
+    if not tasks:
+        return False
+    online = snapshot()["online"]
+    if not online:
+        return False
+    for t in tasks:
+        need = set(t.get("capability", ["echo"]))
+        for node in online:
+            have = set(node_capability(node))
+            if need.issubset(have):
+                cmd = t.get("cmd")
+                if not cmd:
+                    continue
+                ok = send_cmd(cmd, node=node, task_id=t["task_id"],
+                              timeout=t.get("timeout", 300))
+                if ok:
+                    mark_task(t["task_id"], "dispatched")
+                    print(f"[决策] 派发 {t['task_id']} → {node} | {cmd[:60]}", flush=True)
+                    return True
+    return False
+
+def decision_thread():
+    """自动决策循环: 周期扫描任务池, 自动派发给能力匹配的在线节点"""
+    while True:
+        time.sleep(20)  # 每20秒决策一次
+        try:
+            dispatched = dispatch_one()
+            if dispatched:
+                report_truth(f"REPORT.CLOUD-CTL.DECIDE.{now()}",
+                             json.dumps({"action": "dispatch", "note": "自动派发待办任务"}))
+        except Exception as e:
+            print(f"[决策异常] {e}", flush=True)
+
 def main():
     print(f"ZR 云端主控启动 | {HUB_CTL} | proto={PROTO} | 订阅 {MAIN_TOPIC}/{RESULT_TOPIC}",
           flush=True)
@@ -263,6 +373,7 @@ def main():
     threading.Thread(target=sub_thread, args=(MAIN_TOPIC, lambda raw: None, "cmd-scan"), daemon=True).start()
     threading.Thread(target=ctl_handler, daemon=True).start()
     threading.Thread(target=watchdog_thread, daemon=True).start()
+    threading.Thread(target=decision_thread, daemon=True).start()  # 自动决策循环
     signal.pause()
 
 if __name__ == "__main__":
