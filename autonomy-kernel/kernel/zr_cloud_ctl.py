@@ -82,6 +82,25 @@ except Exception as _e:
     def four_dim_check(task):
         return True, []
 
+# ============ 自治算子集 (因果链 + 自愈) ============
+try:
+    from zr_autonomy_ops import CausalityTrack, SelfHeal, track as at_track, heal as at_heal
+    _causality = CausalityTrack()
+    _selfheal = SelfHeal(staleness_window=120)
+    print(f"[自治算子] 因果链跟踪 + 异常自愈 就绪", flush=True)
+except Exception as _e:
+    print(f"[自治算子加载失败] {_e} — 内置兜底", flush=True)
+    class _C:
+        def track(self, *a, **k): return {}
+    class _S:
+        def note_dispatched(self, *a, **k): pass
+        def note_completed(self, *a, **k): pass
+        def note_failed(self, *a, **k): pass
+        def heal(self, *a, **k): return []
+    _causality, _selfheal = _C(), _S()
+    def at_track(*a, **k): return {}
+    def at_heal(*a, **k): return []
+
 # ============ 配置 ============
 HUB_CTL = "ZR-CLOUD-CTL-001"
 CONTROL_PORT = 9010
@@ -277,12 +296,22 @@ def on_result(raw):
     if not is_trusted(msg): return
     note_event(msg)
     _on_result_evolve(msg)  # 进化学习: 更新节点信誉
+    tid = msg.get("task_id", "")
     if msg.get("type") == "online":
         print(f"[上线] {msg.get('node')} | gpu={msg.get('gpu','?')}", flush=True)
     elif msg.get("type") == "heartbeat":
         pass  # 心跳仅更新节点表
     elif msg.get("type") == "done":
-        print(f"[完成] {msg.get('node')} | {msg.get('task_id','')} code={msg.get('code','?')}", flush=True)
+        code = msg.get("code", 0)
+        _causality.track(tid, "done" if code == 0 else "failed", node=msg.get("node"),
+                         detail=f"exit={code}")
+        if code == 0:
+            _selfheal.note_completed(tid)
+        else:
+            _selfheal.note_failed(tid)
+        print(f"[完成] {msg.get('node')} | {tid} code={code}", flush=True)
+    elif msg.get("type") == "error":
+        _selfheal.note_failed(tid)
 
 # ============ 命令下发 ============
 def send_cmd(cmd, node=None, task_id=None, src=HUB_CTL, timeout=300):
@@ -460,12 +489,15 @@ def dispatch_one():
                               timeout=t.get("timeout", 300))
                 if ok:
                     mark_task(t["task_id"], "dispatched")
+                    # ---- 因果链 + 自愈标记 ----
+                    _causality.track(t["task_id"], "dispatched", node=node, task=t)
+                    _selfheal.note_dispatched(t["task_id"], node)
                     print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f}) | {cmd[:60]}", flush=True)
                     return True
     return False
 
 def decision_thread():
-    """自动决策循环: 周期扫描任务池, 自动派发给能力匹配的在线节点"""
+    """自动决策循环: 周期扫描任务池, 自动派发给能力匹配的在线节点; 并周期自愈"""
     while True:
         time.sleep(20)  # 每20秒决策一次
         try:
@@ -473,6 +505,11 @@ def decision_thread():
             if dispatched:
                 report_truth(f"REPORT.CLOUD-CTL.DECIDE.{now()}",
                              json.dumps({"action": "dispatch", "note": "自动派发待办任务"}))
+            # ---- 异常自愈: 检测并清理僵死任务 ----
+            healed = _selfheal.heal(_causality, report_truth)
+            if healed:
+                print(f"[自愈] 清理僵死任务 {len(healed)}: "
+                      f"{[h['task_id'] for h in healed]}", flush=True)
         except Exception as e:
             print(f"[决策异常] {e}", flush=True)
 
