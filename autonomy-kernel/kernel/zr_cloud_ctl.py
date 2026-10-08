@@ -121,6 +121,18 @@ except Exception as _e:
     def _bandit_report(*a, **k): pass
     def _mem_prune(): return {"kept":0,"pruned":0}
 
+# ============ 资源账单统计 (成本可审计) ============
+try:
+    from zr_resource_bill import ResourceBill, bill_start as _bill_start, bill_end as _bill_end, bill_summary as _bill_summary
+    _rbill = ResourceBill()
+    print(f"[资源账单] 成本可审计就绪 | 复用去重窗口={_rbill.dedup_window}s", flush=True)
+except Exception as _e:
+    print(f"[资源账单加载失败] {_e} — 内置兜底", flush=True)
+    def _bill_start(*a, **k): return None
+    def _bill_end(*a, **k): return None
+    def _bill_summary(): return {"total_tasks": 0}
+    _rbill = None
+
 _dispatch_policy = {}   # task_id -> 本轮派发策略 (供结果回报关联)
 
 # ============ 配置 ============
@@ -340,6 +352,8 @@ def on_result(raw):
         # A/B策略回报: 按本次派发的策略记录结果
         policy_used = _dispatch_policy.pop(tid, "reputation_first")
         _bandit_report(policy_used, success)
+        # 资源账单: 结果回传, 记录耗时/结果
+        _bill_end(tid, code)
         print(f"[完成] {node} | {tid} code={code} | 策略={policy_used}", flush=True)
     elif msg.get("type") == "error":
         _selfheal.note_failed(tid)
@@ -382,6 +396,9 @@ def ctl_handler():
                                  "nodes": g.get("nodes", {}), "snapshot": snapshot()})
             elif self.path.startswith("/nodes"):
                 self._json(200, snapshot())
+            elif self.path.startswith("/bill"):
+                # 资源账单摘要 (成本看板)
+                self._json(200, {"ok": True, "bill": _bill_summary()})
             else:
                 self._json(404, {"ok": False, "error": "not found"})
         def do_POST(self):
@@ -539,6 +556,8 @@ def dispatch_one():
                     _causality.track(t["task_id"], "dispatched", node=node, task=t)
                     _selfheal.note_dispatched(t["task_id"], node)
                     _dispatch_policy[t["task_id"]] = policy  # 记录本轮策略
+                    # ---- 资源账单: 派发开始 ----
+                    _bill_start(t["task_id"], node, cmd, policy)
                     print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f},策略={policy}) | {cmd[:60]}", flush=True)
                     return True
     return False
