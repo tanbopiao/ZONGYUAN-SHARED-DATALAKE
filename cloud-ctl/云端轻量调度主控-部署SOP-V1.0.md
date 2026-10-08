@@ -72,6 +72,24 @@ curl -s -X POST -H 'X-CTL-Token: ZR-CTL-2026-OMEGA' -H 'Content-Type: applicatio
 - ✅ 命令广播下发 publish_status=200
 - ✅ 台账 msagent-ctl-ledger.jsonl 自动记录
 
+### 真实握手测试（通过）— 完整双向闭环
+
+2026-10-08 18:20 通过本地测试 worker（ZR-NODE-TEST-LOCAL-001）完成真实握手：
+
+```
+云端主控 --cmd--> ntfy(zongyuan-kunlun-2026) --> worker执行
+     --> 回传 done + 真实输出 --> ntfy(result) --> 云端主控节点表
+```
+
+验证证据：
+- 命令下发：`echo HANDSHAKE-OK && hostname && date`，定向 node，publish_status=200
+- worker 执行日志：`[执行] src=ZR-CLOUD-CTL-001 task=t-handshake-001`
+- 主控节点表：`type=done, last_out=HANDSHAKE-OK\nvefaas-...-sandbox\nThu Oct 8 06:20 PM +08 2026`
+- 台账：命令记录 publish_status=200
+
+**结论：云端主控 → 任意同源 worker 双向握手闭环打通。**
+任何在线 worker 上报 online 后自动入节点表，主控可定向/广播下发命令并收回执行结果。
+
 ## 七、回滚
 
 停掉主控即可，中枢零影响：
