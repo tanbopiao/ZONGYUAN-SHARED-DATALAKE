@@ -17,8 +17,9 @@ zongyuan-autonomy-kernel/
 ├── kernel/                          # 自治内核核心代码
 │   ├── zr_node_protocol.py          # NTFY-CONNECT-001 协议 (身份/命令/真值上报)
 │   ├── zr_node_worker.py            # 同源节点 worker (订阅命令/执行/回传/心跳)
-│   ├── zr_cloud_ctl.py              # 云端主控 (自动决策 + 自我进化 + AxiomGate)
-│   └── zr_axiom_gate.py             # AxiomGate 裁决器 (四维校验+风险三优先+配额稳态)
+│   ├── zr_cloud_ctl.py              # 云端主控 (自动决策 + 自我进化 + AxiomGate + 自治算子)
+│   ├── zr_axiom_gate.py             # AxiomGate 裁决器 (四维校验+风险三优先+配额稳态)
+│   └── zr_autonomy_ops.py           # 自治算子集 (因果链跟踪 + 异常自愈)
 ├── deploy/
 │   └── bootstrap_autonomy_kernel.sh # 一键部署脚本 (worker|controller|full)
 └── docs/
@@ -34,8 +35,24 @@ zongyuan-autonomy-kernel/
 | **自动决策** | 任务池 + 能力匹配，自动派发待办任务 |
 | **自我进化 (RSI)** | 节点信誉表，依据历史结果调整派发策略 |
 | **AxiomGate 裁决** | 派发前四维真值校验 + 风险三优先评分 + 配额稳态三重裁决 |
+| **因果链跟踪** | 任务 入池→派发→完成→上报 全生命周期可回溯，防分叉 |
+| **异常自愈** | 检测 worker 掉线/任务超时/重复派发，自动清理僵死状态 |
 | **自动上报** | 真值中枢 X-Capture-Token + X-DID 双向握手 |
 | **多节点兼容** | CPU/GPU 异构节点统一接入 |
+
+## 自治算子集（V1.0）
+
+新增因果可回溯 + 自愈能力：
+
+- **因果链跟踪**：任务全生命周期（enqueue→dispatched→done/failed）写入 JSONL 台账，节点、命令、时间戳、退出码完整可溯
+- **异常自愈**：派发后超时(120s)无结果的僵死任务自动检测清理，防任务悬空
+
+实测证据（2026-10-08，任务 t-ops-1）：
+```
+{"task_id":"t-ops-1","stage":"dispatched","node":"NODE","task":"echo OPS-CAUSALITY-OK"}
+{"task_id":"t-ops-1","stage":"done","node":"NODE","detail":"exit=0"}
+```
+因果链 dispatched→done 完整记录，可溯源审计。
 
 ## AxiomGate 裁决器（V1.0）
 
