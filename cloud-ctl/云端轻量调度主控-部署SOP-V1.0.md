@@ -90,9 +90,24 @@ curl -s -X POST -H 'X-CTL-Token: ZR-CTL-2026-OMEGA' -H 'Content-Type: applicatio
 **结论：云端主控 → 任意同源 worker 双向握手闭环打通。**
 任何在线 worker 上报 online 后自动入节点表，主控可定向/广播下发命令并收回执行结果。
 
+### 自愈守护（2026-10-08 补齐）— systemd 三服务托管
+
+排查确认：网关/调度器本就有 systemd 托管，主控本次补上，**三服务全部自愈**：
+
+| 服务 | systemd unit | 状态 | 自愈 |
+|---|---|---|---|
+| 真值网关 | zhongshu-gateway.service | active+enabled | ✅ Restart=always |
+| 调度器 | zhongshu-scheduler.service | active+enabled | ✅ Restart=always |
+| **云端主控** | **zr-cloud-ctl.service（新增）** | **active+enabled** | ✅ Restart=always, RestartSec=5 |
+
+主控自愈实测：故意 kill 主控进程(104010) → systemd 自动拉起新进程(104038)，服务保持 active，控制面恢复。
+
+**至此"自动运行 + 自愈"闭环达成。**
+
 ## 七、回滚
 
-停掉主控即可，中枢零影响：
+主控已由 systemd 托管，回滚用：
 ```bash
-ssh -o BatchMode=yes huodouai-cloud "pkill -f zr_cloud_ctl.py"
+ssh -o BatchMode=yes huodouai-cloud "systemctl stop zr-cloud-ctl.service && systemctl disable zr-cloud-ctl.service"
 ```
+停主控不影响网关/调度器/官网，中枢零影响。
