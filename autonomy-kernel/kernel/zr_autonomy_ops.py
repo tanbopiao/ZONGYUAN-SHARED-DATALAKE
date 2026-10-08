@@ -67,11 +67,7 @@ class CausalityTrack:
 
 # ---------- 异常自愈 ----------
 class SelfHeal:
-    """检测并自动修复异常: 掉线/超时/重复派发/僵死任务"""
-    def __init__(self, staleness_window=120):
-        self.staleness = staleness_window  # 任务派发后超过此秒无结果视为僵死
-        self._reported = {}   # task_id -> 派发时间戳 (本地跟踪)
-
+    """检测并自动修复异常: 掉线/超时/重复派发/僵死任务; 联动节点失败隔离"""
     def note_dispatched(self, task_id, node):
         """标记某任务已派发(用于超时检测)"""
         self._reported[task_id] = {"node": node, "ts": time.time(), "state": "dispatched"}
@@ -95,24 +91,61 @@ class SelfHeal:
         return stale
 
     def heal(self, causality=None, report_truth=None):
-        """自愈: 检测僵死任务, 清理并上报"""
+        """自愈联动: 检测僵死任务, 清理+记录节点失败+标记可重派+上报
+        升级: 僵死任务返回 task 信息供主控重新入池(换节点重派)"""
         stale = self.stale_tasks()
         healed = []
         for tid, node, age in stale:
             self._reported.pop(tid, None)  # 清理僵死状态
+            # 记录节点失败计数 (联动隔离: 反复失败节点降权)
+            self.note_node_failure(node)
+            isolated = self.is_node_isolated(node)
             healed.append({"task_id": tid, "node": node, "age": age,
-                           "action": "stale_cleaned"})
+                           "action": "stale_cleaned",
+                           "node_isolated": isolated,
+                           "redispatch": True})  # 标记可换节点重派
             if causality:
                 causality.track(tid, "self_heal", node=node,
-                                detail=f"僵死{age}s自动清理")
+                                detail=f"僵死{age}s清理, {'节点隔离' if isolated else '可重派'}")
             if report_truth:
                 try:
                     report_truth(f"REPORT.CLOUD-CTL.HEAL.{int(time.time())}",
-                                 json.dumps({"action": "stale_clean",
-                                             "task_id": tid, "age": age}))
+                                 json.dumps({"action": "stale_clean", "task_id": tid,
+                                             "age": age, "node_isolated": isolated}))
                 except Exception:
                     pass
         return healed
+
+    # ---- 节点失败计数 + 隔离 (自愈联动) ----
+    def __init__(self, staleness_window=120, isolate_threshold=3):
+        self.staleness = staleness_window
+        self.isolate_threshold = isolate_threshold  # 连续失败>=此值隔离
+        self._reported = {}
+        self._node_fail_streak = {}   # node -> 连续失败次数
+        self._isolated = set()        # 隔离节点集合
+
+    def note_node_failure(self, node):
+        """节点失败一次: 连续失败+1, 达阈值隔离"""
+        if not node:
+            return
+        self._node_fail_streak[node] = self._node_fail_streak.get(node, 0) + 1
+        if self._node_fail_streak[node] >= self.isolate_threshold:
+            self._isolated.add(node)
+
+    def note_node_success(self, node):
+        """节点成功: 清零连续失败, 解除隔离"""
+        if not node:
+            return
+        self._node_fail_streak[node] = 0
+        self._isolated.discard(node)
+
+    def is_node_isolated(self, node):
+        """节点是否被隔离"""
+        return node in self._isolated
+
+    def isolated_nodes(self):
+        """当前隔离节点列表"""
+        return list(self._isolated)
 
 # 全局实例 (供主控挂载)
 causality = CausalityTrack()

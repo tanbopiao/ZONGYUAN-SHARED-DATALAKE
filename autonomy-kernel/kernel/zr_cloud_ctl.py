@@ -101,6 +101,28 @@ except Exception as _e:
     def at_track(*a, **k): return {}
     def at_heal(*a, **k): return []
 
+# ============ 记忆蒸馏 + A/B 策略实验 ============
+try:
+    from zr_memory_ab import MemoryDistiller, PolicyBandit, choose_policy as _bandit_choose, report_policy as _bandit_report, prune_memory as _mem_prune
+    _mem = MemoryDistiller()
+    _bandit = PolicyBandit(epsilon=0.15)
+    print(f"[记忆+策略] 记忆蒸馏 + A/B策略寻优就绪 | 当前最优策略={_bandit.best_policy()}", flush=True)
+except Exception as _e:
+    print(f"[记忆+策略加载失败] {_e} — 内置兜底", flush=True)
+    class _M:
+        def distill(self, *a, **k): return None
+        def prune(self): return {"kept":0,"pruned":0}
+    class _B:
+        def choose_policy(self): return "reputation_first"
+        def report(self, *a, **k): pass
+        def best_policy(self): return "reputation_first"
+    _mem, _bandit = _M(), _B()
+    def _bandit_choose(): return "reputation_first"
+    def _bandit_report(*a, **k): pass
+    def _mem_prune(): return {"kept":0,"pruned":0}
+
+_dispatch_policy = {}   # task_id -> 本轮派发策略 (供结果回报关联)
+
 # ============ 配置 ============
 HUB_CTL = "ZR-CLOUD-CTL-001"
 CONTROL_PORT = 9010
@@ -303,13 +325,22 @@ def on_result(raw):
         pass  # 心跳仅更新节点表
     elif msg.get("type") == "done":
         code = msg.get("code", 0)
-        _causality.track(tid, "done" if code == 0 else "failed", node=msg.get("node"),
+        node = msg.get("node", "")
+        success = (code == 0)
+        _causality.track(tid, "done" if success else "failed", node=node,
                          detail=f"exit={code}")
-        if code == 0:
+        if success:
             _selfheal.note_completed(tid)
+            _selfheal.note_node_success(node)   # 解除节点隔离
+            _mem.distill("node_success", {"node": node, "task": tid}, value_score=1.2)
         else:
             _selfheal.note_failed(tid)
-        print(f"[完成] {msg.get('node')} | {tid} code={code}", flush=True)
+            _selfheal.note_node_failure(node)    # 节点失败计数
+            _mem.distill("node_fail", {"node": node, "task": tid, "code": code}, value_score=0.8)
+        # A/B策略回报: 按本次派发的策略记录结果
+        policy_used = _dispatch_policy.pop(tid, "reputation_first")
+        _bandit_report(policy_used, success)
+        print(f"[完成] {node} | {tid} code={code} | 策略={policy_used}", flush=True)
     elif msg.get("type") == "error":
         _selfheal.note_failed(tid)
 
@@ -456,16 +487,31 @@ def node_capability(node_name):
 
 def dispatch_one():
     """决策: 找 1 个待办任务 + 1 个能力匹配的在线节点, 派发; 无则跳过
-    策略自适应: 候选节点按信誉分降序, 优先派发给高信誉节点 (RSI)
-    AxiomGate: 派发前三重裁决(四维校验+风险三优先+配额稳态)"""
+    A/B策略寻优: bandit自动选择派发策略(信誉优先/能力优先/均衡)
+    AxiomGate: 派发前三重裁决(四维校验+风险三优先+配额稳态)
+    自愈联动: 排除被隔离的节点"""
     tasks = load_task_pool()
     if not tasks:
         return False
     online = snapshot()["online"]
     if not online:
         return False
-    # 按信誉排序候选节点 (高分优先, 低分<40 剔除)
-    ranked_online = sorted(online, key=lambda n: reputation(n), reverse=True)
+    # 排除被自愈隔离的节点
+    isolated = set(_selfheal.isolated_nodes())
+    online = [n for n in online if n not in isolated]
+    if not online:
+        return False
+    # A/B策略: 选择本轮派发策略
+    policy = _bandit_choose()
+    if policy == "reputation_first":
+        ranked_online = sorted(online, key=lambda n: reputation(n), reverse=True)
+    elif policy == "capability_first":
+        # 能力优先: 按节点能力数量降序(能力多者优先)
+        ranked_online = sorted(online, key=lambda n: len(node_capability(n)), reverse=True)
+    else:  # balanced
+        import random
+        ranked_online = list(online); random.shuffle(ranked_online)
+    # 低分<40 剔除
     ranked_online = [n for n in ranked_online if reputation(n) >= 40]
     for t in tasks:
         need = set(t.get("capability", ["echo"]))
@@ -489,17 +535,20 @@ def dispatch_one():
                               timeout=t.get("timeout", 300))
                 if ok:
                     mark_task(t["task_id"], "dispatched")
-                    # ---- 因果链 + 自愈标记 ----
+                    # ---- 因果链 + 自愈标记 + 策略记录 ----
                     _causality.track(t["task_id"], "dispatched", node=node, task=t)
                     _selfheal.note_dispatched(t["task_id"], node)
-                    print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f}) | {cmd[:60]}", flush=True)
+                    _dispatch_policy[t["task_id"]] = policy  # 记录本轮策略
+                    print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f},策略={policy}) | {cmd[:60]}", flush=True)
                     return True
     return False
 
 def decision_thread():
-    """自动决策循环: 周期扫描任务池, 自动派发给能力匹配的在线节点; 并周期自愈"""
+    """自动决策循环: 周期扫描任务池, 自动派发给能力匹配的在线节点; 周期自愈+记忆净化"""
+    round_n = 0
     while True:
         time.sleep(20)  # 每20秒决策一次
+        round_n += 1
         try:
             dispatched = dispatch_one()
             if dispatched:
@@ -510,6 +559,11 @@ def decision_thread():
             if healed:
                 print(f"[自愈] 清理僵死任务 {len(healed)}: "
                       f"{[h['task_id'] for h in healed]}", flush=True)
+            # ---- 记忆净化: 每30轮(约10分钟)净化一次记忆库 ----
+            if round_n % 30 == 0:
+                pr = _mem_prune()
+                if pr.get("pruned", 0) > 0:
+                    print(f"[记忆净化] 淘汰低价值/陈旧记忆 {pr['pruned']}条, 保留{pr['kept']}条", flush=True)
         except Exception as e:
             print(f"[决策异常] {e}", flush=True)
 
