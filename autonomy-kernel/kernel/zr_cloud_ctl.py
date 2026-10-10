@@ -133,6 +133,19 @@ except Exception as _e:
     def _bill_summary(): return {"total_tasks": 0}
     _rbill = None
 
+# ============ 灰度发布 + 视觉快照记忆 ============
+try:
+    from zr_canary_snapshot import CanaryRollout, SnapshotMemory, canary_ready as _canary_ready, canary_report as _canary_report, snap as _snap
+    _canary = CanaryRollout()
+    _snapmem = SnapshotMemory()
+    print(f"[灰度+快照] 渐进发布+快照记忆就绪 | 灰度最小任务={_canary.canary_min_tasks} 成功率≥{_canary.canary_min_success_rate}", flush=True)
+except Exception as _e:
+    print(f"[灰度+快照加载失败] {_e} — 内置兜底", flush=True)
+    def _canary_ready(node, risk="low"): return True
+    def _canary_report(node, success): return "active"
+    def _snap(*a, **k): return ""
+    _canary, _snapmem = None, None
+
 _dispatch_policy = {}   # task_id -> 本轮派发策略 (供结果回报关联)
 
 # ============ 配置 ============
@@ -354,6 +367,11 @@ def on_result(raw):
         _bandit_report(policy_used, success)
         # 资源账单: 结果回传, 记录耗时/结果
         _bill_end(tid, code)
+        # 灰度发布: 节点任务结果回报(累计转正/隔离)
+        _canary_report(node, success)
+        # 快照记忆: 任务结果快照(异常定位回看用)
+        _snap("task_done" if success else "error", tid, {"code": code, "policy": policy_used},
+              node=node)
         print(f"[完成] {node} | {tid} code={code} | 策略={policy_used}", flush=True)
     elif msg.get("type") == "error":
         _selfheal.note_failed(tid)
@@ -399,6 +417,12 @@ def ctl_handler():
             elif self.path.startswith("/bill"):
                 # 资源账单摘要 (成本看板)
                 self._json(200, {"ok": True, "bill": _bill_summary()})
+            elif self.path.startswith("/canary"):
+                # 灰度发布状态
+                self._json(200, {"ok": True, "canary": _canary.summary() if _canary else {"nodes": {}}})
+            elif self.path.startswith("/snapshots"):
+                # 视觉快照记忆最近记录
+                self._json(200, {"ok": True, "snapshots": _snapmem.recent(20) if _snapmem else []})
             else:
                 self._json(404, {"ok": False, "error": "not found"})
         def do_POST(self):
@@ -532,9 +556,14 @@ def dispatch_one():
     ranked_online = [n for n in ranked_online if reputation(n) >= 40]
     for t in tasks:
         need = set(t.get("capability", ["echo"]))
+        task_risk = t.get("risk", "low")   # 任务风险等级: low/high
         for node in ranked_online:
             have = set(node_capability(node))
             if need.issubset(have):
+                # ---- 灰度发布: 节点需满足该风险等级可接条件 ----
+                if not _canary_ready(node, task_risk):
+                    print(f"[灰度] 跳过 {t['task_id']}→{node} | 节点未过灰度,不可接{task_risk}风险任务", flush=True)
+                    continue
                 # ---- AxiomGate 三重裁决 ----
                 allow, verdict = axiom_authorize(t, node=node, node_rep=reputation(node))
                 if not allow:
@@ -558,7 +587,10 @@ def dispatch_one():
                     _dispatch_policy[t["task_id"]] = policy  # 记录本轮策略
                     # ---- 资源账单: 派发开始 ----
                     _bill_start(t["task_id"], node, cmd, policy)
-                    print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f},策略={policy}) | {cmd[:60]}", flush=True)
+                    # ---- 快照记忆: 派发快照 ----
+                    _snap("task_start", t["task_id"], {"cmd": cmd[:100], "risk": task_risk,
+                                                       "policy": policy}, node=node)
+                    print(f"[决策] 派发 {t['task_id']} → {node}(信誉{reputation(node):.0f},策略={policy},风险={task_risk}) | {cmd[:60]}", flush=True)
                     return True
     return False
 
