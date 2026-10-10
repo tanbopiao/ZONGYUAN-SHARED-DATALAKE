@@ -190,8 +190,9 @@ def ntfy_pub(topic, text):
         print(f"[ntfy发布失败] {e}", flush=True); return None
 
 def report_truth(key, value_obj):
-    """上报云端真值中枢 V3.0 协议 (2026-10-10 实测修正)
-    V3.0: body={key, value:{content,...}} + X-DID头; value必须是含content键的JSON对象"""
+    """上报云端真值中枢 V3.1 协议 (RULE-005 V3.1, 2026-10-10 实测修正)
+    V3.1: body={key, value:{content,...}} + X-DID头; value必须是含content键的JSON对象
+    (V3.0 作废: truth_key/truth_value 字段、字符串value)"""
     try:
         # 规范化 value 为含 content 键的对象
         if isinstance(value_obj, str):
