@@ -440,7 +440,8 @@ def ctl_handler():
                 self._json(200, {"ok": ok, "sent": cmd[:100], "node": node or "*",
                                  "nodes_online": len(snapshot()["online"])})
             elif self.path.startswith("/report"):
-                r = report_truth(data.get("key", ""), json.dumps(data.get("value", {})))
+                # value 直接传结构化对象(避免双重序列化, 符合RULE-005 V3.1)
+                r = report_truth(data.get("key", ""), data.get("value", {}))
                 self._json(200, {"report": r})
             elif self.path.startswith("/enqueue"):
                 # 投递待办任务进任务池, 决策循环自动派发
