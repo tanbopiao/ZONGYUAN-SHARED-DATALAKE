@@ -189,12 +189,16 @@ def ntfy_pub(topic, text):
     except Exception as e:
         print(f"[ntfy发布失败] {e}", flush=True); return None
 
-def report_truth(key, value_json):
-    """上报云端真值中枢 (与 zr_node_protocol.report_truth 一致)"""
+def report_truth(key, value_obj):
+    """上报云端真值中枢 V3.0 协议 (2026-10-10 实测修正)
+    V3.0: body={key, value:{content,...}} + X-DID头; value必须是含content键的JSON对象"""
     try:
-        body = json.dumps({"truth_key": key, "truth_value": value_json,
-                           "source_node": HUB_CTL, "truth_type": "rule",
-                           "confidence": 0.95}, ensure_ascii=False).encode()
+        # 规范化 value 为含 content 键的对象
+        if isinstance(value_obj, str):
+            value_obj = {"content": value_obj}
+        elif isinstance(value_obj, dict) and "content" not in value_obj:
+            value_obj = {"content": json.dumps(value_obj, ensure_ascii=False)}
+        body = json.dumps({"key": key, "value": value_obj}, ensure_ascii=False).encode()
         req = urllib.request.Request(TRUTH_API, data=body, headers={
             "X-Capture-Token": X_TOKEN, "X-DID": DID_HEADER,
             "Content-Type": "application/json"})
