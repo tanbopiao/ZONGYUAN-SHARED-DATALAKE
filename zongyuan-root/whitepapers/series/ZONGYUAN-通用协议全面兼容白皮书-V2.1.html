@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.0</title>
+<title>ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.1</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Ω</text></svg>">
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <style>
@@ -37,8 +37,8 @@ tr:nth-child(even){background:#0a0f17}
 </style>
 </head>
 <body>
-<h1>ZONGYUAN-ROOT · 通用协议全面兼容白皮书 V2.0</h1>
-<p class="anchor-tag">确权DID：DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜基线 V2.0（V1.0-V1.9 深化合并总览）</p>
+<h1>ZONGYUAN-ROOT · 通用协议全面兼容白皮书 V2.1</h1>
+<p class="anchor-tag">确权DID：DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜基线 V2.1（V2.0 总览 + OAuth2/OIDC 认证授权族）</p>
 <p>生成时间：2026-10-11 ｜ 锁档：LOCKED（仅追加，不修改已有条目）</p>
 
 <h2>一、总览｜十协议族全景</h2>
@@ -54,6 +54,7 @@ tr:nth-child(even){background:#0a0f17}
 <tr><td>8</td><td>Flower</td><td>联邦学习（FedAvg/SecureAgg）</td><td>/v1/federated/aggregate /v1/federated/status</td><td><span class="badge badge-live">LIVE</span></td><td></td></tr>
 <tr><td>9</td><td>昆仑生产协议</td><td>批量生产/资产加密/锁档</td><td>/v1/kunlun/production</td><td><span class="badge badge-live">LIVE</span></td><td></td></tr>
 <tr><td>10</td><td>四协议联邦组合流</td><td>DPoP→A2A→MCP→SLIM 单请求闭环</td><td>/v1/federated/kunlun</td><td><span class="badge badge-live">LIVE</span></td><td></td></tr>
+<tr><td>11</td><td>OAuth2/OIDC</td><td>RFC6749+RFC7662+RFC7009+OIDC Discovery</td><td>/.well-known/openid-configuration /v1/oauth/token|introspect|revoke</td><td><span class="badge badge-live">LIVE</span></td><td></td></tr>
 </table>
 
 <h2>二、协议栈分层架构（点击层查看详情）</h2>
@@ -81,6 +82,17 @@ flowchart LR
     style B fill:#1a3322,stroke:#44dd88,color:#fff
     style G fill:#1a3322,stroke:#44dd88,color:#fff
 </div>
+
+<h2>三·补、V2.1 深化落地（2026-10-11）—— OAuth2/OIDC 认证授权族</h2>
+<table>
+<tr><th>端点</th><th>标准</th><th>能力</th><th>实测</th></tr>
+<tr><td>GET /.well-known/openid-configuration</td><td>OIDC Discovery 1.0</td><td>issuer/token/introspection/revocation 全声明</td><td>✅ 200</td></tr>
+<tr><td>POST /v1/oauth/token</td><td>RFC6749</td><td>client_credentials 签发（Bearer 或 DPoP 绑定）</td><td>✅ 200</td></tr>
+<tr><td>POST /v1/oauth/introspect</td><td>RFC7662</td><td>token 内省（active/client_id/scope/jkt）</td><td>✅ 200</td></tr>
+<tr><td>POST /v1/oauth/revoke</td><td>RFC7009</td><td>token 吊销</td><td>✅ 200</td></tr>
+<tr><td>错误凭证</td><td>RFC6749</td><td>invalid_client 401</td><td>✅ 401</td></tr>
+</table>
+<p>标准 OAuth2 授权层 + DPoP 令牌绑定 = 完整认证授权闭环。接入面升级为五层：认证(OAuth2/OIDC) → 安全(DPoP) → 编排(A2A) → 工具(MCP) → 传输(SLIM)</p>
 
 <h2>四、深化历程 V1.0→V1.9</h2>
 <table>

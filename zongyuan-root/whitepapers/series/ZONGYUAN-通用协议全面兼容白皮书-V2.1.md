@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.0
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.1
 
 | | |
 |---|---|
 | 确权DID | DID-BR-000002 |
 | 架构ID | ONT-4D-UNIVERSAL-ROOT |
 | 核心元公理 | Ω₀⊂⊙∞⊂Ω 元极恒一 |
-| 基线版本 | V2.0（V1.0-V1.9 深化合并总览） |
+| 基线版本 | V2.1（V2.0 总览 + OAuth2/OIDC 认证授权族） |
 | 生成时间 | 2026-10-11 |
 | 锁档状态 | LOCKED（仅追加，不修改已有条目） |
 
@@ -25,6 +25,7 @@ ZONGYUAN-ROOT 全面兼容层将外部 Agent/模型/工具接入标准化为 **�
 | 8 | Flower | 联邦学习（FedAvg/SecureAgg） | `/v1/federated/aggregate` `/v1/federated/status` | LIVE |
 | 9 | 昆仑生产协议 | 批量生产/资产加密/锁档 | `/v1/kunlun/production` | LIVE |
 | 10 | 四协议联邦组合流 | DPoP→A2A→MCP→SLIM 单请求闭环 | `/v1/federated/kunlun` | LIVE |
+| 11 | OAuth2/OIDC | RFC6749+RFC7662+RFC7009+OIDC Discovery | `/.well-known/openid-configuration` `/v1/oauth/token|introspect|revoke` | LIVE |
 
 ## 二、协议栈分层架构
 
@@ -61,6 +62,40 @@ ZONGYUAN-ROOT 全面兼容层将外部 Agent/模型/工具接入标准化为 **�
                         └─────────────────────────────┘
 ```
 
+## 三·补、V2.1 深化落地（2026-10-11）—— OAuth2/OIDC 认证授权族
+
+标准认证授权层：外部 Agent 通过标准 OAuth2 客户端凭证流获取访问令牌，支持 DPoP 绑定（jkt 指纹），RFC7662 内省、RFC7009 吊销、OIDC Discovery 发现文档。
+
+### 端点
+
+| 端点 | 标准 | 能力 | 实测 |
+|------|------|------|------|
+| `GET /.well-known/openid-configuration` | OIDC Discovery 1.0 | issuer/token/introspection/revocation/jwks 全声明 | ✅ 200 |
+| `POST /v1/oauth/token` | RFC6749 | client_credentials 签发（Bearer 或 DPoP 绑定） | ✅ 200 |
+| `POST /v1/oauth/introspect` | RFC7662 | token 内省（active/client_id/scope/jkt） | ✅ 200 |
+| `POST /v1/oauth/revoke` | RFC7009 | token 吊销 | ✅ 200 |
+| `POST /v1/oauth/token`(错误凭证) | RFC6749 | invalid_client 401 | ✅ 401 |
+
+### 与 DPoP 的配套
+
+- token 签发时可携带 `dpop_jkt`（客户端 DPoP 公钥指纹）→ 返回 `token_type: DPoP` 绑定令牌
+- 内省返回 jkt 指纹，资源服务可校验 proof 一致性
+- 标准 OAuth2 授权层 + DPoP 令牌绑定 = 完整认证授权闭环
+
+### 客户端注册表
+
+| client_id | scopes |
+|-----------|--------|
+| zr-agent | kunlun.production / a2a.dispatch / mcp.call |
+| zr-render | kunlun.production |
+
+### 架构价值
+
+- **标准接入**：外部 Agent 用标准 OAuth2/OIDC 协议接入，无需私有协议
+- **令牌可审计**：内省/吊销全生命周期管理
+- **与 DPoP 天然配套**：OAuth2 签发 → DPoP 绑定 → 资源访问
+- 接入面升级为五层：**认证(OAuth2/OIDC) → 安全(DPoP) → 编排(A2A) → 工具(MCP) → 传输(SLIM)**
+
 ## 四、深化历程 V1.0→V1.9
 
 | 版本 | 深化内容 | 魔搭 commit |
@@ -75,6 +110,7 @@ ZONGYUAN-ROOT 全面兼容层将外部 Agent/模型/工具接入标准化为 **�
 | V1.7 | MCP×昆仑生产工具化 | `0fb677c` |
 | V1.8 | DPoP×昆仑生产安全准入 | `e6c8846` |
 | V1.9 | 四协议联邦组合流 | `3aa51d2` |
+| V2.1 | OAuth2/OIDC 认证授权族 | `(本轮)` |
 
 ## 五、关键端点索引（全部公网 LIVE 实测）
 
