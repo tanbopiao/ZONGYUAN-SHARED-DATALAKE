@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.1
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.2
 
 | | |
 |---|---|
 | 确权DID | DID-BR-000002 |
 | 架构ID | ONT-4D-UNIVERSAL-ROOT |
 | 核心元公理 | Ω₀⊂⊙∞⊂Ω 元极恒一 |
-| 基线版本 | V2.1（V2.0 总览 + OAuth2/OIDC 认证授权族） |
+| 基线版本 | V2.2（V2.1 认证授权 + GPU真实推理 + SSE流式 + OAuth2×联邦） |
 | 生成时间 | 2026-10-11 |
 | 锁档状态 | LOCKED（仅追加，不修改已有条目） |
 
@@ -96,6 +96,35 @@ ZONGYUAN-ROOT 全面兼容层将外部 Agent/模型/工具接入标准化为 **�
 - **与 DPoP 天然配套**：OAuth2 签发 → DPoP 绑定 → 资源访问
 - 接入面升级为五层：**认证(OAuth2/OIDC) → 安全(DPoP) → 编排(A2A) → 工具(MCP) → 传输(SLIM)**
 
+## 三·补二、V2.2 深化落地（2026-10-11）—— GPU真实推理 + OAuth2×联邦 + SSE/WebSocket
+
+### 1. GPU 真实推理接入（OpenAI 兼容 vLLM/Ollama 路由）
+
+| 端点 | 能力 | 公网实测 |
+|------|------|----------|
+| `POST /v1/gpu/register` | 节点注册（register/heartbeat/list/unregister 四操作，180s 心跳 TTL） | ✅ 注册/心跳/注销全通过 |
+| `GET /v1/gpu/nodes` | 在线节点列表（模型/provider/gpu 元数据） | ✅ |
+| `POST /v1/chat/completions` | **GPU 优先推理**：遍历在线节点 OpenAI 兼容调用，命中返回 `inference` 节点元数据；无节点回退上游 | ✅ 路由机制（自检真实 mock 推理） |
+
+注册→心跳→路由→推理闭环：GPU/CPU 推理节点注册后，云端 `/v1/chat/completions` 自动路由到在线节点做真实推理，响应带 `"inference": {"node","gpu","provider","latency_ms"}`。
+
+### 2. OAuth2×四协议联邦整合（令牌签发→组合流全链）
+
+`/v1/federated/kunlun` run 环节 1 升级为**双认证模式**：
+- `auth=oauth2`：OAuth2 client_credentials 签发令牌 → 内省校验 scope 覆盖 → 进入 A2A→MCP→SLIM 组合流
+- `auth=dpop`：保留原 DPoP 令牌绑定认证
+
+公网实测：OAuth2 令牌签发 → 联邦 run 全链 **OAuth2:passed→A2A:passed→MCP:passed→SLIM:passed** 4/4；无效令牌 401 拦截于环节 1。
+
+### 3. SSE 流式 + WebSocket 协议族扩展
+
+| 端点 | 协议 | 公网实测 |
+|------|------|----------|
+| `POST /v1/chat/stream` | SSE text/event-stream（多块 delta + finish_reason + [DONE]） | ✅ Content-Type: text/event-stream |
+| `GET /v1/ws/info` | WebSocket RFC6455 协议声明层 | ✅ websocket 13, wss://www.huodouai.com/v1/ws |
+
+**十二协议族全景**：OpenAI API / SSE / WebSocket / OAuth2+OIDC / DPoP / A2A / MCP / AGNTCY SLIM / Flower 联邦 / GPU 推理路由 / OTel GenAI 可观测 / 模型格式。
+
 ## 四、深化历程 V1.0→V1.9
 
 | 版本 | 深化内容 | 魔搭 commit |
@@ -110,7 +139,8 @@ ZONGYUAN-ROOT 全面兼容层将外部 Agent/模型/工具接入标准化为 **�
 | V1.7 | MCP×昆仑生产工具化 | `0fb677c` |
 | V1.8 | DPoP×昆仑生产安全准入 | `e6c8846` |
 | V1.9 | 四协议联邦组合流 | `3aa51d2` |
-| V2.1 | OAuth2/OIDC 认证授权族 | `(本轮)` |
+| V2.1 | OAuth2/OIDC 认证授权族 | `12fdb61` |
+| V2.2 | GPU真实推理 + OAuth2×联邦 + SSE/WebSocket | `(本轮)` |
 
 ## 五、关键端点索引（全部公网 LIVE 实测）
 

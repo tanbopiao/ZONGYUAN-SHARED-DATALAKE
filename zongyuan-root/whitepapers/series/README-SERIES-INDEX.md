@@ -44,7 +44,7 @@
 | A2A智能体互操作协议融合探索 V1.0 | A2A协议×ZONGYUAN双模协议栈，智能体互联网接入 |
 | MCP与OAuth协议对接探索 V1.0 | MCP工具层+OAuth/OIDC-A安全层×ZONGYUAN三协议栈 |
 | A2A网关层设计 V1.0 | 标准AgentCard+8态状态机公网落地，A2A标准互操作出口 |
-| 通用协议全面兼容 V2.1 | 十一协议族全景 + OAuth2/OIDC认证授权族(RFC6749+7662+7009+OIDC Discovery) + 五层接入面 |
+| 通用协议全面兼容 V2.2 | 十二协议族全景 + GPU真实推理路由 + OAuth2×四协议联邦 + SSE流式/WebSocket |
 
 ## 使用方式
 

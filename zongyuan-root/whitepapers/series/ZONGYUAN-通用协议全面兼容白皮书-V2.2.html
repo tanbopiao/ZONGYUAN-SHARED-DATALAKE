@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.1</title>
+<title>ZONGYUAN-ROOT 通用协议全面兼容白皮书 V2.2</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Ω</text></svg>">
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <style>
@@ -37,8 +37,8 @@ tr:nth-child(even){background:#0a0f17}
 </style>
 </head>
 <body>
-<h1>ZONGYUAN-ROOT · 通用协议全面兼容白皮书 V2.1</h1>
-<p class="anchor-tag">确权DID：DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜基线 V2.1（V2.0 总览 + OAuth2/OIDC 认证授权族）</p>
+<h1>ZONGYUAN-ROOT · 通用协议全面兼容白皮书 V2.2</h1>
+<p class="anchor-tag">确权DID：DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜基线 V2.2（V2.1 认证授权 + GPU真实推理 + SSE流式 + OAuth2×联邦）</p>
 <p>生成时间：2026-10-11 ｜ 锁档：LOCKED（仅追加，不修改已有条目）</p>
 
 <h2>一、总览｜十协议族全景</h2>
@@ -93,6 +93,17 @@ flowchart LR
 <tr><td>错误凭证</td><td>RFC6749</td><td>invalid_client 401</td><td>✅ 401</td></tr>
 </table>
 <p>标准 OAuth2 授权层 + DPoP 令牌绑定 = 完整认证授权闭环。接入面升级为五层：认证(OAuth2/OIDC) → 安全(DPoP) → 编排(A2A) → 工具(MCP) → 传输(SLIM)</p>
+
+<h2>三·补二、V2.2 深化落地（2026-10-11）—— GPU真实推理 + OAuth2×联邦 + SSE/WebSocket</h2>
+<table>
+<tr><th>协议族</th><th>端点</th><th>能力</th><th>公网实测</th></tr>
+<tr><td>GPU 真实推理</td><td>POST /v1/gpu/register / GET /v1/gpu/nodes</td><td>节点注册/心跳/列表/注销，180s TTL，OpenAI 兼容路由</td><td>✅ 注册→心跳→注销全通过</td></tr>
+<tr><td>推理路由</td><td>POST /v1/chat/completions</td><td>GPU 优先推理，命中返回 inference 节点元数据，无节点回退上游</td><td>✅ 路由机制验证</td></tr>
+<tr><td>OAuth2×联邦</td><td>POST /v1/federated/kunlun</td><td>run 环节1 双认证：OAuth2 令牌 或 DPoP 绑定</td><td>✅ OAuth2→A2A→MCP→SLIM 4/4</td></tr>
+<tr><td>SSE 流式</td><td>POST /v1/chat/stream</td><td>text/event-stream 多块 delta + finish_reason + [DONE]</td><td>✅ Content-Type 正确</td></tr>
+<tr><td>WebSocket</td><td>GET /v1/ws/info</td><td>RFC6455 协议声明层 wss 端点</td><td>✅ websocket 13</td></tr>
+</table>
+<p><strong>十二协议族全景</strong>：OpenAI API / SSE / WebSocket / OAuth2+OIDC / DPoP / A2A / MCP / AGNTCY SLIM / Flower 联邦 / GPU 推理路由 / OTel GenAI / 模型格式</p>
 
 <h2>四、深化历程 V1.0→V1.9</h2>
 <table>
