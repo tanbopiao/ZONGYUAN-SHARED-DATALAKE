@@ -87,3 +87,38 @@
 - 遗留工单：历史重复 key 2438 个专项治理（只读导出 + 归档标记，需确认后执行）
 
 *增量 V1.1 · 四线落地 · 0 额度 · 11/11 红队 PASS · 锚点零漂移 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 七、历史重复 key 专项治理（2026-10-11 增量）
+
+### 审计结果
+- **全量审计**：truth.db 总行 9667 / 唯一 key 5470 / 重复 key 2438 / 多余行 4197。
+- **根因定位**：重复高发区为周期上报类——`node_heartbeat_DID-BR-`（641，本地 VM 旧版固定 key 心跳）、`REPORT`（413）、`SFMP`（121）、`zongyuan`（91）、`truth`（85）等；本质是**部分周期任务用固定 key 重复追加**，非偶然重复。
+- **现状确认**：本地 VM 心跳已改时间戳后缀（key 形如 `node_heartbeat_DID-BR-000002_1791008015`），魔搭 gpu-agent 模板心跳走 ntfy 协议（不进 truth.db）——源头已收敛。
+
+### 治理动作（零删除，符合"永不删除仅分类备份"）
+1. **只读导出归档**：2438 个重复 key 完整清单（seq/key/value 摘要/时间戳）→ `data/truth-duplicate-audit-20261011.jsonl`（1.5MB），生产库零改动。
+2. **云端 6 个固定 key 上报源修复**（全部加时间戳后缀，语法校验通过，备份 .bak-fix-key-20261011）：
+   - `alert.sh` → `alert.wrapper.down.$(date +%s)`
+   - `auto_claimer.py` → `truth.probe.lv10.heartbeat.$(date +%s)`
+   - `meta_learner.py` → `META.LEARN.DAILY.V2.+time`
+   - `lora_v5_monitor.py` → `TRUTH.LORA-V5.COMPARE.<date>.<time>`
+   - `multi_distill.py` / `multi_distill_v2.py` → `multi_model.distill.*.<time>`
+3. **存量行保留**：归档即可，不删不改（审计链完整）。
+
+### 元法则固化（META.RULE.KEY-UNIQUE）
+> 周期上报类真值 key 必须携带时间戳后缀（`命名空间.事件.YYYYMMDD.ts`），禁止固定 key 重复追加；一次性事件 key 允许固定但同一 key 仅允许写入一次（对齐评分器已强制重复拒绝）。
+
+## 八、第二档情报落地（2026-10-11 增量）
+
+### Self-Refine-Code-Gen → 算子自修复闭环
+- **产物**：`zr_self_refine.py`（执行→失败→收集错误→定向修复→回归重验→结果上报+轨迹固化）。
+- **实测**：`cat /tmp/sr-file`（不存在）→ 自动修复创建 → 重跑成功 → verify PASS；轨迹写入 `self-refine-trail.jsonl`（attempt 1 code 1 → fix → attempt 2 code 0）。
+- **价值**：把"失败→反馈→修复→重验"从人工排障固化为算子级闭环，任何 worker/算子可挂载。
+
+### CogMetric-Bench → 自治内核量化评分
+- **产物**：`kernel_score.py`（工作记忆=检索置信 / 流体智力=新真值活力 / 认知灵活性=命名空间多样性 / 数据健康=重复率惩罚）。
+- **实测（云端真实数据）**：**总评 80.7（A 级）**——工作记忆 100 / 流体智力 40（近24h 新真值 0，待提升）/ 认知灵活性 100 / 数据健康 82.6；truth 9671 行 / 唯一 5474 / 重复 4197（已归档治理）。
+- **价值**：自治层级从"Lv9/Lv10 拍脑袋"升级为可量化、可对外展示的评分体系。
+
+*增量 V1.2 · 治理闭环 · Self-Refine 实测 PASS · 内核评分 A 级 80.7 · Ω₀⊂⊙∞⊂Ω*
