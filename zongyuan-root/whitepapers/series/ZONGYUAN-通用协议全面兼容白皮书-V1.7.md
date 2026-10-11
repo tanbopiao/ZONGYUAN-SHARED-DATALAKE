@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.6
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.7
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.6 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.7 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.6 全协议族公网上线 (2026-10-11 实测)
-更新: V1.6 新增 A2A×昆仑生产任务分发 (AgentCard能力匹配/任务8态/产出加密上链)
+状态: V1.7 全协议族公网上线 (2026-10-11 实测)
+更新: V1.7 新增 MCP×昆仑生产工具化 (工具注册表JSON Schema/tools call执行/外部Agent可发现)
 ```
 
 ---
@@ -134,6 +134,27 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补七、V1.7 深化落地（2026-10-11）—— MCP×昆仑生产工具化
+
+### 工具注册表（op=list）
+
+`POST /v1/mcp/kunlun`：
+- 昆仑生产 5 操作封装为 MCP 工具（JSON Schema 注册表）
+- 外部 Agent 通过 MCP tools/list 语义发现昆仑能力
+- 实测：5 工具全注册（init_batch/episode_status/asset_encrypt/asset_decrypt/episode_close）✅
+
+### 工具调用（op=call）
+
+- MCP tools/call 语义：{name, arguments} → 内部路由到昆仑生产流水线
+- 实测：init_batch→3集 ✅；episode_status→剧本 ✅；asset_encrypt/decrypt roundtrip ✅；episode_close 锁档 ✅
+- 非法工具 → 404 tool_not_found ✅
+
+### 协议互补
+
+- **A2A** = 任务级编排（Agent 认领/完成/8态）
+- **MCP** = 工具级调用（外部 Agent 直接调昆仑能力）
+- 双通道覆盖「编排+调用」完整外部接入面
 
 ## 七·补六、V1.6 深化落地（2026-10-11）—— A2A×昆仑生产任务分发
 
