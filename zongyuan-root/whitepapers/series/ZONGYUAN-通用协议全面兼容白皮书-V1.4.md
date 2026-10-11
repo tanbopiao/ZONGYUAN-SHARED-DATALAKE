@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.3
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.4
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.3 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.4 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.3 全协议族公网上线 (2026-10-11 实测)
-更新: V1.3 新增 MLS 完整组协商 (共享密钥派生/SecretTree/AES-GCM组消息加密/共识分叉检测)
+状态: V1.4 全协议族公网上线 (2026-10-11 实测)
+更新: V1.4 新增 MLS Ratchet Tree 全态管理 (完整树/密钥更新/无状态+有状态握手)
 ```
 
 ---
@@ -134,6 +134,32 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补四、V1.4 深化落地（2026-10-11）—— MLS Ratchet Tree 全态管理
+
+### 完整树构建（op=init）
+
+`POST /v1/slim/tree`：
+- 每成员叶子 = HKDF(member_secret, "zr-mls-leaf:member")
+- 二叉合并：父节点 = SHA256(L∥R)，逐层汇聚至 root
+- 实测：3 成员（zr/node-b/node-c）→ 3 叶子 → 合并树 → root 唯一
+
+### 成员密钥更新（op=update）
+
+- 叶子轮换：new_leaf = HKDF(old_leaf, "zr-mls-rotate:counter")
+- 沿路径重算 → 新 root → epoch+1
+- 前后向保密：旧 root 与新 root 不同，旧 epoch 密钥不可恢复
+- 实测：zr 密钥轮换 root c9b9849c→b10b374e, epoch→1 ✅
+
+### 无状态握手（op=state）
+
+- 客户端提交全量树快照（各层哈希 + root），服务器与当前树态比对
+- 实测：提交旧快照 → validated=False（已过期）✅
+
+### 有状态握手（op=commit）
+
+- 客户端仅提交增量（自己的新 leaf_secret），服务器应用并演进 epoch
+- 实测：node-b 增量提交 → epoch→2, stateful=True ✅
 
 ## 七·补三、V1.3 深化落地（2026-10-11）—— MLS 完整组协商
 
