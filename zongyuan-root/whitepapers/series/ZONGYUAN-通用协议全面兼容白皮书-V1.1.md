@@ -1,10 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.0
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.1
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.0 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.1 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: 兼容层已公网上线 (2026-10-11 实测)
+状态: V1.1 全协议族公网上线 (2026-10-11 实测)
+更新: V1.1 新增 AGNTCY SLIM 握手 / DPoP 验证 / Flower 联邦 / GPU vLLM 接入机制
 ```
 
 ---
@@ -25,7 +26,7 @@
 | 协议层 | 协议 | 端点 | 状态 |
 |---|---|---|---|
 | Agent互操作 | A2A v1.0 | `GET /a2a/task` | ✅ 公网 live |
-| | AGNTCY SLIM | (声明) MLS+gRPC/HTTP2+OAuth | 📋 declared |
+| | AGNTCY SLIM | `POST /v1/slim/handshake` ECDH P-256 | ✅ 公网 live |
 | 工具/上下文 | MCP | `https://mcp.huodouai.com/mcp` | ✅ 公网 live |
 | 推理服务 | **OpenAI 兼容 API** | `POST /v1/chat/completions` | ✅ 公网 live |
 | | **OpenAI 模型列表** | `GET /v1/models` | ✅ 公网 live |
@@ -133,6 +134,25 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补、V1.1 新增落地（2026-10-11）
+
+### AGNTCY SLIM 传输层（ECDH P-256）
+
+`POST /v1/slim/handshake`：客户端提交 client_pub_pem (PEM) → 服务器生成 ECDH P-256 密钥对 → HKDF 派生会话密钥（32B, SHA256）→ 返回 server_pub + session_key_sha256。具备前向保密，符合 SLIM 声明层语义。
+
+### DPoP 令牌绑定（RFC 9449 简化）
+
+`POST /v1/dpop/verify`：校验 typ=dpop+jwt / htu·htm 绑定 / jti 防重放（注册表去重）/ iat 时效（±300s）。与 X-ZR-TOKEN 双轨，外部 OAuth 生态令牌可验证。
+
+### Flower 联邦声明
+
+`GET /v1/federated/status`：从任务池汇总联邦节点（node_count/nodes/status），聚合策略 fedavg + secure_agg 声明。
+
+### GPU vLLM 推理接入机制
+
+`gpu-agent/gpu_vllm_register.sh`（已推送魔搭 commit 5c45243）：
+1. 检测 GPU → 2. 检查/安装 vLLM → 3. 拉起 OpenAI API Server → 4. 等待就绪 → 5. 上报云端注册 + 入联邦
 
 ## 八、结论
 
