@@ -25,7 +25,7 @@ code{background:#0d1626;color:#8ab4ff;padding:2px 6px;border-radius:4px;font-siz
 </head>
 <body>
 <h1>ZONGYUAN-ROOT 通用协议全面兼容白皮书</h1>
-<div class="meta">确权 DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜V1.2 2026-10-11<br>系列归属：互操作协议层 (L3)｜状态：V1.2 全协议族公网上线（2026-10-11 实测）<br>更新：新增 MLS 组密钥 / Flower 真实 FedAvg 聚合 / OTel 真实打点</div>
+<div class="meta">确权 DID-BR-000002｜ONT-4D-UNIVERSAL-ROOT｜Ω₀⊂⊙∞⊂Ω｜V1.3 2026-10-11<br>系列归属：互操作协议层 (L3)｜状态：V1.3 全协议族公网上线（2026-10-11 实测）<br>更新：新增 MLS 完整组协商（共享密钥派生/SecretTree/AES-GCM 组消息加密/共识分叉检测）</div>
 
 <h2>一、全面兼容目标</h2>
 <div class="note"><b>对外全兼容 + 对内零破坏 + 模型格式通吃 + 观测标准</b>：外部生态按任一主流协议（A2A/MCP/OpenAI API/OTel）发现并调用 ZONGYUAN；NTFY-CONNECT-001 + AxiomGate + 五层链式锁私有信任域不变。</div>
@@ -100,6 +100,15 @@ graph LR
 <tr><td>只读保护</td><td>MCP 出口保持只读；兼容层仅开放声明能力</td></tr>
 <tr><td>配额</td><td>META-RULE-012 配额稳态保护</td></tr>
 <tr><td>审计</td><td>兼容调用日志入 ctl-ledger</td></tr>
+</table>
+
+<h2>七·补三、V1.3 深化落地（2026-10-11）—— MLS 完整组协商</h2>
+<table>
+<tr><th>能力</th><th>端点</th><th>实现</th><th>实测</th></tr>
+<tr><td>共享密钥派生</td><td>POST /v1/slim/group/secret</td><td>KeySchedule 全链：init→group→epoch→encryption（组共享）+ SecretTree 每 sender 独立密钥</td><td>✅ 3 成员共享 + 3 独立 sender 密钥</td></tr>
+<tr><td>组密钥共识</td><td>POST /v1/slim/group/consensus</td><td>成员上报指纹比对，分叉成员标识 mismatched_members</td><td>✅ 全一致收敛 / 注入错误指纹即标识分叉</td></tr>
+<tr><td>组消息加密</td><td>POST /v1/slim/message/encrypt</td><td>AES-256-GCM，AAD=group|epoch|sender</td><td>✅ roundtrip 完整，非成员 403 拦截</td></tr>
+<tr><td>组消息解密</td><td>POST /v1/slim/message/decrypt</td><td>验证 group/epoch/sender + 完整性</td><td>✅ 明文还原 integrity=verified</td></tr>
 </table>
 
 <h2>七·补二、V1.2 深化落地（2026-10-11）</h2>

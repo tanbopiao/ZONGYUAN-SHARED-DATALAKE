@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.2
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.3
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.2 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.3 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.2 全协议族公网上线 (2026-10-11 实测)
-更新: V1.2 新增 MLS 组密钥 / Flower 真实 FedAvg 聚合 / OTel 真实打点
+状态: V1.3 全协议族公网上线 (2026-10-11 实测)
+更新: V1.3 新增 MLS 完整组协商 (共享密钥派生/SecretTree/AES-GCM组消息加密/共识分叉检测)
 ```
 
 ---
@@ -134,6 +134,32 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补三、V1.3 深化落地（2026-10-11）—— MLS 完整组协商
+
+### 多成员共享密钥派生（KeySchedule 全链）
+
+`POST /v1/slim/group/secret`：
+- KeySchedule：init_secret → group_secret → epoch_secret → **encryption_secret（组共享）**
+- SecretTree：encryption_secret → 每 sender 派生独立消息密钥（sender_data_key）
+- 实测：3 成员（zr/node-b/node-c）共享 encryption_secret，SecretTree 3 独立 sender 密钥
+
+### 组密钥共识 + 分叉检测
+
+`POST /v1/slim/group/consensus`：
+- 各成员上报本地派生指纹，服务器校验与真实组状态一致
+- 全匹配 → consensus_reached=True；任一成员分叉 → 标识 mismatched_members
+- 实测：正常全一致 ✅ / 注入错误指纹 → 3 成员全被标识分叉，共识未收敛 ✅
+
+### 组消息加密（AES-256-GCM）
+
+- `POST /v1/slim/message/encrypt`：sender 用其 SecretTree 密钥加密，AAD=group|epoch|sender
+- `POST /v1/slim/message/decrypt`：验证 group/epoch/sender + AES-GCM 完整性
+- 实测：加密→解密 roundtrip 完整（"元极恒一 MLS组消息加密测试" 完整性 verified）；非成员加密被 403 拦截
+
+### 前向保密
+
+成员变更（add/remove）→ 新 epoch → encryption_secret 重派生 → 旧 epoch 组密钥不可用
 
 ## 七·补二、V1.2 深化落地（2026-10-11）
 
