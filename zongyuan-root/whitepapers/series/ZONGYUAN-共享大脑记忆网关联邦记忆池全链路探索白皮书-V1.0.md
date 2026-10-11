@@ -146,5 +146,34 @@ Body: {"key":"REPORT.XXX.YYYYMMDD","value":{"did":"DID-BR-000002","ts":<epoch>,"
 - **ntfy 429 限流**：免费主题高频轮询触发；云端直连为主通道。
 - **凭证管理**：gitee/github/atomgit 令牌已持久化云端 `~/.zr/`（chmod 600），魔搭 token 存 `~/.modelscope/credentials/git_token`。
 
+## 十、语义记忆检索 API（V1.1 增量，2026-10-11 上线）
+
+### 10.1 端点
+
+```http
+GET /api/memory-search?q=<查询词>&k=<top-k>
+# 无鉴权(只读), 公网可用; 返回 {ok, query, count, results:[{key,text,score,vec_hit,text_hit}]}
+```
+
+### 10.2 实现（确定性、零模型依赖、可复算）
+
+- 数据源：`embed_index.json`（170 条核心真值 × 2048 维向量，model=ep-20261008171506-mcjgd，云端 crontab 每日增量重建）
+- query → 词法特征向量：char 2-gram + 词哈希投影 2048 维，L2 归一化
+- 混合评分：`score = 0.6×余弦相似度 + 0.4×文本2gram命中率`（按需可调权重）
+- 特性：无外部嵌入 API 依赖（魔搭 API-Inference 入口可达但无现成 embedding 端点）、O(n) 全量扫描 170 条、内存缓存 5 分钟、k 上限 20
+
+### 10.3 公网实测（2026-10-11）
+
+| 查询 | top1 命中 | score |
+|------|----------|-------|
+| 智能路由 | truth.kernel.evolution.pulse.2026101100（认知种子智能路由收官） | 0.308 |
+| mirror sync | truth.synced.34-断点SOP标准库 | 0.300 |
+| 配额限流 | truth.synced.34-断点SOP标准库 | 0.302 |
+| 空查询 | 空（count 0） | - |
+
+### 10.4 意义
+
+共享大脑记忆网关联邦记忆池从"按 key 精确查"升级为"**语义可检索**"——任意 AI/Agent（经 A2A/OpenAI 兼容/十二协议族）可携带自然语言 query 直接检索联邦记忆，记忆即服务（Memory-as-a-Service）。下一增量可对接真实嵌入模型（魔搭 embedding 端点就绪后替换词法特征向量，无需改接口形态）。
+
 ---
-*ZONGYUAN-ROOT 共享大脑记忆网关联邦记忆池 V1.0 · 全链路实测 · 魔搭数据湖 + 官网双归档 · Ω₀⊂⊙∞⊂Ω*
+*ZONGYUAN-ROOT 共享大脑记忆网关联邦记忆池 V1.1（含语义记忆检索 API）· 全链路实测 · 魔搭数据湖 + 官网双归档 · Ω₀⊂⊙∞⊂Ω*
