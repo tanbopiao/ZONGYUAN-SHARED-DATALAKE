@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.8
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.9
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.8 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.9 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.8 全协议族公网上线 (2026-10-11 实测)
-更新: V1.8 新增 DPoP×昆仑生产安全准入 (RFC9449令牌绑定/签发/绑定校验/安全执行/吊销)
+状态: V1.9 全协议族公网上线 (2026-10-11 实测)
+更新: V1.9 新增 四协议联邦组合流 (DPoP认证→A2A编排→MCP执行→SLIM加密传输 全链路)
 ```
 
 ---
@@ -134,6 +134,37 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补九、V1.9 深化落地（2026-10-11）—— 四协议联邦组合流
+
+### 组合注册表（op=compose）
+
+`POST /v1/federated/kunlun`：
+- 四协议链注册：DPoP(认证)→A2A(编排)→MCP(执行)→SLIM(传输)
+- 实测：flow=认证→编排→执行→加密传输 ✅
+
+### 组合流执行（op=run）
+
+- 一次请求完成全链路：安全准入 → 任务分发 → 工具执行 → 加密传输
+- 实测：DPoP:passed→A2A:passed→MCP:passed→SLIM:passed（4/4）
+- agent=关键帧Agent；transport=MLS AES-256-GCM；encrypted=True ✅
+
+### 安全门（无令牌拦截）
+
+- 未携带有效 DPoP 令牌 → 401 拦截（环节1 DPoP）
+- 实测：无令牌 401 ✅
+
+### 组合流审计（op=status）
+
+- runs 记录落盘（federated-kunlun-pipeline.json）
+- 实测：runs=1，最新 run_id 可回溯 ✅
+
+### 架构价值
+
+- **四协议联邦**：安全(DPoP)+编排(A2A)+工具(MCP)+传输(SLIM) 组成完整生产链路
+- **单请求闭环**：外部 Agent 一次调用即完成 认证→分发→执行→加密
+- **全程可审计**：每环节状态记录，满足 L1 全域巡检
+- 至此外部接入面完整：认证层(DPoP) → 编排层(A2A) → 工具层(MCP) → 传输层(SLIM)
 
 ## 七·补八、V1.8 深化落地（2026-10-11）—— DPoP×昆仑生产安全准入
 
