@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.5
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.6
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.5 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.6 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.5 全协议族公网上线 (2026-10-11 实测)
-更新: V1.5 新增 MLS×昆仑洞天 60集批量生产 (每集独立组密钥/资产加密流转/跨集隔离/集完成锁档)
+状态: V1.6 全协议族公网上线 (2026-10-11 实测)
+更新: V1.6 新增 A2A×昆仑生产任务分发 (AgentCard能力匹配/任务8态/产出加密上链)
 ```
 
 ---
@@ -134,6 +134,27 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补六、V1.6 深化落地（2026-10-11）—— A2A×昆仑生产任务分发
+
+### AgentCard 能力匹配分发（op=dispatch）
+
+`POST /v1/a2a/kunlun/dispatch`：
+- 5 个生产 Agent 注册 AgentCard（剧本/分镜/关键帧/视频/质检）
+- 任务按能力标签匹配 Agent，绑定昆仑批次+集+阶段+组密钥
+- 实测：剧本任务→agent-script ✅；非法阶段→404 ✅
+
+### 任务 8 态流转（op=claim/complete/task_status/cancel）
+
+- submitted → working（Agent 认领）→ completed（产出加密上链）
+- 任意态可 canceled；已完成任务不可取消（409）
+- 实测：全链路状态机通过 ✅
+
+### 产出加密上链
+
+- 任务完成时产出经该集组密钥 AES-256-GCM 加密（AAD=batch|episode|stage|epoch）
+- 跨集隔离 + 全程可审计
+- 实测：剧本产出 encrypted + integrity verified ✅
 
 ## 七·补五、V1.5 深化落地（2026-10-11）—— MLS×昆仑洞天 60集批量生产
 
