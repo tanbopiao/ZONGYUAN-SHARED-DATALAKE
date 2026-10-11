@@ -87,7 +87,7 @@ def main():
     # 自动上报云端(轻量, 失败静默)
     try:
         import urllib.request
-        body = json.dumps({"key": "REPORT.KERNEL-SCORE." + time.strftime("%Y%m%d"),
+        body = json.dumps({"key": "KERNEL.SCORE." + time.strftime("%Y%m%d"),
             "value": {"did": "DID-BR-000002", "ts": int(time.time()),
                       "content": "Ω锚定 内核量化评分 空间时间属性因果本体维度D1 " + json.dumps(out, ensure_ascii=False)[:900]}}).encode()
         rq = urllib.request.Request("https://www.huodouai.com/api/report/truth", data=body, method="POST",

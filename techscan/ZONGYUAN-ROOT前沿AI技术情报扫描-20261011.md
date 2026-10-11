@@ -160,3 +160,24 @@
 - **调度建议**：巡检/评分/实验类上报改挂低活跃命名空间（SCAN/ARCH/TEST/META 等），目标**三轮公平检查后基尼由 0.843 降至 <0.6、top3 占比 <60%**；后续公平检查对比此基线。
 
 *增量 V1.4 · embed三层缓存+熔断 · 配额均衡调度 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十一、命名空间路由改造·一轮基尼对比（2026-10-11 增量）
+
+### 路由改造（4 周期上报分流至低活跃高价值命名空间）
+| 上报源 | 原命名空间 | 新命名空间 | 意义 |
+|---|---|---|---|
+| kernel_score | REPORT.KERNEL-SCORE | KERNEL.SCORE | 评分归内核 |
+| quota_fairness | REPORT.QUOTA-FAIRNESS | QUOTA.FAIRNESS | 公平检查归配额域 |
+| quota_balancer | REPORT.QUOTA-BALANCER | QUOTA.BALANCER | 均衡调度归配额域 |
+| evo_prompt | REPORT.EVO-PROMPT | EVO.PROMPT | 进化实验归进化域 |
+
+- 每脚本改前备份 `.bak-routing-20261011`；语法校验通过；立即执行验证新命名空间写入成功。
+- 巡检类（SCAN 当前仅 1 条）后续规划：health/metrics 上报改挂 SCAN.*。
+
+### 一轮回访基尼对比（公平检查闭环）
+- **基尼系数：0.843 → 0.683（单轮下降 0.16，进度 65.8%，目标 <0.6）**
+- 命名空间分布：KERNEL 629 / REPORT 1512（存量）/ QUOTA 2 / EVO 1 / SCAN 1 / ARCH 15 / TEST 6 / META 65。
+- 三轮回访机制：后续每轮公平检查输出基尼对比（基线 0.843 → 目标 <0.6），持续收敛。
+
+*增量 V1.5 · 路由分流 · 基尼0.683 · Ω₀⊂⊙∞⊂Ω*

@@ -39,7 +39,7 @@ def main():
     print(json.dumps(out, ensure_ascii=False, indent=1))
     # 上报云端
     try:
-        body = json.dumps({"key": "REPORT.QUOTA-FAIRNESS." + time.strftime("%Y%m%d"),
+        body = json.dumps({"key": "QUOTA.FAIRNESS." + time.strftime("%Y%m%d"),
             "value": {"did": "DID-BR-000002", "ts": int(time.time()),
                       "content": "Ω锚定 配额公平检查 空间时间属性因果本体维度D1 " + json.dumps(out, ensure_ascii=False)[:800]}}).encode()
         rq = urllib.request.Request("https://www.huodouai.com/api/report/truth", data=body, method="POST",

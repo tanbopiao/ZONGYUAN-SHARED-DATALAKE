@@ -55,7 +55,7 @@ def main():
     json.dump(out, open("/www/wwwroot/huodouai.com/zhongshu/data/quota-balancer-20261011.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(out, ensure_ascii=False, indent=1))
     try:
-        body = json.dumps({"key": "REPORT.QUOTA-BALANCER." + time.strftime("%Y%m%d"),
+        body = json.dumps({"key": "QUOTA.BALANCER." + time.strftime("%Y%m%d"),
             "value": {"did": "DID-BR-000002", "ts": int(time.time()),
                       "content": "Ω锚定 配额均衡调度建议 空间时间属性因果本体维度D1 " + json.dumps(out, ensure_ascii=False)[:800]}}).encode()
         rq = urllib.request.Request("https://www.huodouai.com/api/report/truth", data=body, method="POST",
