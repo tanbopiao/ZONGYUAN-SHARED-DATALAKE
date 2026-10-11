@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.7
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.8
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.7 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.8 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.7 全协议族公网上线 (2026-10-11 实测)
-更新: V1.7 新增 MCP×昆仑生产工具化 (工具注册表JSON Schema/tools call执行/外部Agent可发现)
+状态: V1.8 全协议族公网上线 (2026-10-11 实测)
+更新: V1.8 新增 DPoP×昆仑生产安全准入 (RFC9449令牌绑定/签发/绑定校验/安全执行/吊销)
 ```
 
 ---
@@ -134,6 +134,38 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补八、V1.8 深化落地（2026-10-11）—— DPoP×昆仑生产安全准入
+
+### 令牌签发（op=issue_token）
+
+`POST /v1/kunlun/secure`：
+- 签发 DPoP 绑定访问令牌：绑定 client 身份 + 昆仑批次
+- 返回 access_token + jkt（DPoP 公钥指纹）
+- 实测：client=zr-external-agent 签发成功，type=DPoP ✅
+
+### 绑定校验（op=bind）
+
+- RFC9449 DPoP proof 验证：jkt 匹配 + 签名 + 时间戳（≤300s）+ jti 防重放
+- 实测：bound=True，绑定校验通过 ✅
+
+### 安全执行（op=execute）
+
+- 校验有效 DPoP 令牌后路由昆仑生产操作（未授权调用 401 拦截）
+- jkt 不匹配 → 401；批次上下文不匹配 → 403；吊销后 → 401
+- 实测：携带令牌 execute episode_status → stage=剧本，authorized_by=DPoP RFC9449 ✅
+
+### 令牌吊销（op=revoke）
+
+- 立即失效，防止令牌泄露滥用
+- 实测：吊销后调用 401 拦截 ✅
+
+### 安全增强
+
+- **DPoP 令牌绑定**：昆仑生产操作必须携带有效 DPoP proof，未授权调用被拦截
+- **防重放**：jti 单次有效（registry 保留最近 200）
+- **可吊销**：令牌泄露可立即吊销
+- 与 A2A（编排）+ MCP（工具化）构成完整外部接入安全面
 
 ## 七·补七、V1.7 深化落地（2026-10-11）—— MCP×昆仑生产工具化
 
