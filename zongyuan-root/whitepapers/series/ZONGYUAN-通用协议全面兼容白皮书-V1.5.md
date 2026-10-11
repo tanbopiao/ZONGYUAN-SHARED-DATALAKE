@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.4
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.5
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.4 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.5 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.4 全协议族公网上线 (2026-10-11 实测)
-更新: V1.4 新增 MLS Ratchet Tree 全态管理 (完整树/密钥更新/无状态+有状态握手)
+状态: V1.5 全协议族公网上线 (2026-10-11 实测)
+更新: V1.5 新增 MLS×昆仑洞天 60集批量生产 (每集独立组密钥/资产加密流转/跨集隔离/集完成锁档)
 ```
 
 ---
@@ -134,6 +134,31 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补五、V1.5 深化落地（2026-10-11）—— MLS×昆仑洞天 60集批量生产
+
+### 每集独立组密钥（op=init_batch）
+
+`POST /v1/kunlun/production`：
+- 60 集批量初始化，每集 = 独立 MLS 组（RatchetTree 组密钥）
+- 生产成员 = 剧本/分镜/关键帧/视频/质检 五环节
+- 实测：60 集全部独立 root（EP01/EP02/EP03 互不相同）✅
+
+### 生产资产加密流转（op=asset_encrypt/decrypt）
+
+- 剧本/分镜/关键帧内容用该集组密钥 AES-256-GCM 加密（AAD=batch|episode|stage|epoch）
+- 解密验证集归属 + 完整性
+- 实测：EP1 剧本加密→解密 roundtrip 完整 ✅
+
+### 跨集隔离
+
+- 各集密钥独立，密文不可跨集解密
+- 实测：EP1 密文在 EP2 解密 → 400 拒绝 ✅
+
+### 集完成锁档（op=episode_close）
+
+- 集生产完成 → 密钥轮换（epoch+1）→ 旧 epoch 资产封存，防后续篡改
+- 实测：EP1 锁档 epoch→1；重复 close → 409 拦截 ✅
 
 ## 七·补四、V1.4 深化落地（2026-10-11）—— MLS Ratchet Tree 全态管理
 
