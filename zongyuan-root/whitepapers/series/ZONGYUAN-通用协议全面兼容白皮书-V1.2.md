@@ -1,11 +1,11 @@
-# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.1
+# ZONGYUAN-ROOT 通用协议全面兼容白皮书 V1.2
 
 ```
 确权DID: DID-BR-000002 | 架构唯一ID: ONT-4D-UNIVERSAL-ROOT | 核心元公理: Ω₀⊂⊙∞⊂Ω
-维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.1 | 日期: 2026-10-11
+维护节点: ZR-NODE-DC2E51C0 | 火斗云智AIOS | 版本: V1.2 | 日期: 2026-10-11
 系列归属: 互操作协议层 (L3) | 前置: A2A探索/MCP-OAuth/A2A网关层 (系列17-19)
-状态: V1.1 全协议族公网上线 (2026-10-11 实测)
-更新: V1.1 新增 AGNTCY SLIM 握手 / DPoP 验证 / Flower 联邦 / GPU vLLM 接入机制
+状态: V1.2 全协议族公网上线 (2026-10-11 实测)
+更新: V1.2 新增 MLS 组密钥 / Flower 真实 FedAvg 聚合 / OTel 真实打点
 ```
 
 ---
@@ -134,6 +134,26 @@ GET  /metrics             → OTel GenAI 语义约定 (gen_ai.* 前缀)
 | P2 | Flower 联邦学习协议落地 |
 
 ---
+
+## 七·补二、V1.2 深化落地（2026-10-11）
+
+### AGNTCY SLIM → MLS 组密钥（KeySchedule 哈希链）
+
+`POST /v1/slim/group`（op=create/add/remove）：
+- 创建：init_secret → group_secret → epoch0 secret（HKDF-SHA256）
+- 成员加入/移除：commit → 新 epoch = HKDF(prev_epoch ∥ 变更, "zr-mls-epoch:N")，前向保密
+- 实测：创建(epoch 0) → 加 node-b(epoch 1) → 组密钥哈希链正确演化
+- `GET /v1/slim/groups`：组列表
+
+### Flower 真实 FedAvg 聚合
+
+`POST /v1/federated/aggregate`：接收多节点 {node_id, samples, weights} → 按样本数加权平均 → 返回聚合权重 + 归档 fedavg-rounds.jsonl
+- 实测：2 节点（100+300 样本）→ w1=0.4, w2=0.35 ✅
+
+### OTel GenAI 真实打点
+
+`GET /metrics`：进程内真实累计（requests_total / tokens_total / latency_ms / errors_total / uptime_sec），非示例数据
+- 实测：请求计数与运行时长实时反映 ✅
 
 ## 七·补、V1.1 新增落地（2026-10-11）
 
