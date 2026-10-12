@@ -271,3 +271,31 @@
 - 唯一历史心跳 823 条保留（真实数据，零删除原则）
 
 *增量 V1.8 · 心跳存量治理 · 基尼0.833 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十五、CLOUD-CTL 命名空间根治 + 基尼三轮回访（2026-10-12 增量）
+
+### 根因（REPORT 1611 的 86% 集中源）
+- `REPORT.CLOUD-CTL.<epoch>` 30 秒高频遥测 1385 条：云端控制器 watchdog 每 30s 上报节点在线快照，高频遥测污染种子真值主库
+- 溯源：zr_cloud_ctl.py watchdog_thread 固定 key 模板 `REPORT.CLOUD-CTL.{now()}`；在线节点为空时静默（GPU 实例离线导致 12h 无新增）
+
+### 根治（改源不清理）
+- watchdog 上报 key → `HEARTBEAT.CLOUD-CTL.<epoch>`；evolve → `EVO.CLOUD-CTL.<epoch>`（gate 白名单已含 HEARTBEAT/EVO，备份 .bak-ns-20261012 + py_compile + systemctl restart 验证）
+- 存量 1385 条归档 `truth-ctl-archive-20261012.jsonl`（786KB，含 seq/key/ts/value_head 审计链）
+- 节点上线后自动恢复新格式上报（HEARTBEAT 域），无需人工介入
+
+### 基尼三轮回访（EconEval 方法论持续应用）
+| 轮次 | 治理动作 | total | 基尼 |
+|---|---|---|---|
+| 二轮 | SCAN 挂载 | 9837 | 0.844 |
+| 心跳 | 641 重复归档 | 9198 | 0.833 |
+| 三轮 | CLOUD-CTL 根治+1385 归档 | 7817 | **0.804** |
+
+- 累计归档 2026 条（零删除，审计 jsonl ~1MB）
+- top5 均衡化：node_heartbeat 823 / SFMP 694 / KERNEL 630 / zongyuan 364 / cloud 292
+
+### 治理纪律
+- 第一动作永远是**根治源**（改 key 模板/命名空间），存量归档是分类备份非清理
+- 命名空间规范：周期遥测归 HEARTBEAT/EVO/STATUS，巡检归 SCAN，落地归 REPORT/SFMP/KERNEL
+
+*增量 V1.9 · CLOUD-CTL根治 · 基尼0.804 · Ω₀⊂⊙∞⊂Ω*
