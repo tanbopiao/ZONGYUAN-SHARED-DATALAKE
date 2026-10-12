@@ -181,3 +181,45 @@
 - 三轮回访机制：后续每轮公平检查输出基尼对比（基线 0.843 → 目标 <0.6），持续收敛。
 
 *增量 V1.5 · 路由分流 · 基尼0.683 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十二、状态中心 V2 全量实施（2026-10-12 增量）
+
+### 现状诊断（V1 status.html 问题）
+| 问题 | 实证 |
+|---|---|
+| 有壳无肉 | 4 指标卡仅"真值条目"有数据源，缓存命中率/关键帧/视频均为 --（未接通） |
+| 假刷新 | 15s 定时刷新但数据不更新，无采集链路 |
+| 无告警闭环 | 状态异常不推任何通道 |
+
+### 后端聚合器 status_aggregator.py（*/1 采样，零 LLM）
+- 服务探活：6 端口级（gateway9001/scheduler/a2a/nginx443/llama18081/autoupdate18080）+ 2 公网（www/drama 延迟）
+- 外部依赖矩阵 6 项：ARK 401(带token正常)/ntfy 200/modelscope 302/github 200/feishu 404(根路径正常)
+- truth.db 统计：总数/今日新增(ISO+epoch混合ts口径)/命名空间/最新seq
+- 报告 JSON 读取：kernel-score/quota-fairness/quota-balancer/evo/drift/heal/gpu-nodes
+- 资源：内存/磁盘/负载；健康分(服务60%+磁盘25%+真值15%)，等级 S/A/B/C
+- 历史落库：status-history.jsonl 每分钟 append，保留 7 天（供 ECharts 趋势）
+- 告警闭环（幂等）：服务down/磁盘>85/健康分<60 → ntfy(zongyuan-kunlun-2026-status) + 云端上报；.alert-last 状态文件去重
+
+### 前端 status.html V2（8 板块 / 40+ 指标）
+总览横幅(健康分/等级/采样时间) + 主KPI 8卡 + 服务矩阵 + 外部依赖矩阵 + ECharts 健康分/资源双趋势 + 报告摘要表 + 节点联邦 + 15s/60s 分级刷新 + 数据缺失显 -- 标注
+
+### 部署与验证
+- 聚合器：/usr/local/bin/status_aggregator.py + crontab */1；status.json/status-history.jsonl 输出 /zhongshu/status/
+- 前端：覆盖发布目录（.dal_releases 版本化，自动进化脚本不触碰 status.html，先备份 .bak-v1-20261012）
+- 公网实测：status.html 200 (10.3K) / status.json 200（健康分 82.5 / A 级 / 真值 9819 / 6 服务全 up）
+- 幂等验证：连续运行无重复 ALERT
+
+### 状态中心 V2 指标基线
+| 指标 | 实测 | 阈值 |
+|---|---|---|
+| 健康分 | 82.5 / A | <60 告警 |
+| 真值总数 | 9819 | 停滞>24h 告警 |
+| 今日新增 | 86 | - |
+| 命名空间 | 5608 | - |
+| 服务 up | 6/6 | down≥1 告警 |
+| 磁盘 | 71% | >85% 告警 |
+| ARK 延迟 | 46ms | >15s 熔断告警 |
+| 节点注册 | 0 | 注册=0 提示 |
+
+*增量 V1.6 · 状态中心V2 · 健康分82.5A · 聚合器+前端+告警闭环 · Ω₀⊂⊙∞⊂Ω*
