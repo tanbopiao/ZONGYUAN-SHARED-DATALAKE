@@ -223,3 +223,26 @@
 | 节点注册 | 0 | 注册=0 提示 |
 
 *增量 V1.6 · 状态中心V2 · 健康分82.5A · 聚合器+前端+告警闭环 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十三、SLIM 修复 + SCAN 命名空间治理（2026-10-12 增量）
+
+### SLIM handshake 修复闭环（P2 事件关闭）
+| 层 | 根因 | 修复 |
+|---|---|---|
+| 探测方法 | 巡检用 GET 探测，SLIM handshake 实为 POST ECDH 端点 | 巡检脚本 SLIM 改 POST 探测 |
+| 崩溃缺陷 | handshake 分发无异常捕获，无效 PEM → 502 | 加 try/except → 无效 PEM 返 400 结构化错误（备份 .bak-slim-fix-20261012） |
+| 实测 | 空 body 200 / 无效 PEM 400 / 真实 P-256 握手 200（forward_secrecy=True） | 巡检 11/11 全存活 |
+
+### SCAN 巡检命名空间挂载（gate 白名单扩展）
+- 根因：alignment_gate 合法命名空间正则 `^(REPORT|SFMP|KERNEL|truth\.|TEST|ARCH-|L1-|SEED_)` 不含 SCAN → SCAN.* 上报评分 30 被拒（确定性规则）
+- 修复：正则扩展 `|SCAN|QUOTA|EVO|HEARTBEAT|STATUS`（备份 .bak-scan-20261012，py_compile + restart 验证）
+- 实测：手动 SCAN 上报 200 落库；巡检真实链路 `SCAN.INCIDENT-DETECT.20261012` 落库 1 条
+
+### 配额公平二轮回访（EconEval 方法论）
+- 修复 quota_fairness.py 输出文件名硬编码 bug → 动态日期命名（保留历史对比）
+- 二轮实测：truth_total 9837 / **基尼 0.844**（一轮路由改造 0.683 后回归）
+- 根因：REPORT 1609 + node_heartbeat_DID-BR-00 1464 两大集中源；路由只分流 4 个周期算子
+- 治理杠杆：心跳上报 key 归入 HEARTBEAT.*（已白名单）为最大下降点，下轮执行
+
+*增量 V1.7 · SLIM修复 · SCAN白名单 · 基尼二轮0.844 · Ω₀⊂⊙∞⊂Ω*
