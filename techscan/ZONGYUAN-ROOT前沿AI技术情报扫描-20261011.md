@@ -299,3 +299,22 @@
 - 命名空间规范：周期遥测归 HEARTBEAT/EVO/STATUS，巡检归 SCAN，落地归 REPORT/SFMP/KERNEL
 
 *增量 V1.9 · CLOUD-CTL根治 · 基尼0.804 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十六、/api/truths 拉取端点修复（2026-10-12 增量）
+
+### 缺口
+- do_GET 路由仅 /api/status、/api/truth(key前缀)、/api/ledger、/api/verify、/api/verify-seed、/api/memory-search、/api/sub-l0——缺全量列表拉取端点
+- 凌晨综合巡检 A 阶段探测 /api/truths/?limit=1 长期 404
+
+### 修复（gateway_server.py 新增路由）
+- `GET /api/truths?limit=N(≤500)&offset=M&date=YYYY-MM-DD`
+- 返回 {ok, total, count, limit, offset, results:[{seq,key,ts}]}
+- date 过滤按 ts like 'YYYY-MM-DD%'；db 引用复用 truth_store.DB 导出（初版 TRUTH_DB 未定义 → 二次补丁 import DB，py_compile + restart 验证）
+
+### 实测
+- 全量：total 7819 / limit 2 正常
+- date：2026-10-12 今日 112 条
+- 巡检 A 阶段探测依赖闭环，后续可改挂巡检脚本
+
+*增量 V1.10 · truths拉取端点 · 巡检依赖闭环 · Ω₀⊂⊙∞⊂Ω*
