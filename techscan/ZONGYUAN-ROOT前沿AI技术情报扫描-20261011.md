@@ -318,3 +318,47 @@
 - 巡检 A 阶段探测依赖闭环，后续可改挂巡检脚本
 
 *增量 V1.10 · truths拉取端点 · 巡检依赖闭环 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十七、云端短剧生产线部署地图（2026-10-12 全量扫描固化）
+
+### 服务面（6 核心服务全 running）
+| 服务 | 入口 | 职责 |
+|---|---|---|
+| zhongshu-gateway | 9001 | 真值网关 V3.1（truth 账本 + Merkle + alignment gate） |
+| zhongshu-scheduler | 300s 轮询 | 全局调度 |
+| zr-a2a-gateway | a2a_gateway.py | A2A v1.0 权威网关（8 态状态机） |
+| zr-agent-suite | 8920 FastAPI | 自治内核可视化控制台（火斗云智 AIOS） |
+| zr-mcp | zr_mcp_server.py | MCP 工具服务（加密输出） |
+| zr-cloud-ctl | NTFY-CONNECT-001 | 云端控制器（任务分发/节点调度/RSI 决策） |
+
+### 产线面（10 批次 / 79 集）
+- 主线批次 KL-1791708512570：60 集（第 1 集已归档 locked + 59 集剧本就绪）
+- 9 个测试批次（1-3 集）：剧本阶段
+- 任务状态机：submitted → working → completed（分镜/关键帧等节点认领）
+
+### 数据面
+- 自治组件全量在线：msagent-ctl-ledger / memory / evolution / bandit / canary / causality
+- 240 个自动任务轨迹（var/tasks）、22 个 SFMP 联邦提案、7 节点注册文件
+- 资产归档：archive/kunlun/ + kunlun-archive-20260913/14/ + archive/gallery/ + assets/kunlun/
+
+### 协议面
+- A2A Agent Card 公网可发现（8 态/真值查询/节点调度/记忆网关）
+- 7 大模型后端路由：ark / deepseek / doubao / glm / qwen / sensenova / zhipu
+- OpenAI 兼容真实模型：zr-qwen2.5-7b（gguf q4_k_m）
+- 昆仑生产输出加密交付（iv/ciphertext/aad，DPoP 令牌准入）
+
+### 运行活性
+- 控制面账本最近活动：A2A memory-search 语义检索全闭环（SUBMITTED→WORKING→COMPLETED）
+- 停摆点：昆仑生产任务（分镜/关键帧）停在 submitted（节点离线待认领，通道健康）
+
+### 关键机制
+1. 输出加密交付：剧本/分镜产物 iv/ciphertext/aad（DPoP 准入）
+2. 多模型冗余路由：7 后端可切换（ARK 主 + 5 备 + 本地 GGUF 兜底）
+3. 自治决策闭环：bandit 策略 → canary 灰度 → causality 因果审计 → 全量入 ledger
+4. 双通道：A2A（公网标准）+ NTFY-CONNECT-001（私有节点绑定）
+
+### 恢复路径
+控制面完好、通道健康，仅需节点上线（CPU 永久实例 worker 补拉起）即可恢复分镜/关键帧生产。
+
+*增量 V1.11 · 云端短剧生产线部署地图 · 6服务/10批次79集 · Ω₀⊂⊙∞⊂Ω*
