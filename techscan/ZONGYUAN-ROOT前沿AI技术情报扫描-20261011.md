@@ -362,3 +362,25 @@
 控制面完好、通道健康，仅需节点上线（CPU 永久实例 worker 补拉起）即可恢复分镜/关键帧生产。
 
 *增量 V1.11 · 云端短剧生产线部署地图 · 6服务/10批次79集 · Ω₀⊂⊙∞⊂Ω*
+
+---
+## 十八、状态中心数据源接通（2026-10-12 增量）
+
+### 缺口（V2 交付遗留）
+- 节点注册显示 0（聚合器只读空 gpu-nodes.json）
+- 缓存命中率/关键帧/视频数据源未接通
+
+### 修复（status_aggregator.py 新增 production_stats()）
+| 数据源 | 真实来源 | 结果 |
+|---|---|---|
+| 节点注册 | var/nodes/*.json（7 文件，last_heartbeat<300 判在线） | nodes_total=7 / online=0 |
+| embed 缓存 | embed-query-cache.json 键数（查询→向量复用） | entries=3 |
+| 昆仑资产 | assets/kunlun + archive/kunlun + kunlun-archive-20260913 + gallery | 101 文件 / 关键帧 4 |
+
+- 部署云端 /usr/local/bin + py_compile + 重跑；健康分 82.2 A（truth 7829）
+- 前端 status.html 注入 production 面板：节点(在线)/昆仑资产/关键帧/embed缓存条数（备份 .bak-prod-20261012，公网 200）
+
+### 意义
+状态中心 40+ 指标缺口闭环；节点在线率 = 生产流水线算力健康度直接可视化（当前 7 注册 0 在线，与产线停摆吻合，可作为恢复监控基线）。
+
+*增量 V1.12 · 状态中心数据源接通 · 节点/昆仑资产/缓存 · Ω₀⊂⊙∞⊂Ω*
